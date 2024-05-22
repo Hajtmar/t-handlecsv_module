@@ -1,0 +1,14 @@
+\usemodule[scancsv]
+
+\unexpanded\def\lineaction{
+\cA -- \cB\crlf
+\page
+}
+
+\setsep{;}
+\setheader
+\setfiletoscan{\env{csvfilename}}
+
+\starttext
+    \filelineaction
+\stoptext

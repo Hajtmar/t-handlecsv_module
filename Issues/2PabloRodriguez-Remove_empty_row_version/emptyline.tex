@@ -1,0 +1,50 @@
+% And mail.csv:
+% 
+%     "Name";"Date"
+%     "ME";11/10/14
+%     "You";05/02/14
+%     "   ";"   "
+%     "She";03/03/12
+%     "It";03/03/14
+    
+% \setuppapersize[A8,landscape]
+%     \setuppagenumbering[location=]
+    \usemodule[scancsv-2015-02-19]
+    %\usemodule[scancsv-upd]
+
+    \unexpanded\def\lineaction{
+    lineno:\lineno, numline: \numline, Name: \noindent(\Name)\ arrived on Date: (\Date)\\
+    }
+
+    \setheader
+    \setsep{;}
+    \setfiletoscan{mail.csv}
+		
+			
+		\starttext
+    
+    \leaveemptyrows
+		\filelineaction
+	
+	  Number of nonempty rows: \numrows
+    
+    Number of empty rows: \numemptyrows
+    
+    \page
+    \csvreport
+    
+    \page
+				    
+    \removeemptyrows
+    \filelineaction
+		
+		Number of nonempty rows: \numrows
+    
+    Number of empty rows: \numemptyrows
+
+		\page
+		
+    \csvreport
+		
+		\stoptext
+

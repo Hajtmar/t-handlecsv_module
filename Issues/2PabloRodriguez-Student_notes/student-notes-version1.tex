@@ -1,0 +1,47 @@
+\usemodule[scancsv]
+\setuppapersize[A8]
+\starttext
+
+\def\fullname{\Name\Surname}
+\def\fullnamewithstatus{\Name\Surname\Status}
+
+
+\def\writestudentnote#1#2{
+ {\bf#1\ #2:}\crlf
+\doloopif{\fullname}{==}{#1#2}{\typenotes}
+\page
+}
+
+\def\writestudentnotewithstatus#1#2#3{
+ {\bf#1\ #2:}\crlf
+\doloopif{\fullnamewithstatus}{==}{#1#2#3}{\typenotes}
+\page
+}
+
+
+\unexpanded\def\typenotes{
+  \noindent\Subject\ --- \Note\\
+}
+    
+
+\setheader
+\opencsvfile{mailmergedatatable.csv}
+
+% Write regardless status line
+\writestudentnote{Name 1}{Surname 1}
+\writestudentnote{Name 2}{Surname 2}
+\writestudentnote{Name 3}{Surname 3}
+\writestudentnote{Name 4}{Surname 4}
+\writestudentnote{Name 5}{Surname 5}
+
+\page
+
+% Write with respect status of line
+\writestudentnotewithstatus{Name 1}{Surname 1}{Enable}
+\writestudentnotewithstatus{Name 2}{Surname 2}{Enable}
+\writestudentnotewithstatus{Name 3}{Surname 3}{Enable}
+\writestudentnotewithstatus{Name 4}{Surname 4}{Disable} % Write only disable rows
+\writestudentnotewithstatus{Name 5}{Surname 5}{Enable}
+
+
+\stoptext

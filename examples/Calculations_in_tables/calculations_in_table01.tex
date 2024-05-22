@@ -1,0 +1,179 @@
+% https://mailman.ntg.nl/pipermail/ntg-context/2003/001390.html
+
+
+%\usemodule[handlecsv (kopie 2017-07-31-1826)]
+\usemodule[t-handlecsv (kopie 2018-02-10-2116)]
+%\usemodule[handlecsv]
+
+
+\def\eval#1{\directlua{context(tonumber(#1))}}
+\def\commatodecimal#1{\directlua{context(string.gsub('#1', "," , "."))}}
+\def\priceforallitems{\ctxlua{context(tostring(tonumber([==[\commatodecimal{\columncontent['Unit Price']}]==]*[==[\commatodecimal{\columncontent['Order Quantity']}]==])))}}
+
+\setupTABLE[background=color,backgroundcolor=white, offset=3pt]
+\setupTABLE[row][first][background=color,backgroundcolor=lightgray, style=bold]
+\setupTABLE[row][last][background=color,backgroundcolor=lightgray, style=bold]
+\setupTABLE[c][1][style=\tfx, width=8cm]
+\setupTABLE[c][2][align=middle]
+\setupTABLE[c][3][alignmentcharacter={.}, aligncharacter=yes, align=middle]
+\setupTABLE[c][4][alignmentcharacter={.}, aligncharacter=yes, align=middle, style=\ss]
+
+\def\firsttableline{
+\bTR
+\bTD Product name\eTD
+\bTD Quantity\eTD
+\bTD Unit Price\eTD
+\bTD Items price\eTD
+\eTR
+}
+
+\def\lasttableline{
+\bTR
+\bTD[nc=3]TOTAL PRICE\eTD
+\bTD\eval{\totalprice}\eTD
+\eTR
+}
+
+
+\def\lineaction{%
+\expanded{
+\bTR
+\bTD\columncontent['Product Name']\eTD
+\bTD\columncontent['Order Quantity'] \eTD
+\bTD\commatodecimal{\columncontent['Unit Price']}\eTD
+\bTD\priceforallitems\eTD
+\eTR
+}
+\eaddto\totalprice{+\priceforallitems}% ADD into
+}
+
+\startbuffer[tablerows]
+\setlinepointer{\recurselevel}
+\expanded{
+\bTR
+\bTD\columncontent['Product Name']\eTD
+\bTD\columncontent['Order Quantity'] \eTD
+\bTD\commatodecimal{\columncontent['Unit Price']}\eTD
+\bTD\priceforallitems\eTD
+\eTR
+}
+\eaddto\totalprice{+\priceforallitems}% ADD into
+\stopbuffer
+
+
+
+\starttext
+
+\setheader
+\setsep{;}
+\catcode`\#=12 %CSV file contains # characters (i.e. TeX problematic character)
+
+
+\opencsvfile{\env{pathtocsv}superstore_sales_smalltable.csv}
+
+
+\title{Using \type{\dorecurse} cycle}
+
+
+
+\def\totalprice{0}
+
+\bTABLE[split=yes]
+\firsttableline
+\dorecurse{\numrows}{
+	\setlinepointer{\recurselevel}
+	\lineaction
+}
+\lasttableline
+\eTABLE
+
+\hairline
+
+\subject{using buffers}
+
+\bTABLE[split=yes]
+\firsttableline
+\dorecurse{\numrows}{
+	\getbuffer[tablerows]
+}
+\lasttableline
+\eTABLE
+
+
+
+
+\title{Using \type{\filelineaction} cycle}
+
+\def\totalprice{0}
+
+\bTABLE[split=yes]
+\firsttableline
+\filelineaction
+\lasttableline
+\eTABLE
+
+\stoptext
+
+
+
+
+
+
+
+\hairline
+
+\columncontent['Product Name']
+
+\columncontent['Order Quantity']
+
+\commatodecimal{\columncontent['Unit Price']}
+
+\ctxlua{context(thirddata.handlecsv.getcellcontent('Unit Price',6))}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+   \newtoks\everysafeexpanded
+
+   \long\def\safeexpanded#1%
+     {\begingroup
+      \the\everysafeexpanded\long\xdef\@@expanded{\noexpand#1}%
+      \endgroup
+      \@@expanded}
+\def\somethingsimon{blabla}
+
+\bTABLE
+\bTR\safeexpanded{\bTD\Aumlaut}\eTD\eTR
+\bTR\safeexpanded{\bTD\noexpand\somethingsimon\Aumlaut}\eTD\eTR
+\eTABLE
+
+
+\def\bTN#1\eTN{\bTD\digits#1\relax\eTD}   % will be in next release
+
+will give you digit alignment
+
+\bTABLE
+\bTR\bTD one \eTD\bTN ~25,== \eTN\bTN ~~0,00  \eTN\eTR
+\bTR\bTD two \eTD\bTN 125,-- \eTN\bTN `00,00  \eTN\eTR
+\eTABLE
+
+see supp-num.tex
+
+%D \starttabulatie[|l|l|l|]
+%D \NC \type{.} \NC , . \NC comma or period \NC \NR
+%D \NC \type{,} \NC , . \NC comma or period \NC \NR
+%D \NC \type{@} \NC \NC invisible space \NC \NR
+%D \NC \type{_} \NC \NC invisible space \NC \NR
+%D \NC \type{/} \NC \NC invisible sign \NC \NR
+%D \NC \type{-} \NC $-$ \NC minus sign \NC \NR
+%D \NC \type{+} \NC $+$ \NC plus sign \NC \NR
+%D \NC \type{s} \NC \NC invisible high sign \NC \NR
+%D \NC \type{p} \NC $\positive$ \NC high plus sign \NC \NR
+%D \NC \type{m} \NC $\negative$ \NC high minus sign \NC \NR
+%D \NC \type{n} \NC $\negative$ \NC high minus (negative) sign \NC \NR
+%D \NC \type{=} \NC $\zeroamount$ \NC zero padding \NC \NR
+%D \stoptabulatie
+
+other alignments are discussed there
+
+

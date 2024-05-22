@@ -1,0 +1,25 @@
+\usemodule[handlecsv]
+
+
+\unexpanded\def\lineaction{%
+\expanded{%
+\columncontent['Product Name'], 
+\columncontent['Order Quantity'], 
+\columncontent['Unit Price']\crlf
+}% 
+}
+
+\catcode`\#=12 %CSV file contains # characters (i.e. TeX problematic character)
+\catcode`\$=12 %CSV file contains $ characters (i.e. TeX problematic character)
+
+
+
+\starttext
+
+\setheader 
+\setsep{;}  
+\opencsvfile{../../superstore_sales.csv}
+
+\filelineaction
+
+\stoptext

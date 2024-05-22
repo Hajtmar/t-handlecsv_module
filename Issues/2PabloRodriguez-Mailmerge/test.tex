@@ -1,0 +1,25 @@
+\usemodule[scancsv]
+
+\setuppapersize[C6, landscape]
+\setuppagenumbering[location=]
+
+\unexpanded\def\lineaction{
+\edef\lcA{\lowercase{\cA}}
+\edef\ucB{\uppercase{\cB}}
+cA: \cA -- lowercase cA: \lcA\crlf
+cB: \cB -- upercase cB: \ucB\crlf
+cC: \cC -- cD: \cD\crlf
+
+\lowercase{AAAA}\crlf
+\uppercase{bbbb}\crlf
+\page
+}
+
+\setsep{;}
+\setheader
+\setfiletoscan{mailmergedatatable.csv}
+
+\starttext
+    \filelineaction
+\stoptext
+

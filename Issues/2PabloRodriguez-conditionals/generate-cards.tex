@@ -1,0 +1,31 @@
+
+
+\usemodule[handlecsv]
+
+\def\gettextfrom[#1]{%
+    \ctxlua{context(thirddata.handlecsv.getcellcontent(#1,thirddata.handlecsv.linepointer()):gsub("\\",""))}}%
+
+
+%\def\zeroedlineno% \unexpanded cannot be used here
+%   {\ctxlua{context(string.rep( "0",
+%    (tostring(thirddata.handlecsv.numrows())):len() -
+%    (tostring(thirddata.handlecsv.linepointer())):len()) ..
+%    thirddata.handlecsv.linepointer())}}
+%
+
+\def\zeroedlineno% \unexpanded cannot be used here
+   {\ctxlua{context(string.rep( "0",(tostring(thirddata.handlecsv.numrows())):len() - (tostring(thirddata.handlecsv.linepointer())):len()) .. thirddata.handlecsv.linepointer())}}
+
+\startbuffer[single-cards]
+%\executesystemcommand{contextjit --runs=1 --mode=individual --purgeall --result=certificate-\zeroedlineno.pdf --arguments=cA={\cA},cB={\cB},"MainLinePointer={\lineno}" cards.tex}
+% \executesystemcommand{context --mode=individual --purgeall --result=certificate-\lineno.pdf --arguments="cA={\cA}","cB=\cB","MainLinePointer=\lineno" cards.tex}
+\executesystemcommand{context --mode=individual --purgeall --result=certificate-\lineno.pdf -arguments="cA={\gettextfrom[1]}","cB={\gettextfrom[2]}","MainLinePointer={\lineno}" cards.tex}
+\stopbuffer
+
+
+\starttext
+\opencsvfile{cards.csv}
+\startitemize[n]
+\doloopif{\cA}{~=}{}{\getbuffer[single-cards]\item \cA }
+\stopitemize
+\stoptext

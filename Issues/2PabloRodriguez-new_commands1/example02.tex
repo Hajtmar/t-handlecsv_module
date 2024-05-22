@@ -1,0 +1,29 @@
+\usemodule[handlecsv]
+
+
+\startbuffer[languages]
+\edef\savequality{\cC}
+\cA\ speaks:
+{
+ \cB,\ \nextrow
+\if!\cA!\doloopwhile{\cA}{}{\cB, }.\ 
+%\else
+%\crlf
+\fi
+}
+He is the \savequality\ student.\par\blank[big]
+
+\stopbuffer
+
+\starttext
+ \opencsvfile{languages.csv}
+ 
+ \doloopif{\cA}{~=}{}{\getbuffer[languages]}
+
+%\dorecurse{\numrows}{
+%\ifx!\cA!\else\getbuffer[languages]\fi
+%}
+
+
+
+\stoptext

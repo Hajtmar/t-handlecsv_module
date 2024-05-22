@@ -1,0 +1,46 @@
+\usemodule[handlecsv]
+
+\startbuffer[other-languages]
+% 1. 
+%	\item \cB
+%	\if!\cA!\else\exitloop\fi % PLAIN TeX SYNTAX : If is \cA is empty then exit loop (test of empty value) - works fine
+% ------------------------------------------------------------------------------------------
+% 2.
+%	\setbox0\hbox{\cA}
+%	\item \cB
+%	\doiftextelse{\box0}{\exitloop}{} % this command works fine (command is testing of nonzero width of box, but not testing empty values)
+% ------------------------------------------------------------------------------------------
+% 3a.
+% \item \cB
+% \doifelse{\cA}{}{}{\exitloop}  % this command works fine	
+% ------------------------------------------------------------------------------------------
+% 3b.
+% \doifelse{\cA}{}{\item\cB}{\item\cB\exitloop}  % this command works fine	
+% ------------------------------------------------------------------------------------------
+% 4.
+%\item \cB
+%\doifnot{\cA}{}{\exitloop}  % this command works fine	
+% ------------------------------------------------------------------------------------------
+% 5.
+\item \cB
+\doifsomethingelse{\cA}{\exitloop}{}  % this command works fine	
+% ------------------------------------------------------------------------------------------
+
+
+
+\stopbuffer
+
+\startbuffer[languages]
+\cA\ speaks:
+    \startitemize
+        \doloopuntil{\cA}{}{\getbuffer[other-languages]}                 
+	\doloopwhile{\cA}{}{\getbuffer[other-languages]}
+    \stopitemize
+\stopbuffer
+
+
+\starttext
+ \opencsvfile{languages03.csv}
+ \doloopif{\cA}{~=}{}{\getbuffer[languages]}
+
+\stoptext

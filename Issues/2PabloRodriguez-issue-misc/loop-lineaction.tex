@@ -1,0 +1,46 @@
+\usemodule[handlecsv]
+\opencsvfile{numbers.csv}
+
+\starttext
+
+\unexpanded\def\lineaction{
+{\startxrow
+    \startxcell\numline. \csvcell['A', \linepointer]\stopxcell
+    \startxcell
+        \doifelse{\numline. \csvcell['A',\thenumexpr{\linepointer+1}]}{undefined}
+            {---}{\numline. \csvcell['A',\thenumexpr{\linepointer+1}]}
+    \stopxcell
+\stopxrow}
+}
+
+\unexpanded\def\otheraction{
+{\startxrow
+    \startxcell X \numline.  \csvcell['A', \linepointer]\stopxcell
+    \startxcell
+        \doifelse{\csvcell['A',\thenumexpr{\linepointer+1}]}{undefined}
+            {---}{Y \numline. \csvcell['A',\thenumexpr{\linepointer+1}]}
+    \stopxcell
+\stopxrow}
+}
+
+
+\startxtable[option=stretch, align=center]
+% Possibilities: \doloopaction, \doloopaction{<\actionmacro>}, \doloopaction{<\actionmacro>}{<tonumblerline>}, \doloopaction{<\actionmacro>}{<fromnumblerline>}{<tonumblerline>}
+% Examples: 
+%		\filelineaction
+% 	\filelineaction{numbers.csv}
+%		\filelineaction{letters.csv}
+%		\doloopaction
+%		\doloopaction{\lineaction}    
+%		\doloopaction{\otheraction}
+% 	\doloopaction{\otheraction}{10}
+%		\doloopaction{\lineaction}{10}{15}
+%		\doloopforall
+%		\doloopforall{\otheraction}
+%		\doloopfromto{2}{7}{\lineaction}
+% 		\setfiletoscan{letters.csv}
+% 		\doloopfromto{15}{27}{\otheraction}
+   
+\stopxtable
+
+\stoptext

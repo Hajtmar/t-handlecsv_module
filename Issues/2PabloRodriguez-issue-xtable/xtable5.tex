@@ -1,0 +1,73 @@
+\usemodule[handlecsv]
+\opencsvfile{numbers.csv}
+
+
+\startbuffer[rows]
+\startxrow
+    \startxcell
+    	\Romannumerals{\cA}
+    \stopxcell
+\stopxrow
+\nextrow
+\stopbuffer
+
+
+\starttext
+
+Solutions using dorecurse cycle:
+
+\startxtable[option=stretch, split=yes]
+\resetlinepointer
+  \dorecurse{\numrows}{\getbuffer[rows]}
+\stopxtable
+
+\blank
+
+Solutions using doloop cycle:
+
+\startxtable[option=stretch, split=yes]
+  \resetlinepointer
+  \doloop{
+  	\ifnotEOF\getbuffer[rows]
+  	\else\exitloop
+	\fi}
+ \stopxtable
+
+
+Solutions using predefined cycles:
+
+
+\type{\doloopforall}‚
+
+\startxtable[option=stretch, split=yes]
+\doloopforall{\getbuffer[rows]}
+\stopxtable
+
+\type{\doloopfromto}
+
+\startxtable[option=stretch, split=yes]
+\doloopfromto{15}{\numrows}{\getbuffer[rows]}
+\stopxtable
+
+
+\type{\filelineaction}
+
+\unexpanded\def\lineaction{\getbuffer[rows]}
+
+\startxtable[option=stretch, split=yes]
+\filelineaction
+\stopxtable
+
+
+\type{\doloopif}
+
+\startxtable[option=stretch, split=yes]
+\doloopif{\cA}{>=}{29}{\getbuffer[rows]}
+\stopxtable
+
+
+
+
+
+\stoptext
+

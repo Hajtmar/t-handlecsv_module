@@ -1,0 +1,139 @@
+% Při tisku daného A3 listu dát tisk od žáka s nejmenším číslem mat.prot na dané A3
+% do žáka s následujícím číslem, pak se vytiskne daná A3 se všemi A4 stránkami ...
+
+\usemodule[handlecsv]
+
+\setheader
+
+\voffset=3mm
+\definelayout[portrait][width=middle, topspace=0cm, header=0cm, footer=0cm, height=middle,leftmargin=0mm, rightmargin=0mm,backspace=0mm]
+
+
+%% Volba pro oboustranný tisk "bookletu" na A3 (A3 se přehnou a vloží do sebe)
+%\setuparranging[2UP,doublesided,rotated]
+%\setuppapersize[A4][A3]  
+%\setuplayout[portrait]
+
+\setuparranging[A4,doublesided]
+\setuppapersize[A4][A4]  
+\setuplayout[portrait]
+
+\setuppagenumbering[alternative=doublesided]
+\setupcolors[state=start,textcolor=black]
+
+\def\proskrtni{\bf\tfd \hbox to 45mm{\hrulefill}}
+
+% Zobrazení blanketu v pozadí
+\useexternalfigure[blanketvpozadi][matprotokol-blanket.jpg][height=\paperheight]
+\useexternalfigure[blanketvpozadileftpage][matprotokol-blanket-leftpage.jpg][height=\paperheight]
+\useexternalfigure[blanketvpozadirightpage][matprotokol-blanket-rightpage.jpg][height=\paperheight]
+
+
+\definelayer[TextBgPos][position=no,corner=top,height=\paperheight,state=start]
+\definelayer[TextFrPos][position=no,corner=top,height=\paperheight,state=start]
+\setupbackgrounds[page][page][background={color,TextBgPos,foreground,TextFrPos}]
+
+
+
+\def\doputOn[#1](#2,#3)[#4]{%
+   \setlayer[#1][x=#2,y=#3,location={#4}]%
+}
+
+\def\putOn[#1](#2,#3){%
+   \doifnextcharelse[
+     {\doputOn[#1](#2,#3)}%
+     {\doputOn[#1](#2,#3)[rt]}%
+}
+
+\def\putOnText{\putOn[TextBgPos]}
+\def\putOverText{\putOn[TextFrPos]}
+\let\put\putOverText
+
+
+\newdimen\horOffset
+\newdimen\vertOffset
+\newdimen\hor
+\newdimen\vvert
+\horOffset=0mm
+\vertOffset=0mm
+
+\def\doputOnWithOffset[#1](#2,#3)[#4]{%
+	 \hor=#2
+	 \vvert=#3
+	 \advance\hor by\horOffset
+	 \advance\vvert by\vertOffset
+	 \setlayer[#1][x=\hor,y=\vvert,location={#4}]%
+}
+
+\def\putOnWithOffset[#1](#2,#3){%
+   \doifnextcharelse[
+     {\doputOnWithOffset[#1](#2,#3)}%
+     {\doputOnWithOffset[#1](#2,#3)[rt]}%
+}
+
+
+\def\putOverTextWithOffset{\putOnWithOffset[TextFrPos]}
+\let\putWithOffset\putOverTextWithOffset
+
+
+\def\protrh{--------------------------------------}
+
+\unexpanded\def\lineaction{
+\ifodd\pagenumber
+	\horOffset=9mm
+	\externalfigure[blanketvpozadirightpage][location={right,top}]
+	\putWithOffset(140mm,11mm){\tf\bf \Trida} \putWithOffset(185mm,11mm){\tf\bf \CisMatProt}
+\else
+	\horOffset=-8mm
+	\externalfigure[blanketvpozadileftpage][location={left,top}]
+	\putWithOffset(90mm,11mm){\tf\bf \Trida} \putWithOffset(40mm,11mm){\tf\bf \CisMatProt}
+\fi
+
+\putWithOffset(45mm,20.5mm){\tf\bf \Jmeno\ \Prijmeni}
+\putWithOffset(160mm,18mm){\tfx\bf \DatumNarozeni}
+\putWithOffset(160mm,23mm){\tfx\bf \RodneCislo}
+\putWithOffset(45mm,28mm){\tfx\bf \MistoNarozeni}
+\putWithOffset(45mm,32.5mm){\tfx\bf \StatniObc}
+\putWithOffset(35mm,38mm){\tfx\bf \StudovalOd}
+\putWithOffset(35mm,43mm){\tfx \STUDIJNIOBOR}  \putWithOffset(122mm,41mm){\tfd \hbox to 7cm{\hrulefill}}
+\putWithOffset(55mm,47mm){\tfx\bf \VzdelavaniUkoncil}
+\putWithOffset(105mm,51.5mm){\tfx\bf 1. termínu} \putWithOffset(172mm,52mm){\tfx\bf \SKOLNIROK}
+%Pro případ, že někdo maturuje poprvé až ve 2. termínu...
+%\putWithOffset(105mm,51.5mm)
+% \ifnum\CisMatProt]=10{{\tfx\bf 2. termínu}}
+% \else{\tfx\bf 1. termínu}
+% \fi
+\putWithOffset(172mm,52mm){\tfx\bf \SKOLNIROK}
+\putWithOffset(90mm,56mm){\tfx\bf \DatumPisemky} \putWithOffset(172mm,56mm){\tfd \hbox to 2cm{\hrulefill}}
+\putWithOffset(60mm,61mm){\tfx\bf \VydejCisly}
+\putWithOffset(85mm,87.5mm){\tf\bf \ZnamkaZPisemky} \putWithOffset(135mm,86mm){\proskrtni}
+\putWithOffset(19mm,93mm){\proskrtni} \putWithOffset(74mm,93mm){\proskrtni} \putWithOffset(135mm,93mm){\proskrtni}
+\putWithOffset(19mm,99mm){\proskrtni} \putWithOffset(74mm,99mm){\proskrtni} \putWithOffset(135mm,99mm){\proskrtni}
+\putWithOffset(18mm,135mm){\tfxx\bf \MatPredmetii} 
+\putWithOffset(18mm,148mm){\tfxx\bf \MatPredmetiii}
+\putWithOffset(18mm,163mm){\tfxx\bf \MatPredmetiv}
+\putWithOffset(18mm,178mm){\proskrtni} \putWithOffset(74mm,178mm){\proskrtni} \putWithOffset(135mm,178mm){\proskrtni}
+
+\putWithOffset(18mm,202mm){\tfxx\bf \MatPredmetii} 
+\putWithOffset(18mm,209mm){\tfxx\bf \MatPredmetiii}
+\putWithOffset(18mm,216mm){\tfxx\bf \MatPredmetiv}
+\putWithOffset(18mm,222mm){\proskrtni} \putWithOffset(74mm,222mm){\proskrtni} \putWithOffset(135mm,222mm){\proskrtni}
+
+\edef\temp{\MatPredmetvi}
+{\ifx\protrh\temp\putWithOffset(75mm,238mm){\proskrtni} \else \putWithOffset(75mm,240mm){\tfx\bf \temp}\fi}
+{\ifx\protrh\temp\putWithOffset(135mm,238mm){\proskrtni} \else \putWithOffset(135mm,240mm){}\fi}
+\putWithOffset(68mm,266mm){-----}
+\putWithOffset(84mm,266mm){------------------------}
+\putWithOffset(143mm,266mm){------------------}%\putWithOffset(143mm,264.5mm){\tfx \VydejCisly]}
+\putWithOffset(37mm,271mm){------------------}%\putWithOffset(37mm,269mm){\tfx \PrevzalVysvedceni]}
+\putWithOffset(122mm,275mm){------------------------------}
+
+
+
+\vglue0pt\unskip\page
+} 
+ 
+
+\starttext
+	\filelineaction{matprotokol-4.a.csv}
+\stoptext

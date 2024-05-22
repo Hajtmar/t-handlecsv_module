@@ -1,0 +1,29 @@
+% 1;a
+% 2;
+%    ;
+% 22;
+% 23;
+% 24;
+% 
+
+\usemodule[handlecsv]
+\opencsvfile{numbers.csv}
+
+\starttext
+
+\unexpanded\def\lineaction{
+\startxrow
+    \startxcell\doiftextelse{\csvcell['A', \numline]}{\csvcell['A',
+    \numline]}{empty}\stopxcell
+    \startxcell
+        \doiftextelse{\csvcell['A',\thenumexpr{\numline+1}]}
+            {\csvcell['A',\thenumexpr{\numline+1}]}{---}
+    \stopxcell
+\stopxrow
+}
+
+\startxtable[option=stretch, align=center]
+    \filelineaction
+\stopxtable
+
+\stoptext

@@ -1,0 +1,58 @@
+%\def\mparametr{\parametr}% inicializace
+%
+%\def\nastavparametr#1#2{%
+%\global\def\parametr{#2}#1%
+%}%%
+%
+%%\define[1]\ListEntry{#1\par}
+%%\processcommalist[one,two,{three,four}]\ListEntry
+%%\processseparatedlist[one*two*three,four][*]\ListEntry
+%\def\zpracujparametry[#1]#2%
+%  {\processcommalist[#1]{\nastavparametr{#2}}}
+%% Použití:
+%% \zpracujparametry[1,5,3.7,4,5,8,9,11]{
+%% 	\getbuffer[funkce1]
+%% 	\page
+%% }
+%
+%\def\ZPRACUJPARAMETRY#1[#2]#3%
+%{\processseparatedlist[#2][#1]{\nastavparametr{#3}}}
+%% Použití:
+%% \ZPRACUJPARAMETRY{znak separátoru}[1,5,3.7,4,5,8,9,11]{
+%% 	\getbuffer[funkce1]
+%% 	\page
+%% }
+%
+%
+%\def\pmparametr#1=$#2${\global\def\parametr{#1}\global\def\mparametr{#2}}
+%
+%\def\nastavparametry#1#2{\pmparametr#2\global\def\pparametr{#2}#1}%
+%
+%\def\zpracujdvojparametry[#1]#2%
+%  {\processcommalist[#1]{\nastavparametry{#2}}}
+%% Použití:
+%% \zpracujdvojparametry[1=$a$,5=$b$,3.7=$c$,4=$d$,5=$e$,8=$f$,9=$g$,11=$h$]{
+%% 	\getbuffer[funkce1]
+%% 	\page
+%% }
+%
+%
+%\def\ZPRACUJDVOJPARAMETRY#1[#2]#3%
+%  {\processseparatedlist[#2][#1]{\nastavparametry{#3}}}
+%% Použití:
+%% \ZPRACUJDVOJPARAMETRY{;}[1=$a$;5=$b$;3.7=$c$;4=$d$;5=$e$;8=$f$;9=$g$;11=$h$]{
+%% 	\getbuffer[funkce1]
+%% 	\page
+%% }
+%
+%
+
+
+\define[1]\ListEntry{
+citiesof-#1.pdf\crlf
+\executesystemcommand{context --purgeall --result=citiesof-#1.pdf --arguments="CountryAbbrev=#1" cities.tex}
+}
+
+\starttext
+\processcommalist[CN,TH,IQ,JP]{\ListEntry}
+\stoptext

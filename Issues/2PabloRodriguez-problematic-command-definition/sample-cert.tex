@@ -1,0 +1,11 @@
+\setuppapersize[A8, landscape]
+\setupbodyfont[helvetica, 13.75pt]
+\setuppagenumbering[location=]
+\setupwhitespace[big]
+\usemodule[handlecsv]
+\opencsvfile{participants.csv}
+\starttext
+\startalign[middle]To Whom It Might Concern\stopalign
+
+This is to certify that \ctxlua{context(thirddata.handlecsv.getcellcontent(1,thirddata.handlecsv.linepointer()))} \cB\ completed the course.
+\stoptext

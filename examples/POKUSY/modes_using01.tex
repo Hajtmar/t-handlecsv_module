@@ -1,0 +1,37 @@
+\usemodule[handlecsv]
+
+
+\starttext
+
+\startbuffer[text-content]
+\cA\hfill\cB\crlf
+\stopbuffer
+
+
+A)
+
+\opencsvfile{mail-sample.csv}
+\doloop{%
+	\ifnotEOF\getbuffer[text-content]\nextrow
+		\else\exitloop
+	\fi
+}
+
+
+D)
+
+\def\lineaction{\getbuffer[text-content]}
+\opencsvfile{mail-sample.csv}
+\filelineaction			
+			
+
+E) 
+
+\opencsvfile{mail-sample.csv}
+\dorecurse{\numrows}{
+\getbuffer[text-content]
+\nextrow
+}
+		
+\stoptext
+

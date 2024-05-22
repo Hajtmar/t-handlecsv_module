@@ -1,0 +1,6 @@
+csvfile;resource-site
+authors.csv;http://www.parseomatic.com/parse/pskb/CSV-File-Format.htm
+uspresidents.csv;http://seepeoplesoftware.com/downloads/older-versions/11-sample-csv-file-of-us-presidents/download.html
+contract.csv;http://www.ferc.gov/docs-filing/eqr/soft-tools/sample-csv/contract.txt
+transaction.csv;http://www.ferc.gov/docs-filing/eqr/soft-tools/sample-csv/transaction.txt
+uspopulation.csv;http://seepeoplesoftware.com/downloads/easytable-free/6-sample-csv-file-of-us-regions/download.html

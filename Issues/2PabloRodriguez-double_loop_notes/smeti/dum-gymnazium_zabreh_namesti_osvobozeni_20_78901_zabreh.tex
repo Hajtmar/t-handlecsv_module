@@ -1,0 +1,154 @@
+\enableregime[utf-8]
+\mainlanguage[cz] 
+
+\usemodule[t-scancsv]
+\usemodule[t-scancsv-standalone]
+
+\setupexternalfigures[directory={graphics/}]
+
+\def\createexternalfile#1{\immediate\openout\scratchwrite#1}
+\def\writetoexternalfile#1{\immediate\write\scratchwrite{#1}}
+\def\closeexternalfile{\closeout\scratchwrite}
+\let\cref\createexternalfile
+\let\wtef\writetoexternalfile
+\let\clef\closeexternalfile
+
+\setupcolors[state=start]
+\definecolor[fcol][black]
+\definecolor[mcol][black]
+\setupurl[color=blue]
+\setupinteraction[state=start,color=blue,contrastcolor=blue, style=normal]
+
+\def\href#1#2{\useURL[#2][{#2}][][{#1}]\goto{\url[#2]}[url(#1)]}
+\def\ahref#1{\color[linkcolor]{\ttx \href{#1}{<#1>}}}
+\def\fullahref#1{\color[linkcolor]{\ttx \href{#1}{http://#1}}}
+\def\mailto#1{\useURL[#1][mailto:#1][][#1]\from[{#1}]}
+\def\MailTo#1#2{\useURL[#1][mailto:#1][][#2]\from[{#1}]}
+\catcode`\_=12 
+
+\setuppagenumbering[state=stop]
+\setuplayout[width=middle, height=middle, topspace=1cm, header=0cm, footer=15mm]
+
+\def\vypispolozky{\ssx\kod\ -- \from[dumurl]\crlf}
+
+\def\printaction{%\porcis,\kod,\pripona,\predmet,\tematickaoblast %,nazevDUM,forma,rocnik,vytvoreno,tvurce,overeno,trida	
+% Pro Web
+%	\expanded{\useURL[dumurl][http://gyza.cz/storage/dum][\kod.\pripona][\nazevDUM]}
+% Pro lokální disk
+	\expanded{\useURL[dumurl][][\kod.\pripona][\nazevDUM]}
+	\writelinetohtml%
+  	\if\PR1\section{{\ssc\predmet}}\fi%
+  	\if\TO1%
+	 		 \subsection{{\bf\tematickaoblast}}%
+  	   \startitemize[n,packed,joinedup][margin=0em,distance=0.5em,itemalign=left,stopper=)]%
+				\if!\overeno!%
+				\else%
+  		 		\item{\ssx\kod\ -- \from[dumurl]}%
+  		 	\fi%
+		 \else%
+  		\if\TO0%
+  			\if!\overeno!%
+				\else%
+				\item{\ssx\kod\ -- \from[dumurl]}%
+				\fi
+				\stopitemize%
+  		 \else%
+  		 	\if!\overeno!%
+				\else%
+				\item{\ssx\kod\ -- \from[dumurl]}%
+ 				\fi
+			 \fi%	
+		\fi%
+}%
+
+
+	
+\unexpanded\def\lineaction{\printaction}
+
+\def\writelinetohtml{%
+\if\PR1%
+	\wtef{<h1>\predmet</h1>}
+\fi
+\if\TO1%
+ 		\wtef{<h2>\tematickaoblast</h2>}
+ 		\wtef{<ol>}
+ 		\if!\overeno!%
+		\else%
+	  \wtef{<li>\kod&nbsp;-&nbsp; <a href="http://gyza.cz/storage/dum/\kod.\pripona">\nazevDUM</a> </li>} 	 
+		\fi
+\else%
+	\if!\TO!
+	\if!\overeno!%
+	\else%
+	\wtef{<li>\kod&nbsp;-&nbsp; <a href="http://gyza.cz/storage/dum/\kod.\pripona">\nazevDUM</a> </li>}%
+	\fi
+	\fi%
+	\if\TO0%
+		\if!\overeno!%
+		\else%
+		\wtef{<li>\kod&nbsp;-&nbsp; <a href="http://gyza.cz/storage/dum/\kod.\pripona">\nazevDUM</a> </li>} 		
+	  \fi
+		\wtef{</ol>}%
+	\fi%	
+\fi%
+}
+
+\starttext
+
+\setheader 
+\setsep{,}
+\setfiletoscan{dum-web.csv}
+
+\cref{index.html}
+\wtef{<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 //EN"}
+\wtef{"http://www.w3.org/TR/html4/strict.dtd">} 
+\wtef{<html>}
+\wtef{<head>} 
+\wtef{<title>DUM - Digitální učební materiály - Gymnázium Zábřeh, Nám. Osvobození 20, 789 01 Zábřeh</title>} 
+\wtef{<META content="text/html; charset=UTF-8" http-equiv=Content-Type>} 
+\wtef{<META content=cs http-equiv=Content-language>} 
+\wtef{<link rel="stylesheet" type="text/css" href="http://gyza.cz/iapp/css/dum-image.css" title="displaysheet">}
+\wtef{<style type="text/css">}
+\wtef{</style>}
+
+\wtef{</head>} 
+\wtef{<body>}
+\wtef{<h4>DUM - Digitální učební materiály - Gymnázium, Zábřeh, nám. Osvobození 20, 789 01 Zábřeh</h4>}
+
+\wtef{<h5><a href="http://gyza.cz/storage/dum/dum-gymnazium_zabreh_namesti_osvobozeni_20_78901_zabreh.pdf">Zde je PDF verze katalogu DUM, který máte aktuálně zobrazen v html formátu.</a></h4>}
+
+\currentdate[day,{.~},month,{~},year] -- \currenttime
+
+
+%\doloopif{value1}{[compare_operator]}{value2}{macro_for_doing} % [compareoperators] <, >, ==(eq), ~=(neq), >=, <=, in, until, while
+%\doloopif{\predmet}{eq}{Fyzika}{\lineaction} % [compareoperators] <, >, ==(eq), ~=(neq), >=, <=, in, until, while
+%\filelineaction{dum-web.csv} % repeat \lineaction macro for all rows of CSV file
+
+%\doloopif{\overeno}{neq}{}{\lineaction}
+
+% vypsat jen ty, které mají zadaný datum ověření!!!!! 
+%\filelineaction{dum-web.csv} % 
+\doloopif{\predmet}{eq}{Matematika}{\lineaction} % [compareoperators] <, >, ==(eq), ~=(neq), >=, <=, in, until, while
+%\doloopif{\tematickaoblast}{eq}{Analytická geometrie}{\lineaction} % [compareoperators] <, >, ==(eq), ~=(neq), >=, <=, in, until, while
+
+\wtef{<h5><a href="http://gyza.cz/storage/dum/dum-gymnazium_zabreh_namesti_osvobozeni_20_78901_zabreh.pdf">Zde je PDF verze katalogu DUM, který máte aktuálně zobrazen v html formátu.</a></h4>}
+
+\wtef{</body>}
+\wtef{</html>}
+\clef
+\stoptext
+
+
+
+%\def\odkaznasoubor{\href{http://dum.gyza.cz/\kod.\pripona}{nazevDUM}}
+%\def\odkaznasoubor{\href{http://dum.gyza.cz/\filename}{\nazevDUM}}
+
+
+% \useURL[CHEMML]        [http://www.pragma-ade.nl/general/manuals/\kod.\pripona \getvalue{aaa}]
+%                        [\getvalue{aaa} -- \kod.\pripona]
+%                        [aaaa \filename \getvalue{aaa} ccc]
+                       
+%\useURL[odkaznasoubor][\filename][][\nazevDUM]
+%\def\odkaz{\href{\filename}{nazevDUM}}
+%\def\ctm{\href{http://meeting.contextgarden.net/2010/programme.shtml}{4CM}}
+%\def\te{\href{http://pavel.striz.cz/texperience/}{3TE}}

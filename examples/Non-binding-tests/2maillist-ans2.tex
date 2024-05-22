@@ -1,0 +1,60 @@
+% Add content (#2) into content of macro #1
+\long\def\addto#1#2{\expandafter\def\expandafter#1\expandafter{#1#2}}
+% Expanded version of previous macro
+\long\def\eaddto#1#2{\edef#1{#1#2}}
+\def\eval#1{\directlua{context(tonumber(#1))}}
+      
+\def\priceforallitems{%
+\ctxlua{context(tostring(tonumber(%
+[==[\secondcol]==]*[==[\thirdcol]==])))}%
+}
+
+
+\def\firsttableline{
+\bTR
+\bTD Product name\eTD
+\bTD Quantity\eTD
+\bTD Unit Price\eTD
+\bTD Items price\eTD
+\eTR
+}
+
+\def\lasttableline{
+\bTR
+\bTD[nc=3]TOTAL PRICE\eTD
+\bTD\eval\totalprice\eTD
+\eTR
+}
+
+\def\firstcol{Product \recurselevel.}
+\def\secondcol{\eval{2*\recurselevel}}
+\def\thirdcol{\eval{5.7*\recurselevel}}
+
+
+\unexpanded\def\parttable{%
+\expanded{
+\bTR
+\bTD\firstcol \eTD
+\bTD\secondcol \eTD
+\bTD\thirdcol \eTD 
+\bTD\priceforallitems\eTD
+\eTR
+}
+\eaddto\totalprice{+\priceforallitems}% ADD into 
+}
+
+
+
+\starttext
+
+\def\totalprice{0}
+
+
+\bTABLE[split=yes]
+\firsttableline
+\dorecurse{3}{\parttable}
+\lasttableline
+\eTABLE
+
+\stoptext
+

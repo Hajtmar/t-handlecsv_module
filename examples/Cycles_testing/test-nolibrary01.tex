@@ -1,0 +1,218 @@
+
+\starttext
+
+
+\ctxlua{
+xlsname='A'
+content='content when parameter is missing'
+context([[\definecomplexorsimple\]]..xlsname)
+%context([[\def\simple]]..xlsname..[[{]]..content..[[}]])
+%context([[\def\complex]]..xlsname..'[#1]'..[[{Neco: #1}]])
+}
+
+\def\simpleA {content when parameter is missing}
+\def\complexA[#1]{parameter #1}
+
+
+ 
+\type{\A}: \A
+
+\type{\A[5]}: \A[5]
+
+
+\stoptext
+
+\starttext
+
+\startluacode
+interfaces.definecommand ('dolastname', {
+    arguments = { { "option", "string" }  },
+    macro = function (opt_1)
+       if #opt_1>0 then context(opt_1) else context('nothing') end 
+    end
+})
+interfaces.definecommand ('lastname', {
+    macro = function ()
+       context.dosingleempty()
+       context.dolastname()
+    end
+})
+\stopluacode
+
+\lastname
+
+\lastname[5]
+
+
+\startluacode
+xlsname='A'
+content='content when parameter is missing'
+interfaces.definecommand (xlsname, {
+    arguments = { { "option", "string" }  },
+    macro = function (opt_1)
+       if #opt_1>0 then context(opt_1) else context(content) end 
+    end
+})
+interfaces.definecommand (xlscommand, {
+    macro = function ()
+       context.dosingleempty()
+       context.dolastname()
+    end
+})
+\stopluacode
+
+
+\A
+
+\A[5]
+
+
+\stoptext
+% 
+% Within the complex problems I need to solve the following case. I want using 
+% lua code to define a macro with one optional parameter in brackets. I tried it 
+% using commands context.setgvalue, or find something on the wiki 
+% (http://wiki.contextgarden.net/System_Macros/Definitions_and_Assignments), but 
+% each time I broke a tooth on it.
+% 
+% Can you, please, someone advise  how something can be it done?
+% Suffice some reference to solve a similar problem.
+%  
+% Thanks Jaroslav Hajtmar
+% 
+% Here is my minimal example:
+
+%\starttext
+
+% OK
+% \def\lastname{\dosingleempty\dolastname}
+% \def\dolastname[#1]{\iffirstargument #1\else nothing\fi}
+% 
+% \lastname
+% 
+% \lastname[Smith]
+
+
+% Not working
+% \ctxlua{
+% context([[\def\firstname{\dosingleempty\dofirstname}]])
+% context([[\def\dofirstname[#1]{\iffirstargument #1\else {nothing}\fi}]])
+% }
+% 
+% \firstname
+% 
+% \firstname['Peter']
+
+
+% \complexorsimple\priklad
+% 
+% \def\simplepriklad{XXX}
+% 
+% \def\complexpriklad[ZZZZZ]
+% 
+% 
+% \priklad
+
+
+% \def\priklad{}
+% \complexprikladdo[setup]
+% \complexprikladdo[]
+
+
+% \definecomplexorsimple\command
+% \def\complexcommand[#1]{parameter #1}
+% \def\simplecommand {without parameter}
+% 
+% \command
+% 
+% \command[123]
+
+
+%\starttext
+% 
+% \ctxlua{
+% xlsname='A'
+% content='content when parameter is missing'
+% context([[\definecomplexorsimple\]]..xlsname)
+% %context([[\def\simple]]..xlsname..[[{]]..content..[[}]])
+% %context([[\def\complex]]..xlsname..'[#1]'..[[{Neco: #1}]])
+% }
+% 
+% \def\simpleA {content when parameter is missing}
+% \def\complexA[#1]{parameter #1}
+% 
+% 
+%  
+% \type{\A}: \A
+% 
+% \type{\A[5]}: \A[5]
+
+
+%\stoptext
+
+
+
+% OK
+% \definecomplexorsimple\priklad
+% \def\complexpriklad[#1]{Neco: #1}
+% \def\simplepriklad{nic}
+% 
+% 
+% 
+% Bez parametru: \priklad
+% 
+% S parametrem 123: \priklad[123]
+% 
+
+
+
+
+% \ctxlua{
+% xlsname='A'
+% content='Jmeno a prijmeni'
+% context([[\definecomplexorsimple\]]..xlsname)
+% context([[\def\complex]]..xlsname..'[#1]'..[[{Neco: #1}]])
+% %context([[\def\simple]]..xlsname..'{'..content..'}')
+% }		
+
+
+% \def\complexA[#1]{Neco: #1}
+% \def\simpleA{nic}
+% 
+% AAAAAAAAAAAAAAAAAA
+% 
+% \A
+% 
+% 
+% \A[5]
+% 
+% AAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+
+%\stoptext
+
+
+
+
+% \definestartstopcommand\somecommand\e!specifier{[##1][##2]}{##3}%
+%   {do #1 something #2 with #3 arg}
+% which becomes:
+% \def\somecommand[#1][#2]\startspecifier#3\stopspecifier%
+%   {do #1 something #2 with #3 arg}
+  
+
+
+
+
+
+		
+
+
+
+
+% \def\dolastname[1]\{\iffirstargument 1\else nic\fi\}
+% context([[*def*]]..xlsname..[[\{*dosingleempty*do]]..xlsname..[[\}]])
+% context([[def*do]]..xlsname..[[\{[!1]*iffirstargument*csvcell[']]..xlsname..[[',!1]*else ]]..content..[[*fi\}]])
+% context([[\def\]]..xlsname..[[\{\dosingleempty\do]]..xlsname..[[\}]])
+% context([[\def\do]]..xlsname..[[\{[!1]\iffirstargument\csvcell[']]..xlsname..[[',!1]\else ]]..content..[[\fi\}]])
+		

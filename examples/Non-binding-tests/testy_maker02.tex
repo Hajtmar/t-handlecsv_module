@@ -1,0 +1,84 @@
+
+\usemodule[handlecsv]
+
+
+
+\starttext
+
+\setheader 
+\enablemode[XXL]
+\opencsvfile{cities.csv}
+\disablemode[XXL]
+\opencsvfile{selectedcountries.csv}
+\enablemode[XXL]
+\opencsvfile{cities.csv}
+\disablemode[XXL]
+
+1. \currentcsvfile
+
+\setcurrentcsvfile[selectedcountries.csv]
+
+2. \currentcsvfile
+
+\opencsvfile{cities.csv}
+
+3. \currentcsvfile
+
+\setcurrentcsvfile[selectedcountries.csv]
+
+4. \currentcsvfile
+
+\setcurrentcsvfile[cities.csv]
+
+5. \currentcsvfile
+\hairline
+\hairline
+\hairline
+
+\type{\cA, \cB, \cC: } \cA, \cB, \cC
+
+\nextrow
+
+\type{\cA, \cB, \cC (after \nextrow): } \cA, \cB, \cC
+
+
+%\resetlinepointer
+
+\setlinepointer{82}
+
+\type{\colA, \colB, \colC: } \colA, \colB, \colC
+
+\nextrow
+
+\type{\colA, \colB, \colC (after \nextrow): } \colA, \colB, \colC
+
+
+\type{\colA[1], \colA[2], \colA[3], \colB[1], \colB[2], \colB[3]: } \colA[1], \colA[2], \colA[3], \colB[1], \colB[2], \colB[3]
+
+\type{\cA, \cB, \cC (after \setlinepointer{82}): } \cA, \cB, \cC
+
+\nextrow
+
+\type{\cA, \cB, \cC (after \nextrow): } \cA, \cB, \cC
+
+
+\type{\cA[1], \cA[2], \cA[3], \cB[1], \cB[2], \cB[83]: } \cA[1], \cA[2], \cA[3], \cB[1], \cB[2], \cB[83]
+
+
+\type{\SerNum, \Name, \Population: } \SerNum, \Name, \Population
+
+\nextrow
+
+\type{\colSerNum, \colName, \colPopulation (after nextrow): } \colSerNum, \colName, \colPopulation
+
+\type{\colSerNum[6], \colName[2], \colPopulation[82]: } \colSerNum[6], \colName[2], \colPopulation[82]
+
+
+
+
+
+\hairline
+\hairline
+\hairline
+
+\stoptext

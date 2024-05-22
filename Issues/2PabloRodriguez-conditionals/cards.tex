@@ -1,0 +1,57 @@
+%\setuppapersize[A9, landscape]
+%\usemodule[handlecsv]
+%\opencsvfile{cards.csv}
+%\starttext
+%\startbuffer[content]
+%\startmakeup[standard][style=\ssbf, align=center]
+%\blank[force, big]
+%\cA
+%\blank[big]
+%\cB
+%\stopmakeup
+%\stopbuffer
+%\doifmodeelse{individual}
+%    {\doloopif{\cA}{==}{\env{cA}}{\getbuffer[content]}}
+%    {\doloopif{\cA}{~=}{}{\getbuffer[content]}}%OK
+%\stoptext
+%
+
+
+\usemodule[handlecsv]
+
+\def\gettextfrom[#1]{%
+    \ctxlua{context(thirddata.handlecsv.getcellcontent(#1,thirddata.handlecsv.linepointer()):gsub("\\",""))}}%
+
+
+
+\setuppapersize[A9, landscape]
+
+\startbuffer[content]
+\startmakeup[standard][style=\ssbf, align=center]
+\blank[force, big]
+\cA
+\blank[big]
+\cB
+\stopmakeup
+\stopbuffer
+
+\def\breakline{\crlf}
+
+\starttext
+\opencsvfile{cards.csv}
+
+%\edef\envcA{\env{cA}}
+
+%\dorecurse{\numrows}{\edef\ecA{\cA}\ifx\ecA\envcA{\getbuffer[content]}\fi\nextrow}
+
+        
+%\doifmodeelse{individual}
+%{\doloopif{\gettextfrom[1]-\gettextfrom[2]}{==}{\env{cA}-\env{cB}}{\getbuffer[content]}}
+%{\doloopif{\cA}{~=}{}{\getbuffer[content]}}%OK
+
+\doifmodeelse{individual}
+    {\doloopif{\gettextfrom[1]}{==}{\env{cA}}{\getbuffer[content]}}
+    {\doloopif{\cA}{~=}{}{\getbuffer[content]}}%OK
+
+\stoptext
+

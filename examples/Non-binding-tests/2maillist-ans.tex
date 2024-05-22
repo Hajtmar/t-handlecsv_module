@@ -1,0 +1,16 @@
+\def\Command#1%
+  {\expdoifelse{#1}{}{100}{#1}}
+
+\starttext
+
+1. \Command{5} % OK
+
+2. \Command  % OK
+
+3. As You see, Command without braces swallows the break of the paragraph.
+
+1. \dorecurse{\Command{5}}{\recurselevel\crlf} % not working
+
+2. \dorecurse{\Command{}}{\recurselevel\crlf}  % not working
+
+\stoptext

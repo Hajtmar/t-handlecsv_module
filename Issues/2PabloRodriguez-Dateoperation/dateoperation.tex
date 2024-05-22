@@ -1,0 +1,67 @@
+\usemodule[scancsv]
+
+\def\ddmmyyyy#1#2#3{% #1 - date, #2 - old separator, #3 - new separator 
+\startlua
+	local parsedate=thirddata.scancsv.ParseCSVLine('#1','#2');
+	local day=tonumber(parsedate[1]);
+	local month=tonumber(parsedate[2]);
+	local year=tonumber(parsedate[3]);
+	if (year<100) then % when is only two digits year format then 
+			if year<=14 then % it is very young person
+				year=year+2000
+			else % this person has more than one hundred years
+				year=year+1900; 
+			end;
+	end; 
+	tex.print(day..'#3'..month..'#3'..year);
+\stoplua
+}
+
+\unexpanded\def\lineaction{
+	\Name\ born \Date\quad  (\ddmmyyyy{\Date}{/}{.\\,}) \\
+}
+
+% Content of CSV file:
+% Name;Date
+% ME;11/10/14
+% You;05/02/14
+% He;15/02/2014
+% She;03/03/12
+% It;03/03/14
+% A;11/11/1999
+% B;01/2/1964
+% C;02/3/23
+% D;03/4/64
+% E;04/5/00
+% F;05/6/01
+% G;05/7/15
+% H;05/7/1915
+% Test0;1/2/00
+% Test1;1/2/01
+% Test2;1/2/02
+% Test3;1/2/03
+% Test4;1/2/04
+% Test5;1/2/05
+% Test6;1/2/06
+% Test7;1/2/07
+% Test8;1/2/08
+% Test9;1/2/09
+% Test10;1/2/10
+% Test11;1/2/11
+% Test12;1/2/12
+% Test13;1/2/13
+% Test14;1/2/14
+% Test15;1/2/15
+% Test16;1/2/16
+% Test17;1/2/17
+% Test18;1/2/18
+% Test19;1/2/19
+% Test20;1/2/20
+    
+\setheader
+ \setsep{;}
+ \setfiletoscan{mail.csv}
+
+\starttext
+   \filelineaction
+\stoptext

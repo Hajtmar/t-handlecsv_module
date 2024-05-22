@@ -1,0 +1,16 @@
+\usemodule[handlecsv]
+\setheader
+\opencsvfile{a.csv}
+\starttext
+\startTEXpage[offset=1em]
+
+\startbuffer[text]
+\item \linepointer This is item \#\indexofnotemptyline{\linepointer}.
+\stopbuffer
+
+\startitemize
+
+\doloopif{\cA}{~=}{}{\getbuffer[text]}
+\stopitemize
+\stopTEXpage
+\stoptext

@@ -1,0 +1,215 @@
+
+
+aha \uff(a$#$
+
+\starttext
+
+
+% --- included file cards.tex
+%\setuppapersize[A9, landscape]
+%\usemodule[handlecsv]
+%\opencsvfile{cards.csv}
+%\starttext
+%\startbuffer[content]
+%\startmakeup[standard][style=\ssbf, align=center]
+%\blank[force, big]
+%\cA
+%\blank[big]
+%\cB
+%\stopmakeup
+%\stopbuffer
+%\doifmodeelse{individual}
+%    {\doloopif{\cA}{==}{\env{cA}}{\getbuffer[content]}}
+%    {\doloopif{\cA}{~=}{}{\getbuffer[content]}}%OK
+%\stoptext
+%
+
+
+\usemodule[handlecsv]
+
+\def\gettextfrom[#1]{%
+    \ctxlua{context(thirddata.handlecsv.getcellcontent(#1,thirddata.handlecsv.linepointer()):gsub("\\",""))}}%
+
+
+
+\setuppapersize[A9, landscape]
+
+\startbuffer[content]
+\startmakeup[standard][style=\ssbf, align=center]
+\blank[force, big]
+\cA
+\blank[big]
+\cB
+\stopmakeup
+\stopbuffer
+
+\def\breakline{\crlf}
+
+\starttext
+\opencsvfile{cards.csv}
+
+%\edef\envcA{\env{cA}}
+
+%\dorecurse{\numrows}{\edef\ecA{\cA}\ifx\ecA\envcA{\getbuffer[content]}\fi\nextrow}
+
+
+%\doifmodeelse{individual}
+%{\doloopif{\gettextfrom[1]-\gettextfrom[2]}{==}{\env{cA}-\env{cB}}{\getbuffer[content]}}
+%{\doloopif{\cA}{~=}{}{\getbuffer[content]}}%OK
+
+\doifmodeelse{individual}
+    {\doloopif{\gettextfrom[1]}{==}{\env{cA}}{\getbuffer[content]}}
+    {\doloopif{\cA}{~=}{}{\getbuffer[content]}}%OK
+
+\stoptext
+
+
+% --- end of file cards.tex
+
+% --- included file generate-test.tex
+\usemodule[handlecsv]
+
+
+\startbuffer[single-cards]
+\executesystemcommand{context --purgeall --result=test-\lineno.pdf --arguments="cA={\cA}","cB=\cB" test.tex}
+\stopbuffer
+
+\starttext
+\opencsvfile{cards.csv}
+
+\startitemize[n]
+\doloopif{\cA}{~=}{}{\getbuffer[single-cards]\item \cA }
+\stopitemize
+
+\stoptext
+
+% --- end of file generate-test.tex
+
+% --- included file test.tex
+\usemodule[handlecsv]
+
+\startluacode
+-- POZN  nemělo by raději být gColNames v řádku 672??  viz returnparametr=thirddata.handlecsv.gColumnNames[csvfile][column]
+
+
+-- Replace text in cell content of specified CSV file with other text
+function thirddata.handlecsv.substitutecontentofcellof(csvfile,column,row,whattoreplace,substitution)
+  local csvfile=thirddata.handlecsv.handlecsvfile(csvfile)
+  local column=thirddata.handlecsv.gColNames[csvfile][column]
+  return thirddata.handlecsv.getcellcontentof(csvfile,column,row):gsub(whattoreplace,substitution)
+end
+
+-- Replace text in cell content of current CSV file with other text
+function thirddata.handlecsv.substitutecontentofcell(column,row,whattoreplace,substitution)
+  local csvfile=thirddata.handlecsv.getcurrentcsvfilename()
+  local column=thirddata.handlecsv.gColNames[csvfile][column]
+  return thirddata.handlecsv.substitutecontentofcellof(csvfile,column,row,whattoreplace,substitution)
+end
+
+-- Replace text in cell content of current row of current CSV file with other text
+function thirddata.handlecsv.substitutecontentofcellofcurrentrow(column,whattoreplace,substitution)
+  local row=thirddata.handlecsv.linepointer()
+  return thirddata.handlecsv.substitutecontentofcell(column,row,whattoreplace,substitution)
+end
+
+
+
+
+
+\stopluacode
+
+
+
+%function thirddata.handlecsv.getcellcontentof(csvfile,column,row)
+
+
+%\def\contentreplace#1#2#3{\ctxlua{context(thirddata.handlecsv.getcellcontent(thirddata.handlecsv.xls2ar('#1'),thirddata.handlecsv.linepointer()):gsub("#2","#3"))}}%
+\def\Xcontentreplace#1#2#3{\ctxlua{context(thirddata.handlecsv.getcellcontent(thirddata.handlecsv.gColNames[thirddata.handlecsv.getcurrentcsvfilename()]['#1'],thirddata.handlecsv.linepointer()):gsub("#2","#3"))}}%
+\def\contentreplace#1#2#3{\ctxlua{context(thirddata.handlecsv.substitutecontentofcellofcurrentrow('#1','#2','#3'))}}%
+
+\let\cr\contentreplace
+\let\substitute\contentreplace
+
+\startbuffer[single-card]
+\cA
+
+\edef\xxx{\cA}
+\substitute{cA}{\xxx}{\\bgroup\\darkred\\bf Miss. \xxx \\egroup}
+
+
+
+\contentreplace{A}{\\}{SS}
+
+\contentreplace{A}{\\}{ }
+
+
+QQQQ
+\cr{A}{\\}{ } --- \cr{1}{\\}{ } --- \cr{cA}{\\}{ }
+QQQQQ
+
+
+WWWWW
+\cr{A}{John}{\\bgroup\\bf\\red David\\egroup }
+---
+\cr{1}{Jane}{\\bgroup\\red Jane\\egroup}
+---
+\cr{cA}{\\}{ }
+WWWWW
+
+\cr{1}{Smith}{\\bgroup\\green Smith\\egroup}
+
+\cr{1}{Mary}{\\bgroup\\blue\\bf Marry\\egroup}
+
+\cr{1}{Mary\\\\Smith}{\\bgroup\\yellow\\bf Helena Vondráčková\\egroup}
+
+
+\stopbuffer
+
+\starttext
+\opencsvfile{cards.csv}
+
+QQQQ
+
+\startluacode
+context(tostring(thirddata.handlecsv.substitutecontentofcellof("cards.csv","cA",1,"John","JOHN")))
+context(tostring(thirddata.handlecsv.substitutecontentofcell("cA",1,"John","JOHNOVO")))
+context(thirddata.handlecsv.substitutecontentofcellofcurrentrow("A","John","Náhrada"))
+\stopluacode
+
+QQQQ
+
+
+
+\doloopif{\cA}{~=}{}{\getbuffer[single-card]}
+
+\stoptext
+
+
+% --- end of file test.tex
+
+% --- included file generate-test.tex
+\usemodule[handlecsv]
+
+
+\startbuffer[single-cards]
+\executesystemcommand{context --purgeall --result=test-\lineno.pdf --arguments="cA={\cA}","cB=\cB" test.tex}
+\stopbuffer
+
+\starttext
+\opencsvfile{cards.csv}
+
+\startitemize[n]
+\doloopif{\cA}{~=}{}{\getbuffer[single-cards]\item \cA }
+\stopitemize
+
+\stoptext
+
+% --- end of file generate-test.tex
+
+\stoptext
+
+
+    uffEND
+
+\konecdokumentu
+

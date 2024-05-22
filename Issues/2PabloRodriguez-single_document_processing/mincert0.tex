@@ -1,0 +1,14 @@
+\setuppapersize[A8, landscape]
+\setupbodyfont[helvetica, 13.5pt]
+\setupinteractionscreen[option=max]
+\setuppagenumbering[location=]
+\setupwhitespace[big]
+\usemodule[handlecsv]
+\opencsvfile{participants.csv}
+\starttext
+\doifnot{\env{MainLinePointer}}{}{\setlinepointer{\env{MainLinePointer}}}
+\startalign[middle]
+To Whom It Might Concern\stopalign
+
+This is to certify that \cA\ completed the course.
+\stoptext

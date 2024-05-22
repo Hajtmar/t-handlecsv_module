@@ -1,0 +1,9 @@
+\usemodule[handlecsv]
+\opencsvfile{abcde.csv} %contents are irrelevant
+\starttext
+\def\tointeger#1{\ctxlua{context(math.floor(tonumber("#1")))}}
+\startbuffer
+\linepointer\ \tointeger{\linepointer} \cA\\
+\stopbuffer
+\doloopif{\cA}{~=}{}{\getbuffer}
+\stoptext

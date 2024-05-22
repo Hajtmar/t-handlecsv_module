@@ -1,0 +1,21 @@
+\setupinteraction[state=start]
+
+\usemodule[handlecsv]
+\opencsvfile{ctx-doc.csv}
+
+%\def\Path{ctxbeta/tex/texmf-context/doc/context/documents/general/manuals/}
+\def\Path{/Users/hajtmar/context/tex/texmf-context/doc/context/documents/general/manuals/]
+
+
+\startTEXpage[offset=1em]
+\starttext
+All attachments on the same paragraph:
+
+\type{\doloopif}
+\attachment[\Path\cB]\nextrow%
+\doloopif{\cA}{==}{}{\attachment[\Path\cB]\nextrow}
+\stopTEXpage
+\stoptext
+
+
+

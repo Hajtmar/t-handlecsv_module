@@ -1,0 +1,11 @@
+\usemodule[handlecsv]
+
+\startbuffer[numbers]%
+\cA, \nextcell{1}, \prevcell{1}\par%
+\stopbuffer%
+
+
+\starttext
+\opencsvfile{numbers.csv}
+\doloopif{\lineno}{>=}{20}{\getbuffer[numbers]}
+\stoptext

@@ -1,0 +1,30 @@
+\usemodule[scancsv]
+\setuppapersize[A5]
+\starttext
+
+
+\def\typeheader{
+  \page{\bf\cA\ \cB:}\crlf
+}
+
+\def\typenotes{
+  \noindent\cC\ --- \cD\\
+}
+
+\def\writestudentnote{
+\doifelse{\cA}{}
+	{\typenotes}
+	{\typeheader}
+}
+
+
+\unexpanded\def\lineaction{
+    \writestudentnote
+}
+
+\setheader
+\opencsvfile{grades.csv}
+
+\filelineaction
+
+\stoptext

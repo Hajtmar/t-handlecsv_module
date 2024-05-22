@@ -1,0 +1,36 @@
+%\usemodule[c:/1da/ConTeXt/ConTeXt-Tests/MyWay/ScanCSV/t-handlecsv_module/t-handlecsv.lua]
+\usemodule[../../t-handlecsv_module/handlecsv]
+%\usemodule[handlecsv]
+
+%\usemodule[scancsv]
+
+\setuppapersize[A5]
+\starttext
+
+
+\def\typeheader{
+  \page{\bf\cA\ \cB:}\crlf
+}
+
+\def\typenotes{
+  \noindent\cC\ --- \cD\\
+}
+
+\def\writestudentnote{
+\doifelse{\cA}{}
+	{\typenotes}
+	{\typeheader}
+}
+
+
+\unexpanded\def\lineaction{
+    \writestudentnote
+}
+
+\setheader
+%\setsep{;}
+\opencsvfile{grades.csv}
+
+\filelineaction
+
+\stoptext

@@ -1,0 +1,221 @@
+\usemodule[handlecsvcells]
+
+
+
+
+
+
+
+
+\starttext
+
+\opencsvfile{numbers.csv}
+
+\unsetheader
+\opencsvfile{letters.csv}
+
+
+\getcsvcell[letters.csv](1,5)
+
+
+\getcsvcell[letters.csv]('A',5)
+
+
+\csvfilename
+
+\getcsvcell[numbers.csv](1,9)
+
+\csvfilename
+
+\hairline 
+
+\setsep{,}
+\setheader
+\opencsvfile{lide.csv}
+
+\csvfilename
+%\numrows
+
+
+\setsep{;}
+\setheader
+\opencsvfile{countries.csv}
+
+\csvfilename
+%\numrows
+
+\numrows[letters.csv]
+
+%\csvfilename -- \numrows
+
+
+\opencsvfile{countries.csv}
+
+%\csvfilename -- \numrows
+
+\opencsvfile{countries.csv}
+
+%\csvfilename -- \numrows
+
+
+
+%\csvfilename -- \numrows -- \numrows[] --
+
+
+\opencsvfile{letters.csv}
+
+%\csvfilename -- \numrows -- \numrows[]
+
+
+
+1 \numrows -- \numrows[]
+
+2 \numrows[lide.csv]
+
+3 \numrows[countries.csv]
+
+4 \numrows[letters.csv]
+
+
+
+%\dorecurse{\number\numrows\relax}{\recurselevel \crlf}
+
+
+%\dorecurse{\numrows[lide.csv]}{\recurselevel \crlf}
+
+
+%
+%1: \getcsvcell[lide.csv](1,9)
+%
+%A: \getcsvcell[lide.csv]("A",9)
+%
+%cA: \getcsvcell[lide.csv]("cA",9)
+%
+%Lastname: \getcsvcell[lide.csv]("Lastname",9)
+%
+%Last name: \getcsvcell[lide.csv]("Last name",9)
+%
+%Lastxname: \getcsvcell[lide.csv]("Lastxname",9)
+%
+%
+%Fitstname: \getcsvcell[lide.csv]("Firstname",9)
+%
+%Firstxname: \getcsvcell[lide.csv]("Firstxname",9)
+%
+%
+%numrows lide: \numrows{lide.csv}
+%
+%\opencsvfile{letters.csv}
+%
+%current opened filename: \csvfilename
+%
+%current opened filename numrows: \numrows
+
+%\dorecurse{\numrows{lide.csv}}{\getcsvcell[lide.csv]("Lastname",\recurselevel)}
+%
+%
+%\dorecurse{\numrows{numbers.csv}}{\getcsvcell[numbers.csv]("B",\recurselevel)}
+%
+%xxx 
+%
+%\dorecurse{\numrows{lide.csv}}{\recurselevel. \getcsvcell[numbers.csv](1,\recurselevel) -- \getcsvcell[numbers.csv]('B',\recurselevel) -- \getcsvcell[numbers.csv]('C',\recurselevel) -- \getcsvcell[numbers.csv](7,\recurselevel)\crlf }
+%
+%xxx 
+%
+%
+%\dorecurse{\numrows{letters.csv}}{\getcsvcell[letters.csv]("B",\recurselevel)}
+%
+%\dorecurse{\numrows{letters.csv}}{\getcsvcell[letters.csv](2,\recurselevel)}
+%
+%
+%
+%
+%numrows lide.csv: \numrows{lide.csv}
+%
+%\csvfilename
+%
+%numcols lide.csv: \numcols{lide.csv}
+%
+%numrows numbers.csv: \numrows{numbers.csv}
+%
+%numrows: \numrows{letters.csv}
+%
+%\csvfilename
+%
+%numcols numbers.csv: \numcols{numbers.csv}
+%
+%numrows letters.csv: \numrows{letters.csv}
+%
+%numrows countries.csv: \numrows{countries.csv}
+%
+%numcols letters.csv: \numcols{letters.csv}
+%
+%numcols: \numcols
+%
+%countries: \numrows{countries.csv}
+%
+%\dorecurse{4}{
+%
+%\recurselevel: \dorecurse{\recurselevel}{\recurselevel x}
+%
+%}
+
+\stoptext
+
+
+
+
+\def\docommand[#1][#2]%
+  {\if!#1!\else#1\fi
+  \if!#2!\else#2\fi}
+
+\def\command%
+  {\dodoubleargument\docommand}
+
+
+\def\Docommand[#1]%
+  {\if!#1!AAA\else#1\fi}
+
+\def\Command%
+  {\dosingleargument\Docommand}
+  
+  
+  
+\starttext
+
+1. \command[222][333]
+
+2. \command[222]
+
+3. \command
+
+
+1. \Command[aaa]
+
+2. \Command
+
+
+
+\def\ctnum#1{\ctxlua{if type(tonumber('#1'))=='number' then context('#1') else context(-1) end}}%
+
+\def\Ctnum#1{\ctxlua{if type(tonumber('#1'))=='number' then context('#1') else context(thirddata.handlecsvcells.numrows('#1')) end}}%
+
+
+\ctnum{5}
+
+\ctnum{aaa}
+
+
+
+\optdef\Dumrows[\ctxlua{context(thirddata.handlecsvcells.numrows(''))}]{
+	\ifnum\ctnum{\opt}>0 \opt%
+	\else\ctxlua{context(thirddata.handlecsvcells.numrows('\opt'))}%
+	\fi%
+}%
+
+\optdef\Wumrows[\ctxlua{context(thirddata.handlecsvcells.numrows(''))}]{
+	\ctnum{\opt}
+}%
+
+\optdef\Numrows[\ctxlua{context(thirddata.handlecsvcells.numrows(''))}]{\ctxlua{if type(tonumber('\opt'))=='number' then context('\opt') else context(thirddata.handlecsvcells.numrows('\opt')) end}}%
+

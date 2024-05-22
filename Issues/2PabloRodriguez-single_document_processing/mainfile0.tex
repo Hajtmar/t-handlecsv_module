@@ -1,0 +1,12 @@
+\usemodule[handlecsv]
+
+\startbuffer[single-certificates]
+\executesystemcommand{context --runs=1 --purgeall --result=certificate-\lineno.pdf --arguments="MainLinePointer={\lineno}" mincert0.tex}
+\stopbuffer
+
+\starttext
+\opencsvfile{participants.csv}
+\startitemize[n]
+\doloopif{\cA}{~=}{}{\getbuffer[single-certificates]\item \cA}
+\stopitemize
+\stoptext

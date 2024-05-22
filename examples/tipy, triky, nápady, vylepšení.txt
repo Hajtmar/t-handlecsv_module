@@ -1,0 +1,42 @@
+
+Všechny *.tex soubory ve složce Examples byly úspěšně kompilovány dne 31.7.2017 verzí knihovny t-handlecsv (kopie 2017-07-31-1826).lua
+
+
+%\usemodule[handlecsv (kopie 2017-07-31-1826)]
+\usemodule[handlecsv]
+
+
+
+
+
+
+
+Dát možnost nastavit pojmenování řádkových maker tak, aby se nevytvářela zbytečně všechna makra.
+
+nové makro \closecsvfile{filename.csv} - šetřit pamětí
+
+
+
+context --purgeall --result=citiesofworld-\Abbrev.pdf --arguments="CountryAbbrev=\Abbrev, Country=\Country" cities
+
+
+
+\opencsvfile{\env{pathtocsv}superstore_sales_smalltable.csv}
+
+
+
+context -- purgeall --arguments="pathtocsv=Calculations_in_tables/" --mode=external Calculations_in_tables/calculations_in_table01.tex
+
+
+
+CSV:
+http://creativyst.com/Doc/Articles/CSV/CSV01.htm#ExampleData
+https://support.spatialkey.com/spatialkey-sample-csv-data/
+http://wiki.contextgarden.net/System_Macros/Branches_and_Decisions#.5Cdoifinstringelse.2C.5Cdoifincsnameelse
+
+
+
+The handlecsv.lua is a ConTeXt module, that enables data merging for automatic document creation in ConTeXt. The most common case for automatic document creation is mail merge. For example documents  as office letters, envelopes or labels for those letters, return-receipts for all letters, lists of recipients of those letters, can be generated automatically from the same CSV data.  Module handlecsv.lua could be used to generating of budgets or invoices.
+
+
+

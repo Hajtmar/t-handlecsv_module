@@ -1,0 +1,66 @@
+
+
+
+\setuppapersize[A4,portrait][A4,portrait]
+
+\setuplayout[width=middle, height=middle, backspace=1in, cutspace=1in, margins=0pt]
+
+\input about_cells_contents-buffers
+
+
+
+\starttext
+\title{Disclosure of the data in the lines and columns of CSV table}
+
+%\startcolumns[n=2, distance=2mm, tolerance=stretch, balance=yes]
+After loading CSV table into module (when use \type{\opencsvfile} command) the 
+CSV data are put into the library macros for practical using. Datas in macros 
+are available to ConTeXt and can be browsed “manually“ or by using the 
+standard cycles or predefined cycles of library.
+
+Processing method and creating of usable macros depends on whether it's header 
+of CSV table or not. If the first row of the table contains the so-called 
+header of CSV file, then column names will be used as names of macros. In 
+addition, macros are created next macros, whose names match the names of cells 
+in a spreadsheet (eg. Excel). 
+
+The contents of individual cells can be obtained using macro 
+\type{\csvcell[<}{\it column}\type{>,<}{\it row}\type{>]} or using any macros 
+that refer to a specific column, while line number of table is determined 
+using a pointer (linepointer). Let me show the following simple example.
+
+
+To begin, suppose that we will process the CSV table 
+{\ss myfirstcsvexamplefile.csv}, the column delimiter is comma (\type{,}) and in 
+first line is header with these items: {\tt "first_name"}, {\tt "last_name"}, 
+{\tt "company_name"}, {\tt "address"}, {\tt "city"}, {\tt "county"}, 
+{\tt "state"}, {\tt "zip"}, {\tt "phone1"}, {\tt "phone2"}, {\tt "email"}, 
+{\tt "web"}.
+
+%\stopcolumns
+
+
+\title{Examples of usage}
+
+\subject{Contents cells via coordinates}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\stoptext
+
+ 

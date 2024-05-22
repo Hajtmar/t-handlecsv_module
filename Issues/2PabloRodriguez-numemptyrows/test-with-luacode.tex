@@ -1,0 +1,194 @@
+\usemodule[handlecsv]
+\setheader
+\opencsvfile{a.csv}
+
+\def\lineaction{\linepointer: \cA, \cB, \cC \par}
+
+\starttext
+\startTEXpage[offset=1em]
+
+markemptylines
+
+\markemptylines
+
+non--empty: \numnotemptyrows\\
+empty: \numemptyrows\\
+total: \numrows
+
+notmarkemptylines
+
+\notmarkemptylines
+
+non--empty: \numnotemptyrows\\
+empty: \numemptyrows\\
+total: \numrows
+
+markemptylines
+
+\markemptylines
+
+non--empty: \numnotemptyrows\\
+empty: \numemptyrows\\
+total: \numrows
+
+resetmarkemptylines
+
+\resetmarkemptylines
+
+non--empty: \numnotemptyrows\\
+empty: \numemptyrows\\
+total: \numrows
+
+
+
+\hairline
+
+\filelineaction
+
+\hairline
+
+\hairline
+
+%
+\startluacode
+function vypisall()
+context("\\hairline\\par All:\\par")
+for i=1,thirddata.handlecsv.gNumRows["a.csv"] do
+for j=1,thirddata.handlecsv.gNumCols["a.csv"] do
+
+context("[")
+context(i,"-",j,"] ---> ")
+if thirddata.handlecsv.gTableRows["a.csv"][i][j]=="" then context("EMPTY") else context(thirddata.handlecsv.gTableRows["a.csv"][i][j],", ") end
+context(", ")
+end 
+context("\\par")
+end
+context("\\par\\hairline")
+end
+
+function vypisempty()
+context("\\hairline\\par EmptyRows:\\par")
+context(thirddata.handlecsv.gNumEmptyRows["a.csv"])
+context(":\\par")
+for i=1,#thirddata.handlecsv.gTableEmptyRows["a.csv"] do context(thirddata.handlecsv.gTableEmptyRows["a.csv"][i],", ") end
+context("\\hairline")
+end
+
+
+function vypisnotempty()
+context("\\hairline\\par NotEmptyRows:\\par")
+context(thirddata.handlecsv.gNumNotEmptyRows["a.csv"])
+context(":\\par")
+for i=1,#thirddata.handlecsv.gTableNotEmptyRows["a.csv"] do context(thirddata.handlecsv.gTableNotEmptyRows["a.csv"][i],", ") end
+context("\\hairline")
+end
+
+function fillvalue()
+thirddata.handlecsv.gTableRows["a.csv"][1]=thirddata.handlecsv.gTableRows["a.csv"][3]
+thirddata.handlecsv.gTableRows["a.csv"][2]=thirddata.handlecsv.gTableRows["a.csv"][3]
+thirddata.handlecsv.gTableRows["a.csv"][4]=thirddata.handlecsv.gTableRows["a.csv"][6]
+thirddata.handlecsv.gTableRows["a.csv"][5]=thirddata.handlecsv.gTableRows["a.csv"][6]
+thirddata.handlecsv.markemptylines()
+end
+
+
+vypisall()
+
+vypisempty()
+
+vypisnotempty()
+
+
+context("Jedeme z kopce: ")
+
+
+-- fillvalue()
+
+thirddata.handlecsv.markemptylines()
+
+vypisall()
+
+vypisempty()
+
+vypisnotempty()
+
+\stopluacode
+
+%\filelineaction
+
+
+
+non--empty: \numnotemptyrows\\
+empty: \numemptyrows\\
+total: \numrows
+
+
+\hairline
+
+\opencsvfile{a.csv}
+
+REMOVEEMPTYLINES:
+ 
+\markemptylines
+\removeemptylines
+
+\startluacode
+
+vypisall()
+
+vypisempty()
+
+vypisnotempty()
+
+\stopluacode
+
+
+non--empty: \numnotemptyrows\\
+empty: \numemptyrows\\
+total: \numrows
+
+
+XXXXX
+
+
+\closecsvfile{a.csv}
+\opencsvfile{a.csv}
+
+FILELINEACTION
+
+
+
+
+\startluacode
+-- thirddata.handlecsv.closecsvfile("a.csv")
+
+-- thirddata.handlecsv.gTableRows["a.csv"]={}
+thirddata.handlecsv.opencsvfile("a.csv")
+vypisall()
+
+vypisempty()
+
+vypisnotempty()
+
+\stopluacode
+
+\filelineaction
+
+non--empty: \numnotemptyrows\\
+empty: \numemptyrows\\
+total: \numrows
+
+
+\markemptylines
+
+non--empty: \numnotemptyrows\\
+empty: \numemptyrows\\
+total: \numrows
+
+
+\stopTEXpage
+\stoptext
+
+
+
+

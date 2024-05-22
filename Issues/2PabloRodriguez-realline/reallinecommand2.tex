@@ -1,0 +1,38 @@
+\usemodule[handlecsv]
+\opencsvfile{holidays.csv}
+
+
+\definelabel[QQ][text=, headcolor=red,numberconversion=A, numberstopper={)}]
+
+
+\def\realline{\doifnot{\cA}{}{\QQ }}
+
+\startbuffer[groups]
+\doiftextelse{\nextcell{'C'}}
+    {\doiftextelse{\cA}
+        {\startxrow[topframe=on, bottomframe=off, toffset=1.5ex]}
+        {\startxrow[topframe=off, bottomframe=off]}}
+    {\startxrow[topframe=off, bottomframe=on, toffset=1ex, boffset=1.5ex]}
+    \startxcell[align=center]{\ttx\setupinterlinespace\cD\realline}\stopxcell% changedline
+    \startxcell[align=center]{\ttx\setupinterlinespace\cA}\stopxcell
+    \startxcell {\ttx\setupinterlinespace\cB\par}\stopxcell
+    \startxcell {\ttx\setupinterlinespace\cC\par}\stopxcell
+\stopxrow
+\stopbuffer
+
+
+
+\starttext
+
+\startxtable[option=stretch, split=yes]
+    \startxrow[align=middle, foregroundstyle=\tfx]
+        \startxcell[width=.075\textwidth] Number\stopxcell
+        \startxcell[width=.075\textwidth] Participants\stopxcell
+        \startxcell[width=.4\textwidth] Countries\stopxcell
+        \startxcell[width=.4\textwidth] Cities\stopxcell
+    \stopxrow
+
+\doloopif{\cC}{~=}{}{\getbuffer[groups]}
+\stopxtable
+
+\stoptext

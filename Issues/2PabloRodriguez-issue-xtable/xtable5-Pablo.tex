@@ -1,0 +1,24 @@
+\usemodule[handlecsv]
+\opencsvfile{numbers.csv}
+\starttext
+
+\startbuffer[rows]
+\startxrow
+    \startxcell\Romannumerals{\cA}\stopxcell
+\stopxrow
+\stopbuffer
+
+\startbuffer[abc]
+\Romannumerals{\cA}\\
+\stopbuffer
+
+\startxtable[option=stretch, split=yes]
+\resetlinepointer % put here command to reset line pointer
+\doloop{\getbuffer[rows] \nextrow \ifEOF\exitloop\fi}
+\stopxtable
+
+
+\resetlinepointer
+\doloop{\getbuffer[abc]\nextrow\ifEOF\exitloop\fi}
+
+\stoptext

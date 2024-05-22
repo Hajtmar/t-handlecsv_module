@@ -1,0 +1,52 @@
+
+\usemodule[scancsv]
+\setuppapersize[A5]
+
+\def\createexternalfile#1{\immediate\openout\scratchwrite#1}
+\def\writetoexternalfile#1{\immediate\write\scratchwrite{#1}}
+\def\closeexternalfile{\closeout\scratchwrite}
+\let\cref\createexternalfile
+\let\wtef\writetoexternalfile
+\let\clef\closeexternalfile
+
+
+\def\writelineintostudentsdatatable{%
+\doifelse{\Name}{}
+	{}%
+	{\wtef{"\Name";"\Surname"}}%
+}%
+
+\def\writelineintomailmergedatatable{%
+\doifelse{\Name}{}
+	{\wtef{"\rName";"\rSurname";"\Subject";"\Note"}}%
+	{\edef\rName{\Name}%
+	 \edef\rSurname{\Surname}%
+	 \wtef{"\Name";"\Surname";"\Subject";"\Note"}}%
+}
+
+
+
+
+\starttext
+
+\cref{studentsdatatable.csv}
+\wtef{"Name";"Surname"}
+\setheader
+\unexpanded\def\lineaction{\writelineintostudentsdatatable}
+\opencsvfile{grades.csv}
+\filelineaction
+\clef
+
+\cref{mailmergedatatable.csv}
+\wtef{"Name";"Surname";"Subject";"Note"}
+\setheader
+\unexpanded\def\lineaction{\writelineintomailmergedatatable}
+\opencsvfile{grades.csv}
+\filelineaction
+\clef
+\clef
+
+Now compile student-notes.tex file!!!
+
+
+\stoptext

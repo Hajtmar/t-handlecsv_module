@@ -1,0 +1,131 @@
+\usemodule[scancsv]
+
+\setupexternalfigures[directory={graphics/}]
+
+\usemodule[letter]
+
+\usetypescript[bonum]
+\setupbodyfont[bonum,11pt]
+
+\setupletterstyle[bodyfont=12pt, whitespace=small, alternative=doublesided, marking=no]
+
+
+
+\setupletterstyle[subject][style=\bfb, align=middle]
+\setupletterstyle[reference][style=\ssx,list={datum}]
+
+
+\def\CSTUG{{\it C\kern-0.2ex\offset[y=+0.5ex]{S}}\kern-0.2ex TUG}
+
+\def\hlavicka{
+\blank[medium]
+\midaligned{\bf \CSTUG\ --\ \ppscstug}
+\midaligned{c/o FEL ČVUT, Technická~2, \ppsCZ166\,27 \ppspraha~6, \ppsCR}
+\par
+\midaligned{\ppsic: 00536580,} 
+\midaligned{\ppsdic: CZ00536580}
+}%\hlavicka{
+
+\def\zahlavi{{{\externalfigure[cstugheader.pdf][width=18cm]}}}
+
+\def\NamePartic{\if:\Firstname:\framed[width=6cm, frame=bottom]{}\else{\bf\Firstname\ \Lastname}\ \fi}
+\def\ParticFrom{\if:\Country:\framed[width=6cm, frame=bottom]{}\else\Country\ \fi}
+
+\startbuffer[dopis]
+\ifnum\Foreigner=0
+\mainlanguage[cz]
+\def\datumvyd{Brejlov, 19. září 2010}
+\def\nadpispotvrzeni{Potvrzení o~účasti}
+\def\ppscstug{Československé\ sdružení\ uživatelů\ \TeX u}
+\def\ppspraha{Praha}
+\def\ppsCR{Česká\ republika}
+\def\ppsfaktura{Faktura č.\,}
+\def\ppsvystavil{Vystavil: }
+\def\ppsdatum{Datum vystavení: }
+\def\ppscastka{Účtovaná\ částka: }
+\def\ppssplatnost{Datum splatnosti: }
+\def\ppspolozky{Účtované\ položky}
+\def\ppsmena{Kč}
+\def\ppsdo{do 14 dnů\ od data vystavení}
+\def\ppsic{IČ}
+\def\ppsdic{DIČ}
+\def\ppsprefix{3141}
+\def\ppsCZ{}
+   \else
+\mainlanguage[en]  
+\def\datumvyd{Brejlov, September 19, 2010}
+\def\nadpispotvrzeni{Conference participation}   
+\def\ppscstug{Czechoslovak \TeX\ Users Group}
+\def\ppspraha{Prague}
+\def\ppsCR{The Czech Republic}
+\def\ppsfaktura{Invoice No. }
+\def\ppsvystavil{Created by: }
+\def\ppsdatum{Date of issuance: }
+\def\ppscastka{Amount of invoice: }
+\def\ppssplatnost{Expiration date: } %PLEASE, DON'T PAY!
+\def\ppspolozky{Invoice items}
+\def\ppsmena{EUR}
+\def\ppsdo{14 days from date of issuance}%This is a payment confirmation.
+\def\ppsic{Identification No.}
+\def\ppsdic{VAT Identification No.}
+\def\ppsprefix{3141}
+\def\ppsCZ{CZ-}
+\fi
+
+\defineletterelement[layer][head][cstuglogo]%
+   {\framed[background=logohead,height=35mm,frame=off,align=left]%
+     {\externalfigure[cstugheader.pdf]}}
+   
+\setupletterlayer[head]
+   [x=0mm,
+    y=15mm,
+   alternative=cstuglogo]
+   
+
+
+\startletter[
+	datum={\datumvyd},
+	subject={\nadpispotvrzeni},
+	closing={}
+	]
+
+
+
+\ifnum\Foreigner=0 % _Czech	
+Organizátoři tímto potvrzují, že {\NamePartic} se zúčastnil{\Sex}\  
+čtvrtého \CONTEXT\ mítinku a~třetího ročníku \TeX perience, které probíhaly v~době od 13.~září~2010 
+do 18.~září 2010, respektive 16.~až 19.~září 2010. 
+
+Místo konferencí: Mlýn 
+Brejlov, Břežany 29, 257\,41, Týnec nad Sázavou, Česká republika.
+
+\else %Eng.
+
+Hereby we confirm that {\NamePartic} from {\ParticFrom} has participated in the 
+fourth \CONTEXT\ meeting and the third \TeX perience conference taken from 
+September 13-18,~2000 and September 16-19,~2010, respectively. 
+
+The address of 
+the conference venue is: Mlýn Brejlov, Břežany 29, CZ-257\,41, Týnec nad 
+Sázavou, The Czech Republic.
+
+\fi
+
+\blank[3*big]\hfill \ppscstug
+
+\stopletter
+
+\page
+\stopbuffer
+ 
+
+
+\starttext
+\setsep{,}
+\setheader
+
+\opencsvfile{badgets.csv}
+\doloop{\ifnotEOF\getbuffer[dopis]\nextrow\else\exitloop\fi} %OK 
+
+\stoptext
+

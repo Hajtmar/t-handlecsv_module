@@ -1,0 +1,43 @@
+[Config]
+Compilator.SaveAll=0
+Compilator.Capture=0
+Compilator.HideOutput=0
+Compilator.ProgSaveAll=0
+Compilator.ProgRunSelection=0
+Compilator.LogType=0
+DefaultCPIndex=8
+LogtoEnd=0
+DontOpen=0
+AbsolutePath=0
+FileFormat=0
+ProjectFilesOnly=0
+[Project tree]
+handlecsv
+	+Složka
+		..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\manual\myfirstcsvexamplefile.csv
+		..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\manual\myfirstcsvexamplefilewithemptylines.csv
+		..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\t-handlecsv.lua
+		..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\manual\t-handlecsv_manual.tex
+[Open project files]
+0=..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\manual\t-handlecsv_manual.tex
+1=..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\t-handlecsv.lua
+2=..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\manual\myfirstcsvexamplefile.csv
+3=..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\manual\myfirstcsvexamplefilewithemptylines.csv
+[Selected Project Files]
+Main=
+Selected=..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\manual\t-handlecsv_manual.tex
+[..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\manual\t-handlecsv_manual.tex]
+TopLine=57
+Caret=18,61
+[..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\t-handlecsv.lua]
+TopLine=857
+Caret=1,894
+BookMark3=3,230
+BookMark4=3,397
+BookMark1=3,259
+[..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\manual\myfirstcsvexamplefile.csv]
+TopLine=1
+Caret=86,34
+[..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\manual\myfirstcsvexamplefilewithemptylines.csv]
+TopLine=4
+Caret=46,41

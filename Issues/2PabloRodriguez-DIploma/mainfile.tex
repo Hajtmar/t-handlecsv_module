@@ -1,0 +1,62 @@
+% This is sorce code of main file ie. mainfile.tex
+% When You compile this file then you get separate PDF file for each row of table notes.csv.
+\usemodule[handlecsv]
+
+\def\sendmail#1#2#3#4{psmail "#1" "#2" "#3" "#4"} % {To}{Subject}{path to Attachments}{Body}
+
+\def\n{}
+
+\setupinteraction[state=start]
+
+\startbuffer[creatingofparticulardiplomas]
+\executesystemcommand{context --purgeall --result=diploma-\cA.pdf --arguments="cA=\cA" servingfile.tex}%  create particular PDF file for student \cA
+\def\mail{\sendmail{\cC}% To ...
+  {Your diploma} % Subject ...
+	{c:\\path\\to\\diploma\\diploma-\cA.pdf}% Attachments ...
+	{First line body\n.Second line body\n Third line body}% Body.... %\n - newline
+}%
+
+\executesystemcommand{\mail} % sent mail with attachments
+
+\item \goto{Click here to send diploma to \cA.}[url(mailto:\cC?subject=PDF diploma for you.&body=Congratulations to obtain a diploma. Your PDF diploma is in attachment file diploma-\cA.pdf")]
+\stopbuffer
+
+
+\starttext
+\opencsvfile{notes.csv}
+\startitemize[n]
+\dorecurse{\numrows}{\getbuffer[creatingofparticulardiplomas]\nextrow}
+\stopitemize
+
+Unfortunately, it is necessary attach file of attachment manually. PDF file is necessary open in Acrobat reader.
+
+\stoptext
+
+
+\executesystemcommand{context --purgeall --result=diploma-\cA.pdf --arguments="cA=\cA" servingfile.tex}%  create particular PDF file for student \cA
+
+
+
+% Makro pro odeslání právě zkompilovaného PDFka
+\sendmail{hajtmar@gyza.cz}% na konkrétní mailovou adresu
+  {Test funkcnosti} % Subject mailu ...
+	{c:\\1da\\context-lua\\scancsv-lua\\contextmeeting2010\\prezentace\\ukazky\\sendbill\\evolution\\kompilovanysoubor.pdf}% příloha
+	{Dobry den\n.Jestli tento mail prisel, tak to opravdu funguje\n Jarda Hajtmar}% %\n - newline
+
+
+
+% \executesystemcommand{mail -s "subject line" jaroslav@hajtmar.com < diploma-Daisy.pdf}%
+%\executesystemcommand{mail hajtmar@gyza.cz, jaroslav@hajtmar.com, hajtmar@gmail.com
+%Subject: I like cheesecake!
+%Hello,
+%
+%It has come to my attention that you enjoy delicious food known as cheesecake.  I do so as well.
+%Hats off to you, my good sir!
+%
+%Yours Sincerely,
+%Jarda
+%}
+
+
+
+% \item \goto{Click here to send diploma to \cA.}[url(mailto:\cC?subject=PDF diploma for you.&body=Congratulations to obtain a diploma. Your PDF diploma is in attachment file diploma-\cA.pdf&attachment="file://Users/hajtmar/OneDrive/Dokumenty/1da/ConTeXt/ConTeXt-Tests/my_way/ScanCSV/t-handlecsv_module/2PabloRodriguez-DIploma/diploma-\cA.pdf")]

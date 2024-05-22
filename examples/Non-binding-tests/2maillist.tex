@@ -1,0 +1,97 @@
+% Šustek:
+
+\def\pocetradku{\futurelet\mujtoken\pocetradkutest}
+\def\pocetradkutest{\ifx\mujtoken[\expandafter\pocetradkusparametrem\else\pocetradkubezparametru\fi}
+\def\pocetradkusparametrem[#1]{\message{Makro volano s parametrem "#1".}}
+\def\pocetradkubezparametru{\message{Makro volano bez parametru.}}
+
+\def\command{\futurelet\commandtoken\docommand}
+\def\docommand{\ifx\commandtoken[\expandafter\commandpar\else\commandnopar\fi}
+\def\commandpar[#1]{Parametr je #1.}
+\def\commandnopar{Bez parametru}
+
+
+
+
+% Olšák:
+% http://petr.olsak.net/opmac-tricks.html
+
+\def\isnextcharA{\the\toks\ifx\tmp\next0\else1\fi\space}
+\long\def\isnextchar#1#2#3{\begingroup\toks0={\endgroup#2}\toks1={\endgroup#3}%
+   \let\tmp=#1\futurelet\next\isnextcharA
+}
+
+\def\sdef#1{\expandafter\def\csname#1\endcsname}
+
+\def\optdef#1[#2]{%
+   \def#1{\def\opt{#2}\isnextchar[{\csname oA:\string#1\endcsname}{\csname oB:\string#1\endcsname}}%
+   \sdef{oA:\string#1}[##1]{\def\opt{##1}\csname oB:\string#1\nospaceafter\endcsname}%
+   \sdef{oB:\string#1\nospaceafter}%
+}
+\def\nospaceafter#1{\expandafter#1\romannumeral-`\.}
+
+
+
+\def\mojemakro{Ahoj}
+
+\optdef\mojemakro [default] #1{opt=\opt, 1=#1}
+
+\optdef\mojedruhemakro[default] #1 #2 {opt=opt, 1=#1, 2=#2.}
+
+  
+  
+\starttext
+
+\mojemakro
+
+\mojedruhemakro
+
+
+
+
+1. \command[xxx]
+
+2. \command
+
+
+
+
+%1. \dorecurse{\Command[5]}{\recurselevel\crlf}
+
+%2. \dorecurse{\Command}{\recurselevel\crlf}
+
+\stoptext
+
+Subject: Problem with macro with optional parameter
+Hello ConTeXist.
+I'm not able to solve a macros problem with one optional argument. I need the macro to return a value that can be used as a dorecurse loop parameter.
+Is there possibility create macro with optional parameter and parameter is concurrently inside in braces? (in nonsquare brackets)? 
+I've tried to experiment with examples from the wiki, but I'm not clear about it.
+
+Thanx for help.
+Jaroslav Hajtmar
+
+Here is minimal example:
+
+
+
+Dobrý den.
+Rád bych zase po čase  "provětral" tuto konferenci dotazem na možnost definice plainových maker s volitelným(i) parametrem(y).
+Ačkoliv plaintex prakticky nepoužívám (s výjimkou kompilace starých věcí z archívu), tak mám většinu maker v ConTeXtu plainových.
+ConTeXt řeší možnost maker s volitelnými parametry, rád bych se však zeptal v této konferenci, zda lze, popř. jak lze v plainu definovat makro s volitelným (více volitelnými) parametry. Koukal jsem do TBN a na podobnou věc jsem nenarazil. Dále bych rád upozornil, že ačkoliv jsem schopen svůj problém řešit makry různých názvů (některé bez parametru jiné s parametry), tak mne jisté důvody (kompatibilita se staršími verzemi mých dokumentů) vedou k tomu, abych se pokusil použít řešení pomocí volitelných parametrů.
+
+Rád bych měl tedy makro s názvem např.: \pocetradku, které by vracelo něco jíného než makro \pocetradku{<jmenosouboru>} resp. možná lépe pro mne \pocetradku[<jmenosouboru>].
+Makro \pocetradku by vracelo počet řádků jakéhosi defaultního - v paměti aktuálního souboru, tzn. bylo by ekvivalentní s makrem \pocetradku[], zatímco \pocetradku[<jmenosouboru>] by vracelo počet řádků nějakého jiného souboru. Při experimentování jsem narazil meze svých znalostí plainu a proto bych se rád obrátil na konferenci. Může mne někdo odkázat na nějaké relevantní zdroj popř. mi nějak poradit? 
+Na internetu jsem našel nějaké podovné věci dělané v LaTeXu, to je pro mne však nepoužitelné... 
+Rád přijmu i to, že mi někdo rozmluví můj problém řešit zrovna takto .... :-).
+
+
+Díky za případné tipy a rady
+
+Zdraví
+Jarda Hajtmar
+
+
+ 
+
+

@@ -1,0 +1,53 @@
+
+
+% csvfile.txt content:
+% first,second,third,fourth
+% 1,"2","3","4"
+% "a","b","c","d"
+% "foo","bar""baz","boogie","xyzzy"
+% 
+
+
+
+\starttext
+
+\let\numcols\relax
+\let\numrows\relax
+\let\numcols\relax
+
+\startluacode
+	-- gCSVHeader=true -- works fine when compiled any version of ConTeXt
+	 gCSVHeader=false -- crashed, when compiled by last version of standalone
+	 gColNames={}
+	 gColumnNames={} 
+	 local inpcsvfile='csvfile.txt'
+	 local currentlyprocessedcsvfile = io.loaddata(inpcsvfile)
+	 local mycsvsplitter = utilities.parsers.rfc4180splitter{
+    	separator = ',',
+    	quote = '"',
+		}
+	if gCSVHeader then
+	 gTableRows, gColumnNames = mycsvsplitter(currentlyprocessedcsvfile,true)   
+	 inspect(gTableRows) 
+	 inspect(gColumnNames)
+	else
+	  gTableRows = mycsvsplitter(currentlyprocessedcsvfile)
+	  inspect(gTableRows)
+	  -- inspect(gColumnNames)
+	end
+
+	context('TR'..tostring(gTableRows)..'  ')
+	context('TC'..tostring(gColumnNames))
+	 -- gNumRows=#gTableRows -- Getting number of rows
+	 --gNumCols=#ColumnNames -- Getting number of cols
+ 	 --gNumCols=#gTableRows[1] -- Getting number of columns
+
+	 context.setgvalue("numrows",tostring(gNumRows))
+	 context.setgvalue("numcols",tostring(gNumCols))
+	 context.setgvalue("filename",tostring(inpcsvfile)) 
+\stopluacode
+
+
+File \filename\ has \numrows\ lines and \numcols\ columns.
+
+\stoptext

@@ -1,0 +1,155 @@
+\starttext
+
+\startluacode
+function texmacroisdefined(macroname)
+			if token.csname_name(token.create(macroname)) == macroname then
+		return true
+ 	else
+		return false
+	end
+end
+
+A={}
+
+for i=1,100 do A[i]='Záznam'..tostring(i) end
+A[25]='AAAAA'
+\stopluacode
+
+
+\directlua{if texmacroisdefined("starttexdt") then context('ANO') else context('NE') end}
+
+
+
+\def\cA{AAAAA}
+
+
+
+\def\lastname{\dosingleempty\dolastname}\def\dolastname[#1]{\iffirstargument \ctxlua{context(A[#1])}\else\cA\fi}
+
+
+\lastname
+
+\lastname[4]
+
+\def\zpracujudaj#1{\def\udaj{#1}}
+\def\zpracujUDAJ#1{\def\UDAJ{#1}}
+
+\zpracujudaj{\expanded{\lastname}}
+\zpracujUDAJ{\expanded{\lastname[25]}}
+
+
+XXX\udaj--\UDAJ XXX
+
+
+\if\udaj\UDAJ HURA\else PRD \fi
+
+\def\a{\expanded{\lastname}}
+\def\b{\expanded{\lastname[25]}}
+
+\a -- \b XX
+
+\if\noexpand\a\noexpand\b HURA\else PRD \fi
+
+
+\if\noexpand{\lastname[25]}\noexpand{\lastname} HURA\else  PRD\fi
+
+
+\def\c{\expanded{\lastname[25]}}
+\def\d{\expanded{\lastname}}
+
+\c
+
+\d
+
+
+CO TOHLE?? \ifx\noexpand\c\noexpand\d HURA\else  PRD\fi
+
+
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+This works as expected:
+
+\def\makrowithAAAAcontent{AAAA}
+
+\edef\testparameter#1{%
+\startluacode
+local parameter='#1'
+if parameter=='AAAA' then context('TRUE. ') else context('FALSE. ') end
+context('Parameter '..parameter..' has length '..string.len(parameter))
+\stopluacode
+}%
+
+\type{\makrowithAAAAcontent} -- \makrowithAAAAcontent
+
+Test is \testparameter{BBBB} 
+
+Test is \testparameter{AAAA} % OK
+
+Test is \testparameter{\makrowithAAAAcontent} % OK
+
+
+But what about this?
+
+
+
+\def\makrowithAAAAcontent{AAAA}
+
+\def\lastname{\dosingleempty\dolastname}%
+\def\dolastname[#1]{\doifsomethingelse{#1}{\ctxlua{context(A[#1])}}{\makrowithAAAAcontent}}%
+
+\startluacode
+for i=1,50 do A[i]='Record '..tostring(i) end
+A[25]='AAAA'
+\stopluacode
+
+
+\type{\lastname} - \lastname
+
+\type{\lastname[2]} - \lastname[2]
+
+\type{\lastname[5]} - \lastname[5]
+
+\type{\lastname[25]} - \lastname[25]
+
+
+
+
+
+\edef\readandprocessparameters#1#2{%
+\startluacode
+local parameter1='#1'
+if parameter1=='AAAA' then context('TRUE. ') else context('FALSE. ') end
+context('Parameter 1 :'..parameter1..' has length '..string.len(parameter1))
+context('\\crlf')
+local parameter2='#2'
+if parameter2=='AAAA' then context('TRUE. ') else context('FALSE. ') end
+context('Parameter 2 :'..parameter2..' has length '..string.len(parameter2))
+context('\\crlf')
+\stopluacode
+}%  
+
+
+Test is \readandprocessparameters{AAAA}{BBBB}
+
+%Test is \readandprocessparameters{\lastname[25]}{\lastname} % Crashed
+
+Test is \readandprocessparameters{\\lastname[25]}{\\lastname}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\stoptext

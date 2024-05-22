@@ -1,0 +1,19 @@
+\usemodule[handlecsv]
+
+
+\starttext
+
+\startbuffer[text-content]
+\cA\hfill\cB\crlf
+\stopbuffer
+
+
+\opencsvfile{mail-sample.csv}
+\doloop{%
+		\getbuffer[text-content]%
+\ifnotEOF\nextrow\else\exitloop\fi%
+}
+
+
+
+\stoptext

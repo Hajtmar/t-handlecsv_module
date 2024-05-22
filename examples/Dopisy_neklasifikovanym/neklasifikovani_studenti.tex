@@ -1,0 +1,91 @@
+\mainlanguage[cz]            % Podle typografických pravidel 
+\setuppapersize[A4][A4]      % Velikost papíru bude A5 a bude na stránce opět o téže velikosti. 
+\setupcolors[state=start]    % Zapne používání barev.
+\setuppagenumbering[state=stop]
+\setuplayout[width=middle, topspace=1cm, header=1cm, footer=1cm]
+
+\enablemode[prvnipololeti]
+%\enablemode[druhepololeti]
+
+\def\skolnirok{2015/16}
+
+
+
+
+\doifmodeelse{prvnipololeti}
+{\def\pololeti{první}\def\pololeticislici{1.}}
+{\def\pololeti{druhé}\def\pololeticislici{2.}}
+
+
+\usedirectory[c:/1da/ConTeXt/ConTeXt-Tests/my_way/ScanCSV/t-handlecsv_module/]
+\usemodule[handlecsv]
+
+\long\def\addto#1#2{\expandafter\def\expandafter#1\expandafter{#1#2}}
+\long\def\eaddto#1#2{\edef#1{#1#2}} 
+
+\unexpanded\def\zkratkapredmetu#1{\ctxlua{context(thirddata.handlecsv.ParseCSVLine('#1',':')[1])}}%
+
+\def\neklpredmety{%
+\def\NeklPredmety{}
+\dostepwiserecurse{24}{58}{1}{\if\csvcell[\recurselevel,\linepointer]N \eaddto\NeklPredmety{\zkratkapredmetu{\csvcell[\recurselevel,0]}, }\fi}% 
+\dostepwiserecurse{75}{85}{1}{\if\csvcell[\recurselevel,\linepointer]N \eaddto\NeklPredmety{\zkratkapredmetu{\csvcell[\recurselevel,0]}, }\fi}% 
+}
+
+
+
+\input lib-lua.tex
+
+\unexpanded\def\lineaction{
+\let\Trida\cA
+\let\Prijmeni\cE
+\let\Jmeno\cF
+\neklpredmety
+\ifx\NeklPredmety\empty\addtonumline{-1}\else
+\numline -- \Jmeno\ \Prijmeni\  (\Trida):  \NeklPredmety\crlf 
+\fi
+} 
+
+
+\unexpanded\def\tableaction{
+\neklpredmety
+\ifx\NeklPredmety\empty\addtonumline{-1}\else
+\let\Trida\cA
+\let\Prijmeni\cE
+\let\Jmeno\cF
+\expanded{\bTR\bTD\numline\eTD \bTD\Jmeno\ \Prijmeni \eTD\bTD (\Trida)\eTD\bTD\NeklPredmety \eTD}%
+\fi
+}
+
+
+\starttext
+
+\setheader
+
+\doifmodeelse{prvnipololeti}
+{\setfiletoscan{export-1pololeti.csv}}
+{\setfiletoscan{export-2pololeti.csv}}
+\opencsvfile
+
+\subject{Neklasifikovaní žáci --  šk. r. \skolnirok, \pololeticislici\ pololetí} 
+
+
+% \resetnumline
+% \doloopfromto{1}{\numrows}{
+% \lineaction
+% }
+% 
+% 
+% \filelineaction
+
+
+
+\blank[3*big]
+
+
+\bTABLE
+\doloopfromto{1}{\numrows}{\tableaction}
+\eTABLE
+
+
+
+\stoptext

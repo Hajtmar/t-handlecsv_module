@@ -1,0 +1,19 @@
+\usemodule[scancsv]
+
+
+\unexpanded\def\printaction{
+		Jméno: \Jmeno, Příjmení:  \Prijmeni, č.j.: \CisJedn
+		\page
+		} 
+
+\def\lineaction{\printaction} %
+
+\setheader 
+\setsep{;}
+\setfiletoscan{demo.csv}
+
+
+\starttext
+%\filelineaction{demo.csv} % 
+\filelineaction
+\stoptext

@@ -1,0 +1,59 @@
+
+
+\starttext
+
+\startluacode
+local crap = [[
+first,second,third,fourth
+"1","2","3","4"
+"a","b","c","d"
+"foo","bar""baz","boogie","xyzzy"
+]]
+
+
+local mycsvsplitter = utilities.parsers.rfc4180splitter()
+local list = mycsvsplitter(crap,true) 
+inspect(list)
+
+
+--tex.print(list[3][2])
+
+function ParseCSVLine(line,sep)
+	local mycsvsplitter = utilities.parsers.rfc4180splitter{
+	    separator = sep,
+	    quote = '"',
+	    strict=true,
+	}
+	local list = mycsvsplitter(line) inspect(list) 
+	return list[1]
+end
+
+--local vysledek=ParseCSVLine('AAA:BBB:CCC:DDD',':')
+
+--tex.print(vysledek[2])
+
+\stopluacode
+
+ 
+\def\nazevpredmetu#1{\ctxlua{context(ParseCSVLine('#1',':')[2])}}%
+ 
+ 
+\nazevpredmetu{AAA:BBB:CCC:DDD}
+ 
+\ctxlua{context(ParseCSVLine('AAA:BBB:CCC:DDD',':')[1])}
+ 
+
+% local mycsvsplitter = utilities.parsers.rfc4180splitter()
+% 
+%
+% 
+% local list, names = mycsvsplitter(crap,true)   inspect(list) inspect(names)
+% 
+% 
+% -- local list, names = mycsvsplitter(crap)        inspect(list) inspect(names)
+% 
+% tex.print(list[2])
+
+
+
+\stoptext

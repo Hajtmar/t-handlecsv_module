@@ -1,0 +1,12 @@
+\usemodule[handlecsv]
+\opencsvfile{numbers.csv}
+\starttext
+\startbuffer[numbers]
+\lineno\qquad\cA\par
+\stopbuffer
+Using \tex{doloopfromto}:\par
+\doloopfromto{5}{10}{\getbuffer[numbers]}
+\blank
+Using \tex{Doloopfromto}:\par
+\Doloopfromto{5}{10}{\getbuffer[numbers]}
+\stoptext

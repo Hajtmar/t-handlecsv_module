@@ -1,0 +1,22 @@
+\usemodule[handlecsv]
+
+\startbuffer[other-languages]
+    \item \cB
+\stopbuffer
+
+\startbuffer[languages]
+\cA\ speaks:
+    \startitemize
+        \doloopuntil{\cA}{}{\getbuffer[other-languages]}                 
+	\if!\cB!\else\doloopwhile{\cA}{}{\getbuffer[other-languages]}\fi
+    \stopitemize
+\stopbuffer
+
+
+\starttext
+ \opencsvfile{languages.csv}
+ \doloopif{\cA}{~=}{}{\getbuffer[languages]}
+
+\stoptext
+
+

@@ -1,0 +1,116 @@
+% Olšák:
+% http://petr.olsak.net/opmac-tricks.html
+
+
+
+
+
+
+
+\def\isnextcharA{\the\toks\ifx\tmp\next0\else1\fi\space}
+\long\def\isnextchar#1#2#3{\begingroup\toks0={\endgroup#2}\toks1={\endgroup#3}%
+   \let\tmp=#1\futurelet\next\isnextcharA
+}
+
+\def\sdef#1{\expandafter\def\csname#1\endcsname}
+
+\def\optdef#1[#2]{%
+   \def#1{\def\opt{#2}\isnextchar[{\csname oA:\string#1\endcsname}{\csname oB:\string#1\endcsname}}%
+   \sdef{oA:\string#1}[##1]{\def\opt{##1}\csname oB:\string#1\nospaceafter\endcsname}%
+   \sdef{oB:\string#1\nospaceafter}%
+}
+\def\nospaceafter#1{\expandafter#1\romannumeral-`\.}
+
+
+\starttext
+
+\startbuffer[buff1]
+Pokud nechcete žádný povinný parametr, definujte: 
+\optdef\mojemakro[default]{opt=\opt}
+
+A používejte \mojemakro\  nebo \mojemakro[cosi].
+\stopbuffer
+
+\typebuffer[buff1]
+
+\getbuffer[buff1]
+
+
+\optdef\numrows[10]{\opt}
+
+OK: \numrows
+
+OK: \numrows[4]
+
+fail %\ dorecurse{\numrows}{\recurselevel \crlf}
+
+fail % \dorecurse{\numrows[5]}{\recurselevel \crlf}
+
+ \hairline
+
+\startbuffer[buff2]
+
+Pokud chcete jeden NESEPAROVANÝ paramter, definujte: 
+\optdef\mojemakro [default] #1{opt=\opt, 1=#1}
+
+a používejte \mojemakro{cosi}\ nebo \mojemakro[neco]{cosi} atd.
+\stopbuffer
+
+
+\typebuffer[buff2]
+
+\getbuffer[buff2]
+
+
+
+
+\hairline
+
+
+% ala Šustek
+
+
+\def\numrows{\futurelet\commandtoken\donumrows}
+\def\donumrows{\ifx\commandtoken[\expandafter\numrowspar\else\numrowsnopar\fi}
+\def\numrowspar[#1]{#1}
+\def\numrowsnopar{10}
+\def\Numrows[#1]{#1}
+
+
+\numrows % OK
+
+\numrows[5] % OK
+
+\Numrows[5] % OK
+
+Ale pokud chci následně makro použít jako parametr pro nějaký ConTeXtový cyklus, tak:
+
+%\dorecurse{\numrows}{\recurselevel} % nepracuje
+
+%\dorecurse{\numrows[7]}{\recurselevel} % nepracuje
+
+\dorecurse{\Numrows[7]}{\recurselevel} % OK
+
+
+% NE \dorecurse{\numrows{}}{\recurselevel} % za \numrows dát něco neškodného různého od [
+
+nebo
+
+%\dorecurse{\numrows\relax}{\recurselevel}
+
+nebo
+
+%\def\neco{\numrows\relax}
+
+%\dorecurse{\neco}{\recurselevel}
+
+
+\def\myrecurse#1{\ifx@#1@\def\next{\dorecurse{10}}\else\def\next{\dorecurse{#1}}\fi\next}
+
+\myrecurse{}{\recurselevel}
+
+\myrecurse{8}{\recurselevel}
+
+
+
+\stoptext

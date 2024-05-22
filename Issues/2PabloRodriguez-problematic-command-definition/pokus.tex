@@ -1,0 +1,35 @@
+\usemodule[handlecsv]
+
+% for your testing
+\def\zeroing#1#2{\ctxlua{context(string.rep("0",math.log('#1')/math.log(10)-math.log('#2'+0.1)/math.log(10)+1) ..'#2')}}
+
+\def\zeroedlineno#1#2{\ctxlua{context(string.rep("0",math.log('#1')/math.log(10)-math.log('#2'+0.1)/math.log(10)+1) ..'#2')}} % #1 must be greater than #2
+
+\def\zeroedlineno{\ctxlua{context(string.rep("0",math.floor(math.log(10*thirddata.handlecsv.numrows())/math.log(10))-math.floor(math.log(thirddata.handlecsv.linepointer())/math.log(10)+1)) .. thirddata.handlecsv.linepointer())}}
+
+\def\zeroedlinenox% \unexpanded cannot be used here
+   {\ctxlua{context(string.rep( "0",
+    (tostring(thirddata.handlecsv.numrows())):len() -
+    (tostring(thirddata.handlecsv.linepointer())):len()) ..
+    thirddata.handlecsv.linepointer())}}
+    
+    
+
+% ??? why so complicated \def\AddName{\ctxlua{context(thirddata.handlecsv.getcellcontent(1,thirddata.handlecsv.gCurrentLinePointer[thirddata.handlecsv.getcurrentcsvfilename()]))}}
+\def\AddName{\cA}
+
+\startbuffer[single-certificates]
+\executesystemcommand{context --runs=1 --purgeall --result=certificate-\zeroedlinenox-\AddName.pdf --arguments="MainLinePointer={\lineno}" sample-cert.tex}
+%\zeroedlinenox -- \lineno\crlf
+\stopbuffer
+
+\starttext
+\opencsvfile{participants.csv}
+\startitemize[n]
+\doloopif{\cA}{~=}{}{\item \cA -- \getbuffer[single-certificates]}
+%\doloopif{\cA}{~=}{}{\getbuffer[single-certificates]}
+%\dorecurse{100}{\zeroing{100}{\recurselevel}\crlf}
+%\dorecurse{20}{\zeroing{100}{\recurselevel}\crlf}
+%\dorecurse{50}{\zeroing{1000}{\recurselevel}\crlf}
+%\stopitemize
+\stoptext

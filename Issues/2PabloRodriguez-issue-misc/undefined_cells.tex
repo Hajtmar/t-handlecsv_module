@@ -1,0 +1,51 @@
+\usemodule[handlecsv]
+\opencsvfile{undefined.csv}
+
+% a;1;x
+% ;2;a
+% X;;c
+% ;;
+%  ;;c
+%  ; ; 
+% g; ;
+% ;;s
+% i;9; 
+% ;10;
+
+
+\starttext
+
+% 
+% \doloopforall{\linepointer. (\cA) -- \doifelse{\cA}{}{nil}{content \cA} \crlf}
+% 
+% \doloopforall{\linepointer. (\cA) -- \doifelse{\cA}{ }{space}{content \cA} \crlf}
+% 
+% \doloopforall{\linepointer. (\cA) -- \doiftextelse{\cA}{content \cA}{without practical content} \crlf}
+% 
+% \doloopforall{\linepointer. (\cA) -- \doifsomethingelse{\cA}{something content}{no content} \crlf}
+% 
+% \doifsomethingelse{\csvcell['A',100]}{\csvcell['A',100]}{no content}
+% 
+% \doifemptyelse{}{EMPTY}{NO EMPTY} 
+% 
+% \doifemptyelse{ }{EMPTY}{NO EMPTY}
+% 
+% \doifemptyelse{X}{EMPTY}{NO EMPTY}
+% 
+% \doifemptyelse{\csvcell['A',100]}{EMPTY}{NO EMPTY -- (\csvcell['A',100])}
+% 
+
+\doifemptyelse{}{EMPTY}{NO EMPTY} 
+
+\doifemptyelse{ }{EMPTY}{NO EMPTY}
+
+\doifemptyelse{X}{EMPTY}{NO EMPTY}
+
+\def\A{}
+
+\expanded{\doifemptyelse{\A}{EMPTY}{NO EMPTY}}
+
+
+
+\stoptext
+

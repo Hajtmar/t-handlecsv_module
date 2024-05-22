@@ -1,0 +1,25 @@
+\usemodule[handlecsv]
+
+\starttext
+
+\startbuffer[rows]
+\startxrow
+    \startxcell\Romannumerals{\cA}\stopxcell
+\stopxrow
+\stopbuffer
+
+\startbuffer[abc]
+\Romannumerals{\cA}\\
+\stopbuffer
+
+
+\startxtable[option=stretch, split=yes]
+\opencsvfile{numbers.csv}
+\doloop{\getbuffer[rows] \nextrow \ifEOF\exitloop\fi}
+\stopxtable
+
+
+\opencsvfile{numbers.csv}
+\doloop{\getbuffer[abc]\nextrow\ifEOF\exitloop\fi}
+
+\stoptext

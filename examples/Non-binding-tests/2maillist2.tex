@@ -1,0 +1,116 @@
+Hello ConTeXist.
+Is there any way to evaluate of contents of two macros as I am showing in my minimal example? 
+I know, that problem is in expansion, but I dont know to resolve it.
+My minimal example consist of piece lua code, because I am solving my problem in mixed codes (TeX & Lua)
+
+Thanx for help.
+Jaroslav Hajtmar
+
+
+\starttext
+\def\pokus#1{\ctxlua{pokusnapromenna='#1'}}
+
+\def\returnpokus{\ctxlua{context(pokusnapromenna)}}
+
+\startluacode
+	interfaces.definecommand ("domymacro", {
+	    arguments = { { "option", "string" }  },
+	    macro = function (opt_1)
+	       if #opt_1>0 then
+		context(opt_1)
+		else
+		context("123")
+		end
+	    end
+		})
+	interfaces.definecommand("mymacro", {
+	    macro = function ()
+	      context.dosingleempty()
+	      context["domymacro"]()
+	    end
+		})
+\stopluacode
+
+\def\myothermacro{123}
+
+\hairline
+
+\mymacro[123]
+
+\mymacro
+
+\myothermacro
+
+
+
+----- \pokus{123}
+
+----- \returnpokus
+
+
+\hairline
+
+mymacro
+
+\doifelse{\mymacro}{123}{equal content}{not equal content}
+
+\doifsamestringelse{\mymacro}{123}{equal content}{not equal content}
+
+\doifinstringelse{\mymacro}{123}{equal content}{not equal content}
+
+\doifincsnameelse{\mymacro}{123}{equal content}{not equal content}
+
+
+
+\hairline
+
+
+myothermacro
+
+\doifelse{\myothermacro}{123}{equal content}{not equal content}
+
+\doifsamestringelse{\myothermacro}{123}{equal content}{not equal content}
+
+\doifinstringelse{\myothermacro}{123}{equal content}{not equal content}
+
+\doifincsnameelse{\myothermacro}{123}{equal content}{not equal content}
+
+
+\hairline
+
+mymacro[123]
+
+\doifelse{\mymacro[123]}{123}{equal content}{not equal content}
+
+\doifsamestringelse{\mymacro[123]}{123}{equal content}{not equal content}
+
+\doifinstringelse{\mymacro[123]}{123}{equal content}{not equal content}
+
+\doifincsnameelse{\mymacro[123]}{123}{equal content}{not equal content}
+
+
+
+\hairline
+
+\doifelse{\mymacro}{\mymacro[123]}{equal content}{not equal content}
+
+\doifsamestringelse{\mymacro}{\mymacro[123]}{equal content}{not equal content}
+
+\doifinstringelse{\mymacro}{\mymacro[123]}{equal content}{not equal content}
+
+\doifincsnameelse{\mymacro}{\mymacro[123]}{equal content}{not equal content}
+
+
+\hairline
+
+\doifelse{\mymacro}{\myothermacro}{equal content}{not equal content}
+
+\doifsamestringelse{\mymacro}{\myothermacro}{equal content}{not equal content}
+
+\doifinstringelse{\mymacro}{\myothermacro}{equal content}{not equal content}
+
+\doifincsnameelse{\mymacro}{\myothermacro}{equal content}{not equal content}
+
+
+
+\stoptext

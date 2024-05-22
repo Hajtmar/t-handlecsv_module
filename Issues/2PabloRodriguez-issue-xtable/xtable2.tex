@@ -1,0 +1,33 @@
+\usemodule[handlecsv]
+\opencsvfile{smallnumbers.csv}
+
+\usehooks
+%\def\bfilehook{\startxtable} % begin file hook
+%\def\efilehook{\stopxtable} % end file hook
+\def\blinehook{\startxrow} % begin line hook
+\def\elinehook{\stopxrow} % end line hook
+\def\bchcA{}
+\def\echcA{}
+\def\bch{\startxcell } % begin column hook
+\def\ech{\stopxcell} % end column hook
+
+
+\unexpanded\def\lineaction{% combine hooks and nohooks fields
+\expanded{
+	\hcA % use hooked item from column A
+  \startxcell % use nonhooked item
+        \doifelse{\csvcell['A',\thenumexpr{\numline+1}]}{}
+            {---}{\csvcell['A',\thenumexpr{\numline+1}]}
+    \stopxcell
+
+}
+}
+
+
+\starttext
+\startxtable
+%\filelineaction{numbers.csv}
+\filelineaction 
+\stopxtable
+\stoptext
+

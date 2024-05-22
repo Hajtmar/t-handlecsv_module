@@ -1,0 +1,53 @@
+\usemodule[handlecsv]
+
+\setuppagenumbering[state=stop]
+%\setupbodyfont[regular, 8pt]
+
+%http://wiki.contextgarden.net/TABLE
+\setupTABLE[split=yes,location={middle,lohi}, height=6mm]
+\setupTABLE[row][first][background=color,backgroundcolor=gray,foregroundcolor=black,height=8mm, align={middle,lohi}]
+\setupTABLE[row][last][background=color,backgroundcolor=gray,foregroundcolor=black,height=8mm,align={middle,lohi}]
+\setupTABLE[c][1][background=color,backgroundcolor=gray,align=middle, width=20mm]
+\setupTABLE[c][2][align={right, lohi}, width=4cm]
+\setupTABLE[c][3][align={middle, lohi}, width=2.5cm]
+\setupTABLE[c][4][align={right, lohi}, width=7cm]
+
+
+\startbuffer[rowoftable]
+\expanded{\bTR\bTD\numline\eTD\bTD\Name\eTD\bTD\Population\eTD\bTD\Altitude\eTD\eTR}%
+\stopbuffer
+	
+
+\def\ListEntry#1{
+\setcurrentcsvfile[selectedcountries.csv]
+\resetlinepointer
+\edef\soughtabbreviation{#1}
+\doloopuntil{\Abbrev}{\soughtabbreviation}{} % looking for Abbrev
+
+\blank[big]
+
+\midaligned{\ssb List of biggest cities of \Country}
+
+\blank[medium]
+
+\setcurrentcsvfile[cities.csv]
+\resetlinepointer
+
+\bTABLE
+\bTR\bTD\ssx NumLine \eTD\bTD\ssx Name\eTD\bTD\ssx Population\eTD\bTD\ssx Altitude\eTD\eTR
+\doloopif{\CountryAbbrev}{eq}{\soughtabbreviation}{\getbuffer[rowoftable]}
+\bTR\bTD-- \eTD\bTD\ssx -- \eTD\bTD -- \eTD\bTD -- \eTD\eTR
+\eTABLE
+}
+
+
+
+	
+\starttext
+\setheader 
+\opencsvfile{cities.csv}
+\opencsvfile{selectedcountries.csv}
+
+\processcommalist[CN,AU,JP]{\ListEntry}
+
+\stoptext

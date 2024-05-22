@@ -1,0 +1,149 @@
+\usemodule[handlecsv]
+
+\setupexternalfigures[directory={graphics/}]
+
+\setupcolors[state=start]
+\setupurl[color=blue]
+\setupinteraction[state=start,color=blue,contrastcolor=blue, style=normal]
+
+
+\def\href#1#2{\useURL[#2][{#2}][][{#1}]\goto{\url[#2]}[url(#1)]}
+%\def\ahref#1{\color[linkcolor]{\ttx \href{#1}{<#1>}}}
+\def\ahref#1{\color[linkcolor]{\ttx \href{#1}{#1}}}
+\def\fullahref#1{\color[linkcolor]{\ttx \href{#1}{http://#1}}}
+\def\mailto#1{\useURL[#1][mailto:#1][][#1]\from[{#1}]}
+\def\MailTo#1#2{\useURL[#1][mailto:#1][][#2]\from[{#1}]}
+\def\scancsvlua{\href{http://jaroslav.hajtmar.com/storage/tex/scancsv.lua/demo-scancsv.lua.zip}{scancsv.lua}}
+\def\ctm{\href{http://meeting.contextgarden.net/2010/programme.shtml}{4CM}}
+\def\te{\href{http://pavel.striz.cz/texperience/}{3TE}}
+
+ 
+
+
+
+\setuppagenumbering[state=stop]
+\setuppapersize[A4,landscape]
+\setuplayout[width=middle, topspace=0cm, header=1.5cm, footer=10mm, height=middle, backspace=10mm]
+\setupbodyfont[regular, 9pt]
+
+
+
+\setupTABLE[split=yes]
+%\setupTABLE[row][first][background=color,backgroundcolor=gray,foregroundcolor=black,height=5mm, align={middle,lohi}]
+%\setupTABLE[row][last][background=color,backgroundcolor=gray,foregroundcolor=black,height=8mm,align={middle,lohi}]
+\setupTABLE[c][1][background=color,backgroundcolor=gray,align=middle, width=1cm]
+\setupTABLE[c][2][align=right, width=8cm]
+\setupTABLE[c][3][align=right, width=10cm]
+\setupTABLE[c][4][align=middle, width=3cm]
+\setupTABLE[c][5][align=middle, width=2cm]
+\setupTABLE[c][6][align=middle, width=3cm]
+
+
+\def\mejl{\mailto{\Email}}
+%\def\mejl{\MailTo{\Email}{e-mail}}
+
+\edef\Dinner{Dinner}
+\edef\Coffee{Coffee}
+\edef\Breakfast{Breakfast}
+\edef\Lunch{Lunch}
+\edef\Tea{Tea}
+\edef\LateTea{Late tea}
+
+%\ifnum
+\def\stylbunky{[background=color, backgroundcolor=gray]}
+\def\tbc{\blue\bf}
+
+\def\teststylu{\ifx\cB\Dinner\stylbunky\else\ifx\cB\Coffee\stylbunky\else\ifx\cB\Breakfast\stylbunky
+\else\ifx\cB\Lunch\stylbunky\else\ifx\cB\Tea\stylbunky\else\ifx\cB\LateTea\stylbunky%\else ...%
+\fi\fi\fi\fi\fi\fi}
+
+\def\teststyluI{\ifx\cB\Dinner\tbc\else\ifx\cB\Coffee\tbc\else\ifx\cB\Breakfast\tbc
+\else\ifx\cB\Lunch\tbc\else\ifx\cB\Tea\tbc\else\ifx\cB\LateTea\tbc%\else ....
+\fi\fi\fi\fi\fi\fi}
+
+% Header of CSV file: Day;Date;TimeFrom;Author;Programm;Type;Space;Notice
+\unexpanded\def\lineaction{%
+\catcode`\_=12
+\catcode`\%=12
+\catcode`\&=12
+\expanded{
+\bTR\teststylu\bTD\cA\eTD\bTD\teststyluI\cB\eTD\bTD\cC\eTD\bTD\cD\eTD\bTD\cE\eTD\bTD\cF\eTD\eTR
+}}
+
+\unexpanded\def\tableaction{%
+\catcode`\_=12
+\expanded{
+\bTR\teststylu\bTD\ssx\TimeFrom\eTD\bTD\teststyluI\ssx\Author\eTD\bTD\ssx\Programm\eTD\bTD\ssx\Type\eTD\bTD\ssx\Space\eTD\bTD\ssx\Notice\eTD\eTR
+}}
+
+
+
+\def\newday#1{%
+\bTR\bTD - \eTD\bTD#1 \eTD\bTD - \eTD\bTD - \eTD\bTD - \eTD\bTD - \eTD\eTR
+}
+
+\def\nadpisdne#1{
+\page[bigpreference]
+\blank[big]
+\midaligned{{\bf\ssa #1}}
+}
+
+
+
+%\def\lineaction{\tableaction}
+
+
+\starttext
+
+\setheader
+\opencsvfile{4CM_programme.csv}
+
+\midaligned{\ssb Programme of \CONTEXT\ meeting and \TeX perience}
+
+\blank[small]
+
+\midaligned{\ssa Brejlov 13.\,--\,19.~9.~2010}
+
+\blank[big]
+
+\setheader % Imform library, that in first row is header with information about names of columns
+
+
+
+
+
+
+
+\catcode`\_=12
+
+
+
+%\nadpisdne{Thursday 16.9.}
+%\opencsvfile{thu.csv}
+%\printtable
+
+\nadpisdne{Friday 17.9.}
+\bTABLE
+\doloopif{\Day}{==}{Friday}{\tableaction} 
+\eTABLE
+
+\nadpisdne{Saturday 18.9.}
+\bTABLE
+\doloopif{\Day}{==}{Saturday}{\tableaction} 
+\eTABLE
+
+
+\nadpisdne{Sunday 19.9.}
+\bTABLE
+\doloopif{\Day}{==}{Sunday}{\tableaction} 
+\eTABLE
+
+
+%\vfill
+\midaligned{\ssx This document was created (generated) using \scancsvlua\ library by Jaroslav Hajtmar.}
+\midaligned{\ssx Scancsv.lua presentation to be held on Saturday, 18.~9.~2010 on \ctm+\te\ in Brejlov.} 
+
+
+\page[no]
+\stoptext
+

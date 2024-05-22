@@ -1,0 +1,65 @@
+% DATA.CSV file:
+%Surname;Firstname;Beh:Behaviour:B:0;Eng:English:S:1;His:History:S:2;Geo:Geography:S:3;M:Mathematics:S:4;Ph:Physics:S:5;Chem:Chemistry:S:6;Bi:Biology:S:7;Gym:Gymnastics:S:8
+%Armstrong;Martin;1;2;2;1;N;2;1;1;N
+%Jones;Bill;1;N;2;2;N;3;5;2;1
+%Aladin;Adam;1;2;2;3;3;3;2;2;1
+%Smith;John;1;2;3;2;3;2;2;1;1
+%Johnson;Veronika;1;N;2;5;N;3;N;2;1
+%Williams;Olga;1;1;2;3;3;1;2;2;1
+%Brown;Martina;1;2;2;1;3;2;2;1;1
+%Cruz;Barbora;1;2;2;1;3;5;2;1;1
+%Martinez;Romana;1;1;1;1;3;1;2;2;N
+%Taylor;Phillip;1;1;2;2;3;3;3;2;1
+%Thomas;Alena;1;2;2;1;2;5;3;1;1
+%Moore;Hanah;1;N;2;3;N;2;3;N;1
+%Garcia;Ann;1;2;2;2;3;1;2;2;1
+%Davis;Sarka;1;3;3;3;3;3;3;2;1
+%Miller;Johana;1;1;1;1;3;1;2;2;1
+%Kvapil;Barbora;1;1;1;1;5;1;1;1;1
+%Mark;Bob;1;2;3;5;4;2;3;5;1
+%Nimmrichter;Tomas;1;1;2;1;1;1;2;2;1
+%Dunlop;Jane;1;N;2;1;N;2;3;1;N
+%Eres;Hana;1;1;1;1;2;1;1;1;1
+%Hummer;Paul;1;1;2;1;2;2;1;1;1
+
+
+% Minimal example: The cycle goes through all the marks of students and lists students who have difficulty learning.
+% In our school we use this script to generate letters to inform parents about the need for students with lack of evaluation to completing their marks on particular subjects.
+
+\usedirectory[/Users/Hajtmar/Onedrive/Dokumenty/1da/ConTeXt/ConTeXt-Tests/my_way/ScanCSV/t-handlecsv_module/]
+\usemodule[handlecsv]
+
+\unexpanded\def\subjectabbreviation#1{\ctxlua{context(thirddata.handlecsv.ParseCSVLine('#1',':')[1])}}%
+
+
+\def\subjectstesting#1{%
+ \def\listofsubjects{}%
+ \dostepwiserecurse{3}{11}{1}{\if\csvcell[\recurselevel,\linepointer]#1 \eaddto\listofsubjects{\subjectabbreviation{\csvcell[\recurselevel,0]}, }\fi}% 
+}
+
+\unexpanded\def\tableaction#1{
+\subjectstesting{#1}
+\ifx\listofsubjects\empty\addtonumline{-1}\else
+\expanded{\bTR\bTD\numline\eTD \bTD\cA\ \cB \eTD\bTD\listofsubjects\eTD}%
+\fi
+}
+
+
+\starttext
+
+\setheader
+\opencsvfile{data.csv}
+
+\subject{The list of pupils with a lack of evaluation (N):} 
+
+\bTABLE
+\doloopfromto{1}{\numrows}{\tableaction{N}}
+\eTABLE
+
+\subject{List of students with insufficient marks (5) :}
+
+\bTABLE
+\doloopfromto{1}{\numrows}{\tableaction{5}}
+\eTABLE
+
+\stoptext

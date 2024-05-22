@@ -1,0 +1,134 @@
+\enableregime[utf-8]
+\mainlanguage[cz] 
+
+\usemodule[t-scancsv]
+
+\setupexternalfigures[directory={graphics/}]
+
+\def\podmpredmet{}
+\def\podmtematickaoblast{}
+
+% \newif\ifzmenapredmetu\zmenapredmetufalse
+% \newif\ifzmenatematickeoblasti\zmenatematickeoblastifalse
+
+\def\createexternalfile#1{\immediate\openout\scratchwrite#1}
+\def\writetoexternalfile#1{\immediate\write\scratchwrite{#1}}
+\def\closeexternalfile{\closeout\scratchwrite}
+\let\cref\createexternalfile
+\let\wtef\writetoexternalfile
+\let\clef\closeexternalfile
+
+\setupcolors[state=start]
+\definecolor[fcol][black]
+\definecolor[mcol][black]
+\setupurl[color=blue]
+\setupinteraction[state=start,color=blue,contrastcolor=blue, style=normal]
+
+\def\href#1#2{\useURL[#2][{#2}][][{#1}]\goto{\url[#2]}[url(#1)]}
+\def\ahref#1{\color[linkcolor]{\ttx \href{#1}{<#1>}}}
+\def\fullahref#1{\color[linkcolor]{\ttx \href{#1}{http://#1}}}
+\def\mailto#1{\useURL[#1][mailto:#1][][#1]\from[{#1}]}
+\def\MailTo#1#2{\useURL[#1][mailto:#1][][#2]\from[{#1}]}
+\catcode`\_=12 
+
+\setuppagenumbering[state=stop]
+\setuplayout[width=middle, height=middle, topspace=1cm, header=0cm, footer=15mm]
+
+\def\vypispolozky{\ssx\kod\ -- \from[dumurl]\crlf}
+
+
+\def\printactiontwo{%\porcis,\kod,\pripona,\predmet,\tematickaoblast %,nazevDUM,forma,rocnik,vytvoreno,tvurce,overeno,trida	
+	\expanded{\useURL[dumurl][http://gyza.cz/storage/dum][\kod.\pripona][\nazevDUM]}
+	\writelinetohtml
+	\ifx\podmpredmet\predmet\else\section{{\ssc\predmet}}\let\podmpredmet\predmet\fi
+	\ifx\podmtematickaoblast\tematickaoblast{\vypispolozky}\else\subsection{{\bf\tematickaoblast}}{\vypispolozky}\let\podmtematickaoblast\tematickaoblast\fi
+}
+
+
+\def\printaction{%\porcis,\kod,\pripona,\predmet,\tematickaoblast %,nazevDUM,forma,rocnik,vytvoreno,tvurce,overeno,trida	
+	\expanded{\useURL[dumurl][http://gyza.cz/storage/dum][\kod.\pripona][\nazevDUM]}
+	\writelinetohtml
+%	\predmet\tematickaoblast\kod -- \PR x \TO \Konec \crlf
+ 	\if\PR1\section{{\ssc\predmet}}\fi
+ 	\if\TO1\subsection{{\bf\tematickaoblast}}\startitemize[n,packed,joinedup][margin=standard]\fi
+ 	\if!\overeno!%
+ 	\else%
+	 {\item\ssx\kod\ -- \from[dumurl]}%
+ 	\fi
+	 \if\TO0\stopitemize\fi
+}
+	
+	
+\unexpanded\def\lineaction{\printaction}
+%\unexpanded\def\lineaction{\printactiontwo}
+
+\def\writelinetohtml{%
+\if\PR1\wtef{<h1>\predmet</h1>}\fi
+\if\TO1\wtef{<h2>\tematickaoblast</h2>}\fi
+\if!\overeno!%
+	\else
+	\wtef{\kod&nbsp;-&nbsp; <a href="http://gyza.cz/storage/dum/\kod.\pripona">\nazevDUM</a> <br />}
+\fi
+}
+
+\starttext
+
+\setheader 
+\setsep{;}
+\setfiletoscan{dum-web.csv}
+
+\cref{index.html}
+\wtef{<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 //EN"}
+\wtef{"http://www.w3.org/TR/html4/strict.dtd">} 
+\wtef{<html>}
+\wtef{<head>} 
+\wtef{<title>DUM - Digitální učební materiály - Gymnázium Zábřeh, Nám. Osvobození 20, 789 01 Zábřeh</title>} 
+\wtef{<META content="text/html; charset=UTF-8" http-equiv=Content-Type>} 
+\wtef{<META content=cs http-equiv=Content-language>} 
+\wtef{<link rel="stylesheet" type="text/css" href="http://gyza.cz/iapp/css/dum-image.css" title="displaysheet">}
+\wtef{<style type="text/css">}
+\wtef{</style>}
+
+\wtef{</head>} 
+\wtef{<body>}
+\wtef{<h4>DUM - Digitální učební materiály - Gymnázium, Zábřeh, nám. Osvobození 20, 789 01 Zábřeh</h4>}
+	
+\currentdate[day,{.~},month,{~},year] -- \currenttime
+
+
+%\doloopif{value1}{[compare_operator]}{value2}{macro_for_doing} % [compareoperators] <, >, ==(eq), ~=(neq), >=, <=, in, until, while
+%\doloopif{\predmet}{eq}{Fyzika}{\lineaction} % [compareoperators] <, >, ==(eq), ~=(neq), >=, <=, in, until, while
+%\doloopif{\overeno}{neq}{}{\lineaction}
+
+% 1. export z google docs do XLSX
+% 2. export z XLSX do CSV (odděl. středníkem)
+% 3. změnit kódování z CP1250 do UTF8
+
+\filelineaction{dum-web.csv} % repeat \lineaction macro for all rows of CSV file
+
+
+
+\wtef{</body>}
+\wtef{</html>}
+\clef
+\stoptext
+
+
+
+
+
+
+
+
+%\def\odkaznasoubor{\href{http://dum.gyza.cz/\kod.\pripona}{nazevDUM}}
+%\def\odkaznasoubor{\href{http://dum.gyza.cz/\filename}{\nazevDUM}}
+
+
+% \useURL[CHEMML]        [http://www.pragma-ade.nl/general/manuals/\kod.\pripona \getvalue{aaa}]
+%                        [\getvalue{aaa} -- \kod.\pripona]
+%                        [aaaa \filename \getvalue{aaa} ccc]
+                       
+%\useURL[odkaznasoubor][\filename][][\nazevDUM]
+%\def\odkaz{\href{\filename}{nazevDUM}}
+%\def\ctm{\href{http://meeting.contextgarden.net/2010/programme.shtml}{4CM}}
+%\def\te{\href{http://pavel.striz.cz/texperience/}{3TE}}

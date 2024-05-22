@@ -1,0 +1,144 @@
+\usemodule[scancsv]
+
+\setupexternalfigures[directory={flags/}]
+
+\def\createexternalfile#1{\immediate\openout\scratchwrite#1}
+\def\writetoexternalfile#1{\immediate\write\scratchwrite{#1}}
+\def\closeexternalfile{\closeout\scratchwrite}
+\let\cref\createexternalfile
+\let\wtef\writetoexternalfile
+\let\clef\closeexternalfile
+
+\setupcolors[state=start]
+\definecolor[fcol][black]
+\definecolor[mcol][black]
+\setupurl[color=blue]
+\setupinteraction[state=start,color=blue,contrastcolor=blue, style=normal]
+
+\def\href#1#2{\useURL[#2][{#2}][][{#1}]\goto{\url[#2]}[url(#1)]}
+\def\ahref#1{\color[linkcolor]{\ttx \href{#1}{<#1>}}}
+\def\fullahref#1{\color[linkcolor]{\ttx \href{#1}{http://#1}}}
+\def\mailto#1{\useURL[#1][mailto:#1][][#1]\from[{#1}]}
+\def\MailTo#1#2{\useURL[#1][mailto:#1][][#2]\from[{#1}]}
+\def\scancsvlua{\href{http://jaroslav.hajtmar.com/storage/tex/scancsv.lua/demo-scancsv.lua.zip}{scancsv.lua}}
+\def\ctm{\href{http://meeting.contextgarden.net/2010/programme.shtml}{4CM}}
+\def\te{\href{http://pavel.striz.cz/texperience/}{3TE}}
+
+\catcode`\_=12 
+
+
+\def\todate{(to date 6.~9.~2010)}
+\def\wtodate{(to date 6. 9. 2010)}
+
+\cref{preliminarylist.htm}
+\wtef{<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 //EN"}
+\wtef{"http://www.w3.org/TR/html4/strict.dtd">} 
+\wtef{<html>}
+\wtef{<head>} 
+\wtef{<title>Preliminary list of participants of ConTeXt meeting and TeXperience - Brejlov 13.-19.9.2010</title>} 
+\wtef{<META content="text/html; charset=UTF-8" http-equiv=Content-Type>} 
+\wtef{<META content=cs http-equiv=Content-language>} 
+\wtef{</head>} 
+\wtef{<body>}
+\wtef{<h1>Preliminary list of participants of ConTeXt meeting and TeXperience</h1>}
+\wtef{<h2>Brejlov 13.-19.9.2010</h2>}
+\wtef{<h3>\wtodate</h3>}
+
+
+\setuppagenumbering[state=stop]
+\setuplayout[width=middle, height=29cm, topspace=1cm, header=0cm, footer=5mm]
+\setupbodyfont[regular, 9pt]
+
+%http://wiki.contextgarden.net/TABLE
+\setupTABLE[split=yes,location={middle,lohi}, height=4.5mm]
+\setupTABLE[row][first][background=color,backgroundcolor=gray,foregroundcolor=black,height=8mm, align={middle,lohi}]
+\setupTABLE[row][last][background=color,backgroundcolor=gray,foregroundcolor=black,height=8mm,align={middle,lohi}]
+\setupTABLE[c][1][background=color,backgroundcolor=gray,align=middle, width=7mm]
+\setupTABLE[c][2][align={right, lohi}, width=4cm]
+\setupTABLE[c][3][align={middle, lohi}, width=1.5cm]
+\setupTABLE[c][4][align={middle, lohi}, width=1.5cm]
+\setupTABLE[c][5][align={middle, lohi}, width=1.5cm]
+\setupTABLE[c][6][align={middle, lohi}, width=1.5cm]
+\setupTABLE[c][7][align={middle, lohi}, width=1.5cm]
+\setupTABLE[c][8][align={middle, lohi}, width=1.5cm]
+\setupTABLE[c][9][align={middle, lohi}, width=5cm]
+
+
+
+\def\flagpicture{\externalfigure[\Flag.png][height=3.5mm, frame=on, framecolor=black]}
+\def\mejl{\mailto{\Email}}
+%\def\mejl{\MailTo{\Email}{e-mail}}
+	
+% Header of CSV file: Lastname,Firstname,MonThu,ThuPM,Fri,Sat,Sun
+\unexpanded\def\tableaction{%
+\expanded{
+	\countperson%
+\bTR\bTD\mcol\numline\eTD\bTD\fcol~\Lastname\ \Firstname~ \eTD\bTD\ \flagpicture\eTD\bTD\fcol\MonThu\eTD\bTD\fcol\ThuPM\eTD\bTD\fcol\Fri\eTD\bTD\fcol\Sat\eTD\bTD\fcol\Sun\eTD\bTD\fcol\ttx\mejl\eTD\eTR%
+	\writelinetohtml%
+	}}
+	
+\unexpanded\def\lineaction{\tableaction}
+
+\newcount\cMonThu\cMonThu=0
+\newcount\cThuPM\cThuPM=0
+\newcount\cFri\cFri=0
+\newcount\cSat\cSat=0
+\newcount\cSun\cSun=0
+
+% Header of CSV file: Lastname,Firstname,MonThu,ThuPM,Fri,Sat,Sun
+\def\countperson{
+\if1\MonThu\advance\cMonThu by1\fi
+\if1\ThuPM\advance\cThuPM by1\fi
+\if1\Fri\advance\cFri by1\fi
+\if1\Sat\advance\cSat by1\fi
+\if1\Sun\advance\cSun by1\fi
+}
+
+\def\writelinetohtml{%
+%\wtef{<tr><td>\numline</td><td>\Lastname\space \Firstname</td><td>\MonThu</td><td>\ThuPM</td><td>\Fri</td><td>\Sat</td><td>\Sun</td><td><a href="mailto:\Email">e-mail</a></td></tr>}%
+\wtef{<tr><td>\numline</td><td>\Lastname\space \Firstname</td><td>\Flag</td><td>\MonThu</td><td>\ThuPM</td><td>\Fri</td><td>\Sat</td><td>\Sun</td></tr>}%
+}
+
+\starttext
+\midaligned{\ssb Preliminary list of participants of \CONTEXT\ meeting and \TeX perience}
+
+\blank[small]
+
+\midaligned{\ssa }
+
+\blank[medium]
+
+\midaligned{\todate}
+
+\blank[big]
+
+\opencsvfile{lide.csv}
+\setheader % Imform library, that in first row is header with information about names of columns
+\setsep{,}
+
+\wtef{<table>}
+%\wtef{<tr><td>Id</td><td>Name</td><td>Mon. -- Thurs.</td><td>Thurs. p.m.</td><td>Fri. </td><td>Sat. </td><td>Sun.</td><td>E-mail</td></tr>}
+\wtef{<tr><td>Id</td><td>Name</td><td>Nationality</td><td>Mon. -- Thurs.</td><td>Thurs. p.m.</td><td>Fri. </td><td>Sat. </td><td>Sun.</td></tr>}
+
+
+\placetable[none]{}{
+\bTABLE
+\bTR\bTD\ssx Id \eTD\bTD\ssx Name\eTD\bTD\ssx Nationality\eTD\bTD\ssx Monday -- Thursday\eTD\bTD\ssx Thursday p.m.\eTD\bTD\ssx Friday\eTD\bTD\ssx Saturday\eTD\bTD\ssx Sunday\eTD\bTD\ssx E-mail\eTD\eTR
+%\filelineaction{lide.csv} % repeat \lineaction macro for all rows of CSV file
+\doloopif{\Flag}{~=}{anl}{\lineaction} % repeat \lineaction macro for all rows of CSV file
+\bTR\bTD-- \eTD\bTD\ssx Number of participants: \eTD\bTD -- \eTD\bTD\ssbf\the\cMonThu\eTD\bTD\ssbf\the\cThuPM\eTD\bTD\ssbf\the\cFri\eTD\bTD\ssbf\the\cSat\eTD\bTD\ssbf\the\cSun\eTD\bTD-- \eTD\eTR
+%\wtef{<tr><td>-</td><td>Number of participants </td><td>\the\cMonThu</td><td>\the\cThuPM</td><td>\the\cFri</td><td>\the\cSat</td><td>\the\cSun</td><td>-</td></tr>}
+\wtef{<tr><td>-</td><td>Number of participants </td><td>-</td><td>\the\cMonThu</td><td>\the\cThuPM</td><td>\the\cFri</td><td>\the\cSat</td><td>\the\cSun</td></tr>}
+\eTABLE}
+\vfill
+\midaligned{\ssx This document was created (generated) using \scancsvlua\ library by Jaroslav Hajtmar.}
+\midaligned{\ssx Scancsv.lua presentation to be held on Saturday, 18.~9.~2010 on \ctm+\te\ in Brejlov.} 
+
+
+\page[no]
+\wtef{</table>}
+\wtef{</body>}
+\wtef{</html>}
+\clef
+\stoptext
+

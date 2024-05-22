@@ -1,0 +1,15 @@
+\usemodule[handlecsv]
+
+\startbuffer[single-certificates]
+   \executesystemcommand{context --runs=1 --purgeall --result=certificate-\lineno.pdf --arguments="forwardingargumentcA=\cA" mincert.tex}
+\stopbuffer
+
+
+\starttext
+\opencsvfile{participants.csv}
+
+\startitemize[n]
+\doloopif{\cA}{~=}{}{\getbuffer[single-certificates]\item \cA (his/her certificate is in PDF file: certificate-\lineno.pdf) }
+\stopitemize
+
+\stoptext

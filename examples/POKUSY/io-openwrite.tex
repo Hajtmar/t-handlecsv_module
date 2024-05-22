@@ -1,0 +1,64 @@
+
+%\usemodule[/Users/hajtmar/OneDrive/Dokumenty/1da/ConTeXt/ConTeXt-Tests/my_way/ScanCSV/t-handlecsv_module/t-handlecsv]
+%\usemodule[/Users/hajtmar/OneDrive/Dokumenty/1da/ConTeXt/ConTeXt-Tests/my_way/ScanCSV/t-handlecsv_module/t-handlecsv-extra]
+
+
+\usemodule[handlecsv]
+\usemodule[handlecsv-extra]
+
+
+\starttext
+\opencsvfile{mail-sample.csv}
+\opencsvfile{io-openwrite.csv}
+
+Type all rows of currently opened (io-openwrite.csv) file with initial order:
+
+\doloopforall{\cA\crlf}
+
+% now create temporary (or permanent) file of arbitrary name in reverse order from fil
+\writefileinreverseorderfromto{io-openwrite.csv}{tempfile.tmp}
+\writecurrfileinreverseorderto{io-openwrite-reverse.csv} % current file is io-openwrite.csv
+
+After opening temporary file (tempfile.tmp) reverse ordered file:
+
+\opencsvfile{tempfile.tmp} % open temporary file
+
+\doloopforall{\cA\crlf} % type all rows of temporary file
+
+\deletefile{tempfile.tmp} % delete temporary file (is not necessary)
+
+
+Now type reverse order of current processed CSV file (io-openwrite.csv):
+
+\setcurrentcsvfile[io-openwrite.csv] % set to current processed table
+\reverseorder % change order of current table
+
+\doloopforall{\cA\crlf} % type all rows, now in reverse order
+
+
+\reverseorder % change order of current table again (back to initial order)
+
+After change into reverse order of current processed CSV file (io-openwrite.csv) again are rows of table:
+
+\doloopforall{\cA\crlf} % type all rows in reverse order
+
+
+Reverse order of another opened table (mail-sample.csv):
+
+\reverseorderof{mail-sample.csv}
+\setcurrentcsvfile[mail-sample.csv] % set to current processed table
+
+% another possibility is
+% \setcurrentcsvfile[mail-sample.csv] % set to current processed table
+% \reverseorder % change order of current table
+
+\doloopforall{\cA\crlf} % type all rows in reverse order
+
+
+Change it back (mail-sample.csv):
+
+\reverseorderof{mail-sample.csv} % change it back
+\doloopforall{\cA\crlf} %
+
+\stoptext
+

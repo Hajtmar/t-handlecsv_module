@@ -1,0 +1,19 @@
+\setuppapersize[A8, landscape]
+\setupbodyfont[helvetica, 13.5pt]
+\setupinteractionscreen[option=max]
+\setuppagenumbering[location=]
+\setupwhitespace[big]
+
+% \usemodule[handlecsv]  		% This is not necessary!!!! because the arguments are passed by another mechanism. 
+% \opencsvfile{participants.csv}		% When main source is compiled, then ConTeXt is calling compile subordinating file and at the same time are forwarding parameters.
+
+\starttext
+
+\startalign[middle]
+To Whom It Might Concern
+\stopalign
+
+% Forwarding arguments are obtain throught \env{} macro.
+This is to certify that \env{forwardingargumentcA} completed the course.
+
+\stoptext

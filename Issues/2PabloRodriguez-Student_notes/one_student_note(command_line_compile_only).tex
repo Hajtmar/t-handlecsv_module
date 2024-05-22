@@ -1,0 +1,37 @@
+\usemodule[scancsv]
+\setuppapersize[A8]
+\setuppagenumbering[state=stop]
+
+
+\def\fullname{\Name\Surname}
+\def\fullnamewithstatus{\Name\Surname\Status}
+
+
+\def\writestudentnote#1#2{
+ {\bf#1\ #2:}\crlf
+\doloopif{\fullname}{==}{#1#2}{\typenotes}
+\page
+}
+
+\def\writestudentnotewithstatus#1#2#3{
+ {\bf#1\ #2:}\crlf
+\doloopif{\fullnamewithstatus}{==}{#1#2#3}{\typenotes}
+\page
+}
+
+
+\unexpanded\def\typenotes{
+  \noindent\Subject\ --- \Note\\
+}
+
+
+    
+\starttext
+One Student Note: 
+
+\setheader
+\opencsvfile{mailmergedatatable.csv}
+
+\writestudentnotewithstatus{\env{NameArgument}}{\env{SurnameArgument}}{\env{StatusArgument}}
+
+\stoptext

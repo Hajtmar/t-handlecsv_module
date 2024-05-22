@@ -1,0 +1,15 @@
+\usemodule[handlecsv]
+
+\startbuffer[languages]
+\cA\lineno\ speaks:
+    %~ \lineno\ \doloopfromto{1}{3}{, \lineno \cB}
+    %~ \lineno\ \doloopuntil{\cA}{}{, \lineno \cB}
+    %~ \savelineno\lineno\cB\nextrow a\doloopwhile{\cA}{}{, \lineno \cB}\setsavedlineno
+    \lineno\ savelineno\cB\nextrow\relax{\doloopwhile{\cA}{}{, \lineno \cB}}setsavedlineno\lineno.
+He is the \cC\ student.\par\blank[big]
+\stopbuffer
+
+\starttext
+ \opencsvfile{languages.csv}
+ \doloopif{\cA}{~=}{}{\getbuffer[languages]}
+\stoptext

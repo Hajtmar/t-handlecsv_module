@@ -1,0 +1,69 @@
+
+\usemodule[handlecsv]
+\usemodule[handlecsv-tools]
+
+\def\mypreviousrow{\readline{\the\numexpr(\recurselevel-1)}}
+\def\mycurrentrow{\readline{\recurselevel}}
+\def\mynextrow{\readline{\the\numexpr(\recurselevel+1)}}
+
+\unsetheader
+\setsep{;}
+
+\opencsvfile{mail-sample.csv}
+
+\starttext
+
+
+\startbuffer[textloop]
+\cA\ (before \csvcell['A',\thenumexpr{\numline+1}], current is \cA) was born on  \cB.    
+\csvcell['A',\thenumexpr{\numline+1}] was born \csvcell['B',\thenumexpr{\numline+1}].
+\crlf
+\stopbuffer
+
+\startbuffer[text]
+\mycurrentrow\cA\ (before \mynextrow\cA) was born on  \mycurrentrow\cB.\crlf
+\stopbuffer
+
+\startbuffer[othersolution]
+\csvcell['A',\recurselevel]\ (before \csvcell['A',\thenumexpr{\recurselevel+1}])    
+was born on  \csvcell['B',\recurselevel].\crlf
+\stopbuffer
+
+
+And classic loop solution:
+
+\opencsvfile{mail-sample.csv}
+\doloop{\ifnotEOF\getbuffer[textloop]\nextrow\else\exitloop\fi}
+
+
+Dorecurse cycle solution:
+
+\dorecurse{\numrows}{
+\getbuffer[text]
+}
+
+
+Another dorecurse cycle solution:
+
+\dorecurse{\numrows}{
+\getbuffer[othersolution]
+}
+
+
+\printall
+
+\csvreport
+
+\printline
+
+\stoptext
+
+
+
+
+
+ 
+
+  
+  
+

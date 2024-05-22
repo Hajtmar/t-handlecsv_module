@@ -1,0 +1,46 @@
+
+%\usemodule[handlecsv]
+\usemodule[t-handlecsv (kopie 2018-02-10-2116)]
+%\usemodule[handlecsv (kopie 2016-02-17)]
+%\usemodule[handlecsv (kopie 2015-07-08)]
+%\usemodule[handlecsv (kopie 2016-02-10)]
+%\usemodule[handlecsv-2015-07-13-06-08]
+%\usemodule[handlecsv-2015-07-16-21-58]
+%\usemodule[handlecsv-2015-09-22]
+%\usemodule[handlecsv (kopie 2015-07-18)]
+%\usemodule[handlecsv (kopie 2015-06-15)]
+%\usemodule[handlecsv-2015-06-27]
+%\usemodule[handlecsv-2015-09-23]
+% Not ok \usemodule[handlecsv (kopie 2015-07-04)]
+%\usemodule[handlecsv (kopie 2015-06-10)]
+%\usemodule[handlecsvtest]
+%\usemodule[handlecsv-test (kopie 2017-07-12-1614)]
+%\usemodule[handlecsv (kopie 2017-07-09-1344)]
+%\usemodule[handlecsv (kopie 2017-06-12 )]
+%\usemodule[handlecsv]
+
+\unexpanded\def\lineaction{%
+\expanded{%
+\columncontent['Product Name'],
+\columncontent['Order Quantity'],
+\columncontent['Unit Price']\crlf
+}%
+}
+
+\catcode`\#=12 %CSV file contains # characters (i.e. TeX problematic character)
+\catcode`\$=12 %CSV file contains $ characters (i.e. TeX problematic character)
+
+
+
+\starttext
+
+\setheader
+\setsep{;}
+
+\doifmodeelse{davka}
+	{\opencsvfile{Cycles_testing/superstore_sales.csv}}
+	{\opencsvfile{../Cycles_testing/superstore_sales.csv}}
+
+\filelineaction
+
+\stoptext

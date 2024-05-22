@@ -1,0 +1,249 @@
+\usemodule[handlecsv]
+%\usemodule[handlecsv (kopie 2016-02-17)]
+%\usemodule[handlecsv (kopie 2015-07-08)]
+%\usemodule[handlecsv (kopie 2016-02-10)]
+%\usemodule[handlecsv-2015-07-13-06-08]
+%\usemodule[handlecsv-2015-07-16-21-58]
+%\usemodule[handlecsv-2015-09-22]
+%\usemodule[handlecsv (kopie 2015-07-18)]
+%\usemodule[handlecsv (kopie 2015-06-15)]
+%\usemodule[handlecsv-2015-06-27]
+%\usemodule[handlecsv-2015-09-23]
+% Not ok \usemodule[handlecsv (kopie 2015-07-04)]
+%\usemodule[handlecsv (kopie 2015-06-10)]
+%\usemodule[handlecsvtest]
+%\usemodule[handlecsv-test (kopie 2017-07-12-1614)]
+%\usemodule[handlecsv (kopie 2017-07-09-1344)]
+%\usemodule[handlecsv (kopie 2017-06-12 )]
+%\usemodule[handlecsv]
+
+
+\setupexternalfigures[location=default]  
+%\setuplabeltext[cz][figure= ] % musí být ty mezery
+
+
+\mainlanguage[cz] 
+\usemodule[letter]
+%\setupletteroptions[backgroundimage=mill]
+
+\defineletterelement[layer][head][mylogo]%
+   {\framed[background=logohead,height=50mm,frame=off,align=left]%
+     {\hlavicka}}
+   
+\setupletterlayer[head]
+   [x=0mm,
+    y=0mm,
+   alternative=mylogo]
+   
+
+\input lib-lua
+
+\def\datumodeslani{26. 4. 2010}
+
+\setupletterstyle[bodyfont=10pt, whitespace=small, alternative=doublesided]
+% Nastaveni adresniho pole
+\setupletterstyle[address][
+	style=sansbold, 
+	preset=lefttop, 
+	hoffset=14cm%,
+	%voffset=7cm,
+	]
+
+  
+
+
+\setupletterstyle[subject][style=\bfb, align=middle]
+\setupletterstyle[reference][style=\ssx,list={cislojednaci, spisovaznacka, misto, datum}]
+
+\setuplabeltext[
+	letter:Date={Datum:}, 
+	letter:misto={Místo:},
+	letter:cislojednaci={Čís.jedn.:}, 
+	letter:spisovaznacka={Spis.zn.:}]
+
+
+
+\startbuffer[dopis]
+	\let\SpZn\cA
+	\let\CisJedn\cB
+	\let\Prijmeni\cC
+	\let\Jmeno\cD
+	\let\Pohl\cE
+	\let\DatNar\cF
+	\let\Ulice\cG
+	\let\Obec\cH
+	\let\PSC\cI
+	\let\PrijmeniZZ\cJ
+	\let\JmenoZZ\cK
+	\let\UliceZZ\cL
+	\let\ObecZZ\cM
+	\let\PSCZZ\cN
+	\let\BP\cO
+	\let\BZ\cP
+	\let\BS\cQ
+	\let\VH\cR
+	\let\Poradi\cS
+\def\podpisreditele{Mgr. Stanislav Nejedlý}
+\startletter[
+	%fromname={\hlavicka},
+	toname={{\red\Jmeno\ \Prijmeni}},
+	toaddress={{\red\Ulice\\ \PSC\ \Obec}},
+	date={\datumodeslani},
+	misto={Město},
+	subject={\midaligned{R O~Z~H O~D N U~T Í}},
+	closing={\hfill\podpisreditele},
+	cislojednaci={\red\CisJedn},
+	spisovaznacka={\red\SpZn},
+	]
+	
+
+
+\blank[medium]
+
+Ředitel školy, jehož činnost vykonává Název školy, Ulice, 112 32 Město, 
+jako příslušný správní orgán podle § 165 odst. 2 písm. f) zákona č. 
+561/2004 Sb., o~předškolním, základním, středním, vyšším odborném a~jiném 
+vzdělávání (školský zákon), ve znění pozdějších změn a~doplňků, rozhodl
+v~souladu s~§ 59, § 60, § 60a, § 60b a~§ 61 téhož zákona, vyhláškou č. 671/2004 
+Sb., kterou se stanoví podrobnosti o~organizaci přijímacího řízení ke 
+vzdělávání ve středních školách, ve znění pozdějších změn a~doplňků, a~§~1 
+odst. 2 zákona č. 500/2004 Sb., správní řád, ve znění pozdějších změn
+a~doplňků, takto:
+
+
+
+\blank[medium]
+
+{\uchazec}
+
+\blank[big]
+
+\centerline{{\bfa není přijat\a}}
+
+\blank[big]
+
+ke vzdělávání ve~škole, jehož činnost vykonává Název školy, Ulice, 112 32 Město,
+od 1.\,9.\,2010 do prvního ročníku nižšího stupně osmiletého 
+studia, do oboru vzdělání 94-13-K/81 Škola, do denní formy vzdělávání.
+
+
+
+\blank[big]
+
+\centerline{{\bf O~d ů v~o~d n ě n í :}}
+
+\blank[medium]
+
+Ředitel školy v~souladu s~§ 60 odst. 3 zákona č. 561/2004 Sb., o~předškolním, 
+základním, středním, vyšším odborném a~jiném vzdělávání (školský zákon), ve 
+znění pozdějších změn a~doplňků, stanovil, že do oboru vzdělání uvedeného ve 
+výroku rozhodnutí bude přijato nejvýše 30 uchazečů.
+
+V~přijímacím řízení byli uchazeči hodnoceni v~souladu s~kritérii přijímacího 
+řízení vydanými ředitelem gymnázia dne 15.1. 2010 pod č.j. 3/2010.
+
+Výsledné hodnocení uchazeče bylo v~souladu se stanovenými kritérii vyjádřeno 
+počtem bodů určeným níže uvedeným způsobem:
+
+
+
+\blank[medium]
+
+{\bf Body za průměrný prospěch (BP)} se rozumí bodové ohodnocení výsledků klasifikace uchazeče 
+určené podle vzorce $\rm BP = (6 - \rm P_{4/1} - \rm P_{4/2} - \rm P_{5/1})\times 10$,
+kde $\rm P_{4/1},\ P_{4/2} \ a \ P_{5/1}$ je 
+průměrný prospěch na vysvědčení za 1. pololetí 4. ročníku, za 2. pololetí 4. 
+ročníku a~za 1. pololetí 5. ročníku základní školy zaokrouhlený na dvě 
+desetinná místa.
+
+{\bf Body za přijímací zkoušku (BZ)} se rozumí harmonizované skóre dosažené
+v~testu obecných studijních předpokladů určené podle kritérií hodnocení testu 
+stanovených dodavatelem testu - společností www.scio.cz, s.r.o.
+
+{\bf Body za soutěže (BS)} se rozumí body, které jsou přiděleny uchazeči, 
+který se umístil do třetího místa v~okresním nebo vyšším kole některé ze 
+soutěží uvedených ve Věstníku MŠMT sešit 8 pro školní rok 2009/2010 pod č.j. 
+12 702/2009-51 a~označených A1, A2, A3, A4, A5, A6, A7, A8, A10, A11, A13, 
+nebo v~odpovídajících soutěžích uvedených ve Věstníku MŠMT sešit 8 pro školní 
+rok 2008/2009 pod č.j.~11~453/2008-51, takto:
+
+BS = 10 bodů za 1. místo v~okresním nebo vyšším kole soutěže,\crlf
+BS = 7 bodů za 2. místo v~okresním nebo vyšším kole soutěže,\crlf
+BS = 4 body za 3. místo v~okresním nebo vyšším kole soutěže.\par
+
+Umístil-li se uchazeč ve více soutěžích nebo více kolech jedné soutěže, 
+získává body pouze za tu soutěž nebo kolo soutěže, ve kterém dosáhl nejlepšího 
+výsledku. Umístění v~soutěži muselo být doloženo diplomem nebo jeho úředně 
+ověřenou kopií nejpozději v~den konání přijímací zkoušky.
+
+
+{\bf Výsledným bodovým hodnocením (VH)}  se 
+rozumí počet bodů, který je součtem bodů za průměrný prospěch, bodů za 
+přijímací zkoušku a~bodů za soutěže.
+
+{\bf Podmínkou přijetí} uchazeče ke vzdělávání ve výše uvedeném oboru vzdělání bylo 
+podle stanovených kritérií dosažení výsledného bodového hodnocení {\bf alespoň 30 
+bodů}.
+
+\blank[medium]
+
+\page[preference]
+
+{\bf Hodnocení uchazeče} bylo vyjádřeno tímto bodovým ziskem:
+
+Body za průměrný prospěch BP = {{\red\BP}} bodů\crlf
+Body za přijímací zkoušku BZ = {{\red\BZ}} bodů\crlf
+Body za soutěže BS = {{\red\BS}} bodů
+
+{\bf Výsledné bodové hodnocení uchazeče VH = {{\red\VH}} bodů}\crlf
+
+Uchazeč ziskem {{\red\VH}} bodů splnil podmínku pro přijetí stanovenou v~kritériích 
+přijímacího řízení a~v~pořadí uchazečů podle výsledků hodnocení přijímacího 
+řízení se umístil na {{\red\bf\Poradi}}. místě. Toto pořadí bylo určeno tak, že uchazeči byli 
+seřazeni sestupně podle výsledného bodového hodnocení a~v~případě rovnosti 
+výsledného bodového hodnocení více uchazečů byli tito vzájemně seřazeni 
+sestupně podle bodů za přijímací zkoušku. Protože podmínky přijímacího řízení 
+splnilo více uchazečů, než kolik lze přijmout, v~souladu s~§ 60 odst. 14 
+zákona č. 561/2004 Sb., o~předškolním, základním, středním, vyšším odborném
+a~jiném vzdělávání (školský zákon), ve znění pozdějších změn a~doplňků, 
+rozhodovalo pořadí uchazečů podle výsledků hodnocení přijímacího řízení. 
+Uchazeč tedy nebyl přijat ke vzdělávání ve střední škole, neboť byla dána 
+přednost uchazečům, kteří se lépe umístili v~pořadí podle výsledků hodnocení 
+přijímacího řízení.
+
+
+\blank[3*big]
+
+
+\centerline{{\bf P o~u~č e n í~~ o~~~o~d v~o~l á n í :}}
+
+\blank[medium]
+
+Proti rozhodnutí o~nepřijetí uchazeče ke vzdělávání ve střední škole se lze 
+odvolat podle zákona č. 500/2004 Sb., správní řád, ve znění pozdějších změn
+a~doplňků, v~souladu s~§ 60 odst. 19 zákona č. 561/2004 Sb., o~předškolním, 
+základním, středním, vyšším odborném a~jiném vzdělávání (školský zákon), ve 
+znění pozdějších změn a~doplňků, do 3 pracovních dnů od doručení tohoto 
+rozhodnutí k~Odboru školství, mládeže a~tělovýchovy Krajského úřadu 
+Olomouckého kraje. Odvolání se podává u~ředitele Školy, Adresa, Ulice, PSČ Město.
+
+\blank[3*big]
+
+\stopletter
+\page
+\stopbuffer
+ 
+
+\def\lineaction{\getbuffer[dopis]\page}
+
+\starttext
+\setheader
+
+\opencsvfile{decision_on_admission.csv}
+%\doloop{\ifnotEOF\getbuffer[dopis]\nextrow\else\exitloop\fi} %OK 
+
+% NEBO :
+\filelineaction{decision_on_admission.csv}{3}{5}
+
+\stoptext
+

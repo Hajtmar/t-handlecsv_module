@@ -1,0 +1,48 @@
+    \setuppagenumbering[location=]
+    \usemodule[hl2t-scancsv.lua]
+
+    \unexpanded\def\lineaction{
+    \startxrow
+      % syntax of previous macros
+        \startxcell\previousName = \previouscB --> \Name\stopxcell
+        \startxcell\previousBegin = \previouscC  --> \Begin\stopxcell
+        \startxcell\previousEnd = \previouscD --> \doifelse{\previousEnd}{End}{\End}{\End}\stopxcell 
+    \stopxrow
+    }
+
+    \setheader
+    \setsep{;}
+    \setfiletoscan{dates-table.csv}
+
+    \starttext
+        \startxtable[option=stretch, align=center]
+            \filelineaction
+        \stopxtable
+  
+  
+Test loops...
+  
+	\doloopif{\cA}{==}{\cA}{\cA, \cB, \cC, \cD} % return data from all lines
+	      
+	xxx
+
+ \doloopif{\cA}{==}{3}{\cA, \cB, \cC, \cD} % returns data from third line
+ 
+ xxx
+ 
+ \doloopif{\cB}{eq}{Jane Doe}{\cA, \cB, \cC, \cD}  % compare operator for strings (compatibility with first version of library)        
+ 
+ xxx
+ 
+ \doloopif{\cB}{==}{Jane Doe}{\cA, \cB, \cC, \cD}
+ 
+ xxx
+ 
+ \doloopif{\cD}{==}{}{\cA, \cB, \cC, \cD}
+ 
+ xxx
+ 
+ \doloopif{\cC}{==}{}{\cA, \cB, \cC, \cD} % return nothing because third column is not empty for all rows
+ 
+  
+\stoptext

@@ -1,0 +1,75 @@
+\usemodule[handlecsv]
+\opencsvfile{numbers.csv}
+
+
+\def\mujproblem{1}
+
+\def\notEOF{%
+\directlua{
+	if thirddata.handlecsv.getcurrentlinepointer() > thirddata.handlecsv.gNumRows[thirddata.handlecsv.getcurrentcsvfilename()] then context([[0]])
+  else context([[1]])
+  end	
+}1}
+
+\starttext
+
+
+
+ \def\testik{
+ \directlua{
+ 		if thirddata.handlecsv.getcurrentlinepointer() > thirddata.handlecsv.gNumRows[thirddata.handlecsv.getcurrentcsvfilename()] then
+      context([[\global\EOFtrue]])
+      context([[\global\notEOFfalse]])
+   else
+   	  context([[\global\EOFfalse]])
+      context([[\global\notEOFtrue]])
+   end	
+ }
+ }
+ 
+
+
+\startbuffer[xtable]
+\startxrow %
+\startxcell %
+   A
+%\linepointer  -- \Romannumerals{\getcsvcell['A',\recurselevel]}% 
+% 	\linepointer  -- \Romannumerals{\cA}%
+\stopxcell %
+\stopxrow %
+\stopbuffer
+
+% 
+% 
+% 
+% 
+% 
+
+
+ 
+\starttext 
+
+I have no clue, why this example not work. It seems, that problem is in collision with startxtable macro.
+
+\resetlinepointer
+
+\startxtable[option=stretch, split=yes]
+
+\doloop{
+\if\notEOF%
+	\startxrow %
+  \startxcell %
+   A
+%\linepointer  -- \Romannumerals{\getcsvcell['A',\recurselevel]}% 
+% 	\linepointer  -- \Romannumerals{\cA}%
+\stopxcell %
+  \startxcell B\stopxcell   
+\stopxrow%
+\nextrow\else\exitloopnow\fi
+}
+%
+\stopxtable%
+
+
+
+\stoptext

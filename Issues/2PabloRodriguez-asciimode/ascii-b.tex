@@ -1,0 +1,14 @@
+\usemodule[handlecsv]
+
+{
+\catcode`\#=12 % local change of character TeX category
+\opencsvfile{b.csv}
+%line of file b.csv: "a";"b#c"
+}
+
+\asciimode
+\starttext
+\cA - a#b - \cB
+\stoptext
+
+

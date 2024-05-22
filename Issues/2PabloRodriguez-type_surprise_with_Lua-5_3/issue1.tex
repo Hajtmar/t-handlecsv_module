@@ -1,0 +1,8 @@
+\usemodule[handlecsv]
+\opencsvfile{abcde.csv} %contents are irrelevant
+\starttext
+\startbuffer
+\lineno\cA\\
+\stopbuffer
+\doloopif{\cA}{~=}{}{\getbuffer}
+\stoptext

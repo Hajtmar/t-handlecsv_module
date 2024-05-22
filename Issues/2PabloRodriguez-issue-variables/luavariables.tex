@@ -1,0 +1,90 @@
+\usemodule[handlecsv]
+
+
+\opencsvfile{file.csv}
+% a;aa;aaa;aaaa;aaaaa
+% b;bb;bbb;bbbb;bbbbb
+% c;cc;ccc;cccc;ccccc
+% d;dd;ddd;dddd;ddddd
+% e;ee;eee;eeee;eeeee
+
+\starttext
+
+
+
+\startluacode
+function document.bingo(str)
+    if thirddata.handlecsv.getcellcontent(3,thirddata.handlecsv.getcurrentlinepointer()) == str then
+    -- OR if thirddata.handlecsv.gTableRows[thirddata.handlecsv.getcurrentlinepointer()][3] == str then
+    tex.print("\\\\{\\bf Bingo!!!}")
+    else
+    tex.print("\\\\{\\bf Hopla!!!}")
+    end
+end
+\stopluacode
+
+
+
+\dorecurse{\numrows}{
+\ctxlua{document.bingo('bbb')}
+\nextrow
+}
+
+
+OR
+
+ 
+\resetlinepointer 
+\doloop{
+\ifnotEOF
+\ctxlua{document.bingo('bbb')}
+\nextrow%
+\else\exitloop\fi
+}
+
+
+\stoptext
+
+
+% \startluacode
+% context(thirddata.handlecsv.gTableRows[1][1]..' [first row, first column]\\crlf')
+% context(thirddata.handlecsv.gTableRows[1][2]..' [first row, second column]\\crlf')
+% context(thirddata.handlecsv.gTableRows[3][4]..' [third row, fourth column]\\crlf')
+% \stopluacode
+% 
+% OR:
+% 
+% \startluacode
+% for row=1,thirddata.handlecsv.gNumRows do
+% 	for col=1,thirddata.handlecsv.gNumCols do
+% 		context([[item]]..row..[[,]]..col..[[=]])
+% 		context(thirddata.handlecsv.getcellcontent(col,row))
+% 		context[[\crlf]]
+% 	end
+% end
+% \stopluacode
+% 
+% 
+% OR:
+% 
+% \startluacode
+% for row=1,thirddata.handlecsv.gNumRows do
+% 	for col=1,thirddata.handlecsv.gNumCols do
+% 		context([[item]]..row..[[,]]..col..[[=]])
+% 		context('\\csvcell['..col..','..row..']')
+% 		context[[\crlf]]
+% 	end
+% end
+% \stopluacode
+% 
+% 
+% OR :
+% 
+% \startluacode
+% 		context('\\csvcell["E",5]')
+% \stopluacode
+% 
+% ETC.
+% 
+
+

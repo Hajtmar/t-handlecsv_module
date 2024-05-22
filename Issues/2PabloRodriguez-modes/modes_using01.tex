@@ -1,0 +1,149 @@
+% Hi Jaroslav,
+% 
+% I know I have to give you an outline (or even better, a draft) on the
+% new handlecsv. I have been busy this previous months (no vacation for
+% me yet :(), but I hope I will find time this weekend.
+% 
+% I have another question about the old t-scancsv.lua. Here is a minimal
+% sample:
+
+\usemodule[handlecsv]
+%\usemodule[scancsv]
+
+\enablemode[mymode]
+%\disablemode[mymode]
+
+
+
+\starttext
+
+\startbuffer[text-content]
+\cA\hfill\cB\crlf
+\stopbuffer
+
+\startbuffer[text-content-mode-enabled]
+mode enabled: \cA\hfill\cB\crlf
+\stopbuffer
+
+\starttext
+\startbuffer[text-content-mode-disabled]
+mode disabled: \cB\hfill\cA\crlf
+\stopbuffer
+
+
+Loop and modes:
+
+\opencsvfile{mail-sample.csv}
+\doloop{%
+	\startmode[mymode]%
+		\getbuffer[text-content-mode-enabled]%
+	\stopmode%
+	\startnotmode[mymode]%
+		\getbuffer[text-content-mode-disabled]%
+	\stopnotmode%
+\ifnotEOF\nextrow\else\exitloop\fi%
+}
+
+
+Another example:
+
+\opencsvfile{mail-sample.csv}
+\doloop{%
+	\doifmodeelse{mymode}{\cA}{\cB} -- \ %
+	\doifmodeelse{mymode}{\getbuffer[text-content-mode-enabled]}{\getbuffer[text-content-mode-disabled]}%
+	\ifnotEOF\nextrow\else\exitloop\fi%
+}
+
+And next another example:
+
+\opencsvfile{mail-sample.csv}
+\doloop{%
+	\doifnotmode{mymode}{\getbuffer[text-content-mode-disabled]}
+	\doifmode{mymode}{mode is enaabled}
+	\ifnotEOF\nextrow\else\exitloop\fi%
+}
+
+
+
+
+Attention! This loop cycle is wrong!!!! (last round is not realized)
+
+\opencsvfile{mail-sample.csv}
+\doloop{%
+	\ifnotEOF\getbuffer[text-content]\nextrow
+		\else\exitloop
+	\fi
+}
+
+
+
+
+Right realizing loop is :
+
+\opencsvfile{mail-sample.csv}
+\doloop{%
+	\ifnotEOF\getbuffer[text-content]\nextrow
+		\else\getbuffer[text-content]\exitloop
+	\fi
+}
+
+or: 
+
+\opencsvfile{mail-sample.csv}
+\doloop{% we assume, that file has more than one row
+\getbuffer[text-content]
+	\ifnotEOF\nextrow
+		\else\exitloop
+	\fi
+}
+
+
+
+Another testings:
+
+A) 
+
+\setfiletoscan{mail-sample.csv}
+\opencsvfile
+\doloop{
+\getbuffer[text-content]
+\ifnotEOF\nextrow\else\exitloop\fi
+}
+
+
+B)
+
+\def\lineaction{\getbuffer[text-content]}
+\opencsvfile{mail-sample.csv}
+\filelineaction			
+			
+
+C) 
+
+\opencsvfile{mail-sample.csv}
+\dorecurse{\numrows}{
+\getbuffer[text-content]
+\nextrow
+}
+		
+\stoptext
+
+
+% Being the contents of mail-sample.csv:
+% 
+%     "ME";11/10/14
+%     "You";05/02/14
+%     "He";03/03/54
+%     "She";03/03/12
+%     "It";03/03/14
+% 
+% Is there any way that the loop can ignore a row when a mode is enabled
+% in t-scancsv.lua?
+% 
+% I mean, there are the \doifmode, \doifnotmode and \doifnotmodeelse
+% commands, but I don’t know how to mix them with \doloop.
+% 
+% Many thanks for your help,
+% 
+% 
+% Pablo

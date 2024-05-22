@@ -1,0 +1,87 @@
+\setuppapersize[A4][A4]      % Velikost papíru bude A5 a bude na stránce opět o téže velikosti. 
+\setupcolors[state=start]    % Zapne používání barev.
+\setuppagenumbering[state=stop]
+\setuplayout[width=middle, topspace=1cm, header=1cm, footer=1cm]
+
+\usemodule[handlecsv]
+\setheader
+
+\setupbodyfont[cmr,sansserif,10pt]
+
+\setupwhitespace[medium]
+
+\input lib-lua
+
+
+
+\unexpanded\def\lineaction{
+		%\vodoznakGyZA
+		\hlavicka
+		\hrule
+		\blank[big]
+		
+		\adresnistitek{\CjPozvanka }{31.3.2010}
+		
+			\blank[10mm]
+
+			{\tfa Invitation to entrance examination}
+				
+			\blank[big]	
+			
+			Madam,\crlf
+			sir,
+			
+			\blank[big]	
+			
+			the filing of a secondary school was opened administrative proceedings regarding the admission of applicants
+			  
+			
+			
+			\blank[big]
+			
+			\uchazec
+						
+			\blank[big]
+								
+			
+education in secondary school, whose work is carried out Gymnasium, Zábřeh, Liberation Square 20, in the field of  79-41-K/81 Gymnasium.
+
+The admission procedure will be followed in accordance with the ~ ~ criteria for admission procedure ref 3/2010 established by the school head. 
+
+
+In accordance with the criteria for the admission procedure will be included 
+in the admission procedure entrance exam, which will include a test of general 
+study prerequisites supplied by www.scio.cz, Ltd. {\bf The entrance exam} will 
+be held on {\bf \TerminPZ} from 7:45 pm in the Grammar School, Zábřeh, 
+Liberation Square 20.
+
+When evaluating a publication of the results of the admission procedure, candidates will
+labeled registration numbers. The registration number will be allocated to applicants
+during the briefing before the start of the entrance exams. Results admission
+the proceedings will be posted on the bulletin board in the lobby of the school and on the Internet ~
+school site {\bf www.ourhighschool.cz}.
+
+{\bf Please read the enclosed information carefully!}
+ 
+{\bf Bring a thin black marker thickness of 0.3!}
+
+{\bf No other aids are not candidates for the exam need!}
+
+			
+			\blank[3*big]
+			
+			\podpisreditele
+
+\page
+} 
+
+
+\starttext
+\setheader
+\filelineaction{8l.csv}
+\filelineaction{4l.csv}
+\filelineaction{4l-n.csv}
+
+
+\stoptext
+	

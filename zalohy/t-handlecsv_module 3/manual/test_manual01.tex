@@ -1,0 +1,165 @@
+% Možnosti získávání údajů z CSV tabulky pomocí maker
+% \cA, \cB, .... a odpovídající \Firstname, \Lastname atd...
+% \csvcell['',radek] - univerzální přístu k informacím ...
+% \columncontent['sloupec']
+% \colA, \colB, ... resp \colA[5], \colB[7],....atd...
+% \colFirstname, \colFirstname[11]
+
+
+
+
+\usemodule[handlecsv]
+% \usemodule[handlecsv-tools]
+
+%\setuppapersize[A0]
+%\setuplayout[A0]
+
+\starttext
+
+
+\setheader % set a header flag i.e. CSV file has header in first line
+\setsep{,} % change settings of default separator (this is ; semicolon) 
+\opencsvfile{myfirstcsvexamplefile.csv}
+%\opencsvfile{myfirstcsvexamplefilewithoutheader.csv}
+
+
+
+
+
+
+
+\catcode`\#=12 %CSV file contains # characters (i.e. TeX problematic character)
+
+
+
+\startluacode
+local pocet=#thirddata.handlecsv.gColumnNames
+context('Počet je: ')
+context(pocet)
+
+local keyset={}
+local n=0
+
+for k,v in pairs(thirddata.handlecsv.gColNames) do
+  n=n+1
+  keyset[n]=k
+end
+
+table.sort(keyset)
+
+for i=1,n do
+context(''..keyset[i]..', ')
+end
+
+
+context('\\crlf')
+
+for i=1,#thirddata.handlecsv.gColumnNames do
+context('\\backslash '..thirddata.handlecsv.gColumnNames[i]..', ')
+end
+    
+\stopluacode
+
+
+
+
+
+Column names:
+
+\dorecurse{\numcols}{\colname[\recurselevel] -- \xlscolname[\recurselevel] -- \cxlscolname[\recurselevel] -- \texcolname[\recurselevel]\crlf }
+
+
+ Available macros:
+  
+\dorecurse{\numcols}{\backslash columncontent['\colname[\recurselevel]'] -- \xlscolname[\recurselevel] -- \cxlscolname[\recurselevel] -- \texcolname[\recurselevel]\crlf }
+
+sss
+
+
+\cA, \csname cA\endcsname \csname first_name\endcsname
+
+ss
+
+First names:
+
+\dorecurse{\numrows}{
+\columncontent['first_name'] \nextrow \crlf
+}
+
+Column contents:
+
+\dorecurse{\numcols}{
+\texcolname[\recurselevel]
+\edef\namea{'\texcolname[\recurselevel]'}
+\columncontent[\namea]
+\columncontent[\recurselevel] \nextrow \crlf
+}
+
+
+Zajímavý obrat:
+
+\dorecurse{\numcols}{
+Name of column \recurselevel is \colname[\recurselevel]. Content of this column is \columncontent[\recurselevel]. Content this column by other metod is \edef\texname{'\texcolname[\recurselevel]'} -- \columncontent[\texname]. Serial number of column is \indexcolname[\texname].\crlf 
+}
+
+
+Stepping
+
+\columncontent['firstxname'] \nextrow \crlf
+\columncontent['first_name'] \nextrow \crlf
+\columncontent['firstxname'] \nextrow \crlf
+\columncontent['cA'] \nextrow \crlf
+\columncontent['A'] \nextrow \crlf
+
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+\type{\numrows}: \numrows
+
+\type{\numemptyrows}: \numemptyrows
+
+\type{\numnotemptyrows}: \numnotemptyrows
+
+\type{\numcols}: \numcols
+
+\type{\csvfilename}: \csvfilename
+
+% \type{\csvreport}: 
+% 
+% \csvreport
+% 
+% \csvfilename
+% 
+% 
+% \type{\csvreport{myfirstcsvexamplefilewithemptylines.csv}}: 
+% 
+% \csvreport{myfirstcsvexamplefilewithemptylines.csv} 
+% 
+% 
+% \type{\printline}: 
+% 
+% \printline
+% 
+% \type{\printall}: 
+% 
+% {\catcode`\#=12 \printall}
+% 
+
+
+
+\csvcell[2,1]
+
+\csvcell[2,1]
+
+
+
+% \colname[#1]
+% \indexcolname[#1]
+% \xlscolname[#1]
+% \numberxlscolname[#1]
+
+
+
+
+
+\stoptext

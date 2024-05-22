@@ -1,0 +1,152 @@
+\mainlanguage[cz]            % Podle typografických pravidel 
+\setuppapersize[A4][A4]      % Velikost papíru bude A5 a bude na stránce opět o téže velikosti. 
+\setupcolors[state=start]    % Zapne používání barev.
+\setuppagenumbering[state=stop]
+\setuplayout[width=middle, topspace=1cm, header=1cm, footer=1cm]
+
+%\enablemode[prvnipololeti]
+\enablemode[druhepololeti]
+
+\def\puvodniterminklasifikace{22.\ 6.\ 2015}
+\def\nahradniterminklasifikace{30.\ 9.\ 2015}
+\def\dopiszedne{25.\ 6.\ 2015}
+
+
+
+
+
+\doifmodeelse{prvnipololeti}
+{\def\pololeti{první}}
+{\def\pololeti{druhé}}
+
+\newif\ifneklasifikovanyzak
+
+\usedirectory[c:/1da/ConTeXt/ConTeXt-Tests/my_way/ScanCSV/t-handlecsv_module/]
+\usemodule[handlecsv]
+
+
+\def\predmetzhlavicky#1:#2:#3:#4!{#2}
+\def\vyhodnocenypredmet{\edef\predmet{\csvcell[\recurselevel,0]}\words{\expandafter\predmetzhlavicky\predmet!}}
+
+\def\TestujNeklPredmety{%
+\neklasifikovanyzakfalse
+\dostepwiserecurse{24}{58}{1}{\if\csvcell[\recurselevel,(\linepointer-1)]N \neklasifikovanyzaktrue\fi }%
+\dostepwiserecurse{75}{85}{1}{\if\csvcell[\recurselevel,(\linepointer-1)]N \neklasifikovanyzaktrue\fi }%
+\removeunwantedspaces%
+}
+
+\def\NeklPredmety{%
+\neklasifikovanyzakfalse
+\dostepwiserecurse{24}{58}{1}{\if\csvcell[\recurselevel,(\linepointer-1)]N \vyhodnocenypredmet,\neklasifikovanyzaktrue\fi }%
+\dostepwiserecurse{75}{85}{1}{\if\csvcell[\recurselevel,(\linepointer-1)]N \vyhodnocenypredmet,\neklasifikovanyzaktrue\fi }%
+\removeunwantedspaces%
+}
+
+\def\vypisneklasifikovanepredmety{%
+\if!\NeklPredmety!\else\NeklPredmety\fi
+}
+
+\input ../texlibrary/lib-lua.tex
+
+\unexpanded\def\printaction{
+\let\Trida\cA
+\let\Prijmeni\cE
+\let\Jmeno\cF
+\let\DatumNarozeni\cG
+\let\MistoNarozeni\cH
+\let\Pohlavi\cJ
+\let\Mesto\cK
+\let\PSC\cL
+\let\Ulice\cM
+\let\ZZPrijmeni\cP
+\let\ZZJmeno\cQ
+\let\ZZUlice\cR
+\let\ZZMesto\cS
+\let\ZZPSC\cT
+\let\DatNar\DatumNarozeni
+\let\Obec\Mesto
+
+%\let\NeklPredmety
+%\vodoznakGyZA
+\hlavicka
+\hrule
+\blank[big]
+
+%\adresnistitek		
+				
+\blank[10mm]
+
+{\tfa Věc: Stanovení náhradního termínu pro hodnocení}
+				
+\blank[big]	
+			
+Vážená paní,\crlf
+Vážený pane,
+			
+\blank[big]	
+			
+Ředitel Gymnázia, Zábřeh, náměstí Osvobození 20 stanovuje náhradní termín pro 
+hodnocení níže jmenovaného žáka, který z~důvodu nedostatku podkladů nemohl být 
+hodnocen za {\pololeti} pololetí ke dni {\puvodniterminklasifikace}.
+
+\blank[big]
+
+			
+%\let\nahradniterminklasifikace\TerminKlasifikace
+\zak
+						
+\blank[big]
+			
+Předměty, ze kterých žák nemohl být hodnocen:	{\bf \NeklPredmet}
+			
+\blank[big]
+			
+Náhradní termín pro hodnocení:	{\bf \nahradniterminklasifikace}
+
+\blank[big]
+
+\doifmodeelse{prvnipololeti}
+{Nebude-li pro nedostatek podkladů možné žáka hodnotit ani v~náhradním termínu, 
+žák nebude za první pololetí hodnocen.}
+{Nebude-li žák hodnocen ani v~náhradním termínu, bude podle § 69 odst.~6 zákona 
+č.~561/2004 Sb., o~předškolním, základním, středním, vyšším odborném a~jiném 
+vzdělávání (školský zákon), v~platném znění, a~§~3 vyhlášky č.~13/2005~Sb.,
+o~středním vzdělávání a~vzdělávání v~konzervatoři, v~platném znění, celkové 
+hodnocení žáka na vysvědčení vyjádřeno stupněm {\bf neprospěl}.}
+			
+
+
+
+\blank[3*big]
+			
+V~Zábřehu dne {\dopiszedne} 					
+			
+\podpisreditele
+
+\vfill
+
+%Vzal na vědomí dne {\hbox to 4cm{\dotfill}}\hfill {\hbox to 5cm{\dotfill}}\break
+%\null\hfill Podpis zákonného zástupce\break
+
+\page
+} 
+
+
+
+\starttext
+
+\setheader
+
+\doifmodeelse{prvnipololeti}
+{\setfiletoscan{export-1pololeti.csv}}
+{\setfiletoscan{export-2pololeti.csv}}
+\opencsvfile
+
+
+\doloop{
+\TestujNeklPredmety
+\ifneklasifikovanyzak\def\NeklPredmet{\NeklPredmety}\printaction\fi
+\exitlooptest
+}
+
+\stoptext

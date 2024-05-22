@@ -1,0 +1,73 @@
+\usemodule[handlecsv]
+\opencsvfile{numbers.csv}
+\unsetheader
+
+\startbuffer[mybuff]
+  \startxrow %
+  \startxcell %
+    \Romannumerals{\csvcell['A',\recurselevel]} %
+  \stopxcell %
+\stopxrow %
+\stopbuffer
+
+
+\startbuffer[myanotherbuff]
+  \startxrow %
+  \startxcell %
+    \Romannumerals{\csvcell['A',\numline]}
+  \stopxcell %
+\stopxrow %
+\stopbuffer
+
+\startbuffer[mynextbuff]
+  \startxrow %
+  \startxcell %
+    \csvcell['A',\numline]
+  \stopxcell %
+\stopxrow %
+\stopbuffer
+
+
+
+\unexpanded\def\lineaction{\getbuffer[myanotherbuff] }
+
+
+\starttext
+
+
+\resetlinepointer
+\startxtable[option=stretch, split=yes]
+\dorecurse{\numrows}{\getbuffer[mybuff]}
+\stopxtable%
+
+\page
+
+\resetlinepointer
+\startxtable[option=stretch, split=yes]
+\filelineaction
+\stopxtable
+
+\page
+
+\resetlinepointer
+\startxtable[option=stretch, split=yes]
+\doloopaction{\getbuffer[myanotherbuff] }
+\stopxtable
+
+
+
+
+\stoptext
+
+% \resetlinepointer
+% \startxtable[option=stretch, split=yes]
+% \doloop{
+% \getbuffer[mynextbuff]
+% \ifnotEOF
+% 	%\getbuffer[myanotherbuff]
+%  \nextline
+% 	\else\exitloop
+% \fi
+% }%
+% \stopxtable
+

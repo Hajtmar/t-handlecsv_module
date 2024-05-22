@@ -1,0 +1,243 @@
+\usemodule[handlecsv]
+%\usemodule[../t-scancsv_ConTeXt_module/last_versions/scancsv-2015-06-02]
+%\usemodule[scancsv-2015-06-02]
+
+
+
+\def\bfilehook{BF}%
+\def\efilehook{EF}%
+\def\blinehook{BL}%
+\def\elinehook{EL}%
+\def\bch{BC}
+\def\ech{EC}
+
+% Transaction_date,Product,Price,Payment_Type,Name,City,State,Country,Account_Created,Last_Login,Latitude,Longitude
+\unexpanded\def\clineaction{%
+% \let\Product=\cB%
+% \let\Price=\cC% 
+% \let\City=\cF% 
+% \let\State=\cG% 
+% \let\Country=\cH% 
+{\numline}\ -  \sernumline - \linepointer -- (\lineno): \Product\ -- \Price, \City, \State, \Country% \Latitude - \Longitude \crlf
+}%
+	
+\unexpanded\def\lineaction{\numline-\sernumline-\linepointer--(\lineno):\hProduct\--\hPrice-\hCity-\hState-\hCountry}%	
+\unexpanded\def\action{ACTION: \numline\ -  \sernumline - \linepointer -- (\lineno): \hProduct\ -- \hPrice, \hCity, \hState, \hCountry}%
+
+\usehooks % it is necessary turn on using hooks while process CSV file
+\setheader
+\setsep{;}
+% \unsetsep
+\opencsvfile{SalesJan2009.csv} % 999 lines
+
+
+\starttext
+
+
+% List of all CSV table:
+%
+% \bTABLE
+%     \dorecurse{\numrows}{\bTR
+%         \dorecurse{\numcols}{\bTD \csvcell[\currentTABLEcolumn,\currentTABLErow] \eTD}
+%     \eTR}
+% \eTABLE
+%    
+
+
+
+
+% doloop cycle:
+% 
+% \doloop{%
+% \ifnum\cC=1200\lineaction\ifEOF\exitloop\else\nextrow\fi
+% \else\ifEOF\exitloop\else\nextrow\fi
+% \fi%
+% }%
+
+%
+%
+%
+
+
+% List of column names (ie all columns in 'zero row'):\crlf
+% \dostepwiserecurse{1}{\numcols}{1}{\csvcell[\recurselevel,0],\  }
+% 
+% List of first row of table:\crlf
+% \dostepwiserecurse{1}{\numcols}{1}{\csvcell[\recurselevel,1],\  }
+
+
+
+% MODULE PREDEFINED LOOPS
+%\filelineaction
+%\doloopfromto{1}{50}{\lineaction}  
+%\doloopforall  % implicit do \lineaction for all lines of open CSV table
+%\doloopforall{\action}  % do \action macro for all lines of open CSV table
+
+
+
+% \doloopaction{\action} % use \action macro for all lines of open CSV file
+% \doloopaction{\action}{4} % use \action macro for first 4 lines
+% \doloopaction{\action}{2}{5} % use \action macro for lines from 2 to 5
+
+
+\filelineaction
+
+% compare numbers
+%\doloopifnum{\cC}{<}{1200}{\lineaction} % less
+%\doloopifnum{\cC}{>}{1200}{\lineaction} % greather
+%\doloopifnum{\cC}{==}{1200}{\lineaction} % equal
+%\doloopifnum{\cC}{~=}{1200}{\lineaction} % not equal
+%\doloopifnum{\cC}{>=}{1200}{\lineaction} % greather or equal
+%\doloopifnum{\cC}{<=}{1200}{\lineaction} % less or equal
+
+% compare strings
+% \doloopif{\Product}{==}{Product2}{\lineaction} % compare string
+% \doloopif{\Product}{eq}{Product2}{\lineaction} % == is synonym for 'eq' operator if arguments are not numbers
+% \doloopif{\Product}{~=}{Product2}{\lineaction}
+% \doloopif{\Product}{neq}{Product2}{\lineaction} % ~= is synonym for 'neq' operator  if arguments are not numbers
+% \doloopif{uct3}{in}{\Product}{\lineaction} % testing if substring is contained inside string 
+% \doloopif{Product3}{until}{\Product}{\lineaction} % List all, until the test is not met - then just quit. Repeat until satisfied. If it is not never met, will list all record
+% \doloopif{\Product}{while}{Product1}{\lineaction} % List all, while the test is  met. When first which not met then just quit. If first is not met, will list no record
+%\doloopuntil{Product3}{\Product}{\lineaction}
+%\doloopwhile{\Product}{Product1}{\lineaction}
+ 
+
+
+\stoptext
+
+
+
+
+
+% 4. \doloopif{value1}{[compare_operator]}{value2}{macro_for_doing} % [compareoperators] <, >, ==(eq), ~=(neq), >=, <=, in, until, while 
+% actions for rows of open CSV file which are responded of condition  
+\def\doloopif#1#2#3#4{%
+    \opencsvfile%
+    \readline
+    \bfilehook%
+    \def\paroperator{#2}
+    %  operator '==' is for strings comparing converted to 'eq' operator 
+    \startluacode
+			 if '#2'=="==" and not(type(tonumber('#1'))=='number' and type(tonumber('#3'))=='number') 
+	     then context('\\def\\paroperator{eq}')  
+	     end
+     \stopluacode
+    %  operator '~=' is for strings comparing converted to 'neq' operator
+    \startluacode
+		 if '#2'=="~=" and not(type(tonumber('#1'))=='number' and type(tonumber('#3'))=='number') 
+     then context('\\def\\paroperator{neq}')  
+     end
+		 \stopluacode
+    % and now process actual operator 
+    \processaction[\paroperator][%
+     <=>{% {number1}{<}{number2} ... Less 
+     \doloop{%
+    	\edef\tempiv{#4}%
+      \startluacode
+				if #1<#3 then context('\\blinehook \\tempiv\\elinehook') end
+			\stopluacode
+			%
+      \readline\nextline%
+   	  \ifEOF\exitloop\fi%
+     }%
+     },% end < ... Less
+     >=>{% {number1}{>}{number2} ... Greater 
+     \doloop{%
+    	\edef\tempiv{#4}%
+    	\startluacode
+				if #1>#3 then context('\\blinehook \\tempiv\\elinehook') end
+			\stopluacode
+			\readline\nextline\ifEOF\exitloop\fi%
+     }%
+     },% end > ... Greater
+     ===>{% {number1}{==}{number2} ... Equal
+     \doloop{%
+       \edef\tempiv{#4}%
+    	 \startluacode
+			  if #1==#3 then context('\\blinehook \\tempiv\\elinehook') end
+			 \stopluacode
+			 \readline\nextline\ifEOF\exitloop\fi%
+     }%
+     },% end == ... Equal
+     ~==>{% {number1}{~=}{number2} ... Not Equal
+     \doloop{%
+       \edef\tempiv{#4}%
+    	  \startluacode
+			   if #1~=#3 then context('\\blinehook \\tempiv\\elinehook') end
+				\stopluacode
+				\readline\nextline\ifEOF\exitloop\fi%
+     }%
+     },% end ~= ... Not Equal
+     >==>{% {number1}{>=}{number2} ... GreaterOrEqual 
+     \doloop{%
+       \edef\tempiv{#4}%
+    	 \startluacode
+			  if #1>=#3 then context('\\blinehook \\tempiv\\elinehook') end
+				\stopluacode
+				\readline\nextline\ifEOF\exitloop\fi%
+     }
+     },% end >=  ... GreaterOrEqual
+     <==>{% {number1}{<=}{number2} ... LessOrEqual 
+     \doloop{%
+       \edef\tempiv{#4}%
+       \startluacode
+			   if #1<=#3 then context('\\blinehook \\tempiv\\elinehook') end
+			 \stopluacode
+			 \readline\nextline\ifEOF\exitloop\fi%
+     }%
+     },% end <= ... LessOrEqual 
+     eq=>{%  command {string1}{==}{string2} is converted to command command {string1}{eq}{string2} ... string1 is equal string2 
+     \doloop{%
+ 		 \edef\tempi{#1}%
+ 		 \edef\tempii{#3}%
+ 		 \edef\tempiii{#4}%
+       \ifx\tempi\tempii\blinehook \tempiii\elinehook\fi\readline\nextline\ifEOF\exitloop\fi%
+     }%
+     },%  end eq
+     neq=>{%  command {string1}{~=}{string2} is converted to command command {string1}{neq}{string2} ... string1 is not equal string2  
+     \doloop{%
+  		\edef\tempi{#1}%
+  		\edef\tempii{#3}%
+  		\edef\tempiii{#4}%
+      \ifx\tempi\tempii\else\blinehook \tempiii\elinehook\fi\readline\nextline\ifEOF\exitloop\fi%
+     }%
+     },% end neq
+     in=>{% {substring}{in}{string} ... substring is contained inside string 
+     \doloop{%
+ 		 \edef\tempi{#1}%
+ 		 \edef\tempii{#3}%
+ 		 \edef\tempiii{#4}%
+       \doifincsnameelse{\tempi}{\tempii}{\blinehook \tempiii\elinehook}
+			 \readline\nextline\ifEOF\exitloop\fi%
+     }
+     }, % end in
+     until=>{% {substring}{until}{string} ... % List all, until the test is not met - then just quit. Repeat until satisfied. If it is not never met, will list all record
+      \doloop{
+        \edef\tempi{#1}
+        \edef\tempii{#3}
+        \edef\tempiii{#4}
+        % \ifx\tempi\tempii\exitloop\else\ifEOF\exitloop\else \blinehook \tempiii \elinehook\readline\nextline\fi\fi% recent version
+        \ifx\tempi\tempii\exitloop\else\ifEOF\exitloop\else\blinehook \tempiii\elinehook\readline\nextline\fi\fi% new version
+     }%
+     }, % end until % the comma , is very important here!!!
+     while=>{% {string}{while}{string} ... % List all, while the test is  met. When first which not met then just quit. If first is not met, will list no record
+     \doloop{%
+	   \edef\tempi{#1}
+	   \edef\tempii{#3}
+      \edef\tempiii{#4}
+	   \ifx\tempi\tempii\blinehook \tempiii\elinehook\readline\nextline\else\exitloop\fi%
+   	\ifEOF\exitloop\fi%
+     }%
+     }, % end while % the comma , is very important here!!!
+     test=>{% {string}{while}{string} ... % List all, while the test is  met. When first which not met then just quit. If first is not met, will list no record
+     \doloop{%
+	   \edef\tempi{#1}
+	   \edef\tempii{#3}
+      \edef\tempiii{#4}
+	   \ifx\tempi\tempii\blinehook \tempiii\elinehook\readline\nextline\else\exitloop\fi%
+   	\ifEOF\exitloop\fi%
+     }%
+     }, % end test % the comma , is very important here!!!
+    ]% end of \processaction
+  \efilehook%
+} % end of \doloopif

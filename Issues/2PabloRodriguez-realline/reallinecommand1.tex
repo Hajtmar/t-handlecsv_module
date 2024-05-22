@@ -1,0 +1,17 @@
+\definelabel [QQ][text=,headcolor=red]
+
+\starttext
+\startxtable
+  \startxrow
+    \startxcell one \stopxcell
+    \startxcell two \QQ[there] \stopxcell
+  \stopxrow
+  \startxrow
+    \startxcell alpha \QQ\stopxcell
+    \startxcell beta \QQ[here]  \stopxcell
+  \stopxrow
+\stopxtable
+
+See entry \in[here].
+
+\stoptext

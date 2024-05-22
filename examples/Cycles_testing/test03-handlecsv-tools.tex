@@ -1,0 +1,36 @@
+\usemodule[handlecsv]
+\usemodule[handlecsv-tools]
+
+
+\starttext
+
+
+\setheader % set a header flag i.e. CSV file has header in first line
+\setsep{,} % change settings of default separator (this is ; semicolon)
+\opencsvfile{myfirstcsvexamplefile.csv}
+%\opencsvfile{myfirstcsvexamplefilewithoutheader.csv}
+
+\catcode`\#=12 %CSV file contains # characters (i.e. TeX problematic character)
+
+
+
+% tyto nepodstatnÈ lua funkce (resp. jejich n·slednÈ TeXovÈ definice) byly umÌstÏny do samostatnÈho modulu "t-handlecsv-tools.lua"
+
+\setuppapersize[A3,landscape][A3,landscape]
+
+
+% vypsat hlaviËku
+\setlinepointer{0}
+\printline
+
+% vypsat 8. ¯·dek
+\setlinepointer{8}
+\printline
+
+
+\printall
+
+\csvreport
+
+
+\stoptext

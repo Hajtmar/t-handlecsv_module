@@ -1,0 +1,453 @@
+\setupwhitespace[medium]
+
+% \let\numcols\relax
+% \let\numrows\relax
+% \let\numcols\relax
+
+
+\starttext
+This simple sample document shows possibilities of the handlecsv.lua module.
+
+
+Imagine, that CSV file \type{myfirstcsvexamplefile.csv} that I want to use for 
+my print report has the so-called header (ie. the first line contains the 
+names of each columns of the table) and the separator of columns is a 
+semicolon.
+
+When I need process this CSV file, then at first I have to load required 
+module by command:
+
+\starttyping
+\usemodule[handlecsv] % this command load module into my source code
+\stoptyping
+
+\usemodule[handlecsv]  % this command load module into my source code
+% \usemodule[handlecsv-tools]
+
+The module now needs to know, whether CSV file contain a header and to know 
+which delimiter used to divide to separate columns. The default setting of the 
+module library setting can be changed to suit my needs.
+
+\starttyping
+\setheader % this set a header flag i.e. CSV file has header in first line 
+\setsep{,} % change settings of default separator (this is ; semicolon)
+\stoptyping
+
+\setheader % set a header flag i.e. CSV file has header in first line 
+% compared to \unsetheader or \resetheader synonyms are used for no header file
+\setsep{,} % change settings of default separator (this is ; semicolon)
+% \unsetsep or \resetsep synonyms change settings of default separator (;)
+
+Now I can open my CSV file for processing by the command: 
+
+
+\starttyping
+\opencsvfile{myfirstcsvexamplefile.csv}
+\stoptyping
+
+
+\opencsvfile{myfirstcsvexamplefile.csv}
+
+After opening the file I can find out a lot of useful information. eg typing of line:
+
+\startbuffer[message1]
+The file \csvfilename\ has \numcols columns\  and \numrows\ rows (lines).
+\stopbuffer
+
+\typebuffer[message1]
+
+Lists message: 
+
+\getbuffer[message1]
+
+%\printline
+
+%\printall
+
+%\csvreport
+
+
+
+
+% \setheader
+% \ifissetheader{true}\else{false}\fi
+% 
+% 
+% \def\rowfrommacro#1{\the\numexpr(#1+0)}
+
+
+
+
+% \unsetheader
+% \ifissetheader{true}\else{false}\fi
+
+
+\unexpanded\def\lineaction{%
+%\catcode`\_=12
+%\catcode`\%=12
+%\catcode`\&=12
+\catcode`\#=12
+%\catcode`\@=12
+%\numline  \linepointer -  \csvcell['A',\the\numexpr(\linepointer+0)]\crlf % OK
+%\numline  \linepointer -  \csvcell['A',\rowfrommacro{\linepointer}]\crlf %OK
+%\csvcell['A',\rowfrommacro{\linepointer}] OK
+%\numline  \linepointer -  \csvcell['A','\linepointer']\crlf
+\ifnotemptyline\numline\ xx  \linepointer -  \csvcell['A',\linepointer] \crlf \else XX \numline \fi%OK
+}
+
+
+DORECURSE
+
+\dorecurse{\numrows}{\numline / \linepointer - \csvcell['first_name',\recurselevel]\nextline\nextnumline\crlf}
+
+
+\filelineaction
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+\setheader % set a header flag i.e. CSV file has header in first line 
+\setsep{,} % change settings of default separator (this is ; semicolon)
+\opencsvfile{myfirstcsvexamplefilewithoutheader.csv}
+
+The filename {\ttbf \csvfilename}\ has \numcols\ columns\  and \numrows\ rows (lines).
+
+\dorecurse{\numrows}{\numline / \linepointer - \csvcell['A',\recurselevel]\nextline\nextnumline\crlf}
+
+
+%\filelineaction
+
+
+%\csvreport 
+ 
+
+První řádek obsahuje hlavičku ()
+
+
+Stejně pro soubor bez hlavičky
+
+
+
+% \starttyping
+% \usemodule[handlecsv]  % this command load module into my source code
+% 
+% \setheader
+% \setsep{,}
+% 
+% 
+% 
+% \stoptyping
+
+
+
+%\notmarkemptylines % TZN všechny řádky jsou považovány za neprázdné (i když v nich není žádná informace)
+%\markemptylines % TZN prázdné řádky jsou rozlišovány a jsou označeny  Lépe makro s názvem OZNAČITprázdnéřádky 
+
+
+\setheader
+\setsep{,}
+% \unsetsep
+\opencsvfile{myfirstcsvexamplefilewithemptylines.csv}
+
+
+The filename {\ttbf \csvfilename}\ has \numcols\ columns\  and \numrows\ rows (lines).
+
+\dorecurse{\numrows}{\numline / \linepointer - \csvcell['A',\recurselevel]\nextline\nextnumline\crlf}
+
+
+LUACODE
+
+
+% -- context(tostring(thirddata.handlecsv.testemptyrow(9)))
+% -- context(tostring(thirddata.handlecsv.gNumEmptyRows))
+
+\startluacode
+for i = 1, thirddata.handlecsv.gNumRows do
+	if thirddata.handlecsv.emptylineevaluation(i) then context(i..'empty\\crlf') else context(i..'nonempty\\crlf') end
+end
+context(tostring(thirddata.handlecsv.gNumEmptyRows))
+\stopluacode
+
+
+EMPTYTEST
+
+\dorecurse{\numrows}{\readline{\recurselevel}\ifemptyline \recurselevel: EMPTY \else \recurselevel: NONEMPTY \fi\nextrow\crlf}
+
+
+NOTEMPTYTEST
+
+\dorecurse{\numrows}{\readline{\recurselevel}\ifnotemptyline \recurselevel: NOTEMPTY \else \recurselevel: EMPTY \fi\nextrow\crlf}
+
+
+
+
+FILELINEACTION EMPTY -- NONEMPTY
+
+\setheader
+\setsep{,}
+% \unsetsep
+%\notmarkemptylines
+%\markemptylines
+
+\opencsvfile{myfirstcsvexamplefilewithemptylines.csv}
+
+
+\ifemptylinesmarking
+EMPTY LINES ARE MARKING
+\else
+EMPTY LINES ARE NOT MARKING ()
+\fi
+
+
+
+\ifemptylinesnotmarking
+EMPTY LINES ARE NOT MARKING
+\else
+EMPTY LINES ARE MARKING
+\fi
+
+
+
+\unexpanded\def\notemptylineaction{%
+\catcode`\#=12
+%\catcode`\@=12
+\ifnotemptyline\numline\ -- \lineno / \linepointer -  \csvcell['B',\linepointer]\crlf\fi%OK
+}
+
+\unexpanded\def\emptylineaction{%
+\catcode`\#=12
+%\catcode`\@=12
+\ifemptyline\numline\ -- \lineno / \linepointer -  nothing\crlf\fi%OK
+}
+
+% \resetnumline
+% \resetlinepointer
+%\filelineaction
+
+%\unsetheader
+%\notmarkemptylines
+\ifissetheader
+ SETHEADER = ON
+\doloopaction{\notemptylineaction}
+\else
+	SETHEADER = OFF
+\doloopaction{\emptylineaction}
+\fi
+
+
+
+
+
+\numemptyrows
+
+\numnotemptyrows
+
+\numrows
+
+FILELINEACTION EMPTY -- NONEMPTY FILELINEACTION EMPTY -- NONEMPTY FILELINEACTION EMPTY -- NONEMPTY
+
+
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxx
+\markemptylines
+
+
+\indexofemptyline{2}
+
+\indexofnotemptyline{2}
+
+AAAAAAAAAAAAAAAAAAAAAAAA
+
+ALL LINES WITH EVALUATING OF EMPTENIES
+
+\dorecurse{\numrows}{\readline{\recurselevel}\ifnotemptyline \recurselevel -- \indexofnotemptyline{\recurselevel} : \csvcell['A', \indexofnotemptyline{\recurselevel}] \else \recurselevel: EMPTY \fi\nextrow\crlf}
+
+BBBBBBBBBBBBBBBBBBBBBBBBBB
+
+ONLY NONEMPTY LINES
+
+%\dorecurse{\numnotemptyrows}{\readline{\recurselevel}\ifnotemptyline \recurselevel -- \indexofnotemptyline{\recurselevel} : \csvcell['A', \indexofnotemptyline{\recurselevel}]\crlf\fi\nextrow}
+\dorecurse{\numnotemptyrows}{\readline{\recurselevel}\recurselevel -- \indexofnotemptyline{\recurselevel} : \csvcell['A', \indexofnotemptyline{\recurselevel}]\crlf\nextrow}
+
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+ONLY EMPTY LINES
+
+%\dorecurse{\numemptyrows}{\readline{\thenumexpr{\indexofemptyline{\recurselevel}}}\ifemptyline\recurselevel -- \indexofemptyline{\recurselevel} : EMPTY\crlf\fi\nextrow}
+\dorecurse{\numemptyrows}{\readline{\thenumexpr{\indexofemptyline{\recurselevel}}}\recurselevel -- \indexofemptyline{\recurselevel} : EMPTY\crlf\nextrow}
+
+DDDDDDDDDDDDDDDDDDDDDDDD
+
+
+\startluacode
+context(tostring(thirddata.handlecsv.gMarkingEmptyLines))
+
+for i = 1, thirddata.handlecsv.gNumEmptyRows do
+context('EMPTY:'..thirddata.handlecsv.gTableEmptyRows[i]..', ')	
+thirddata.handlecsv.indexofemptyline(i)
+end
+
+for i = 1, thirddata.handlecsv.gNumRows-thirddata.handlecsv.gNumEmptyRows do
+ context('NOEMPTY:'..thirddata.handlecsv.gTableNotEmptyRows[i]..', ')
+ thirddata.handlecsv.indexofnotemptyline(i)	
+end
+\stopluacode
+
+
+
+
+
+
+\stoptext
+
+
+
+
+
+
+
+https://en.wikipedia.org/wiki/Comma-separated_values
+
+
+
+
+{\bf\backslash csvfilename} -- name of open CSV file 
+
+{\bf\backslash numcols} -- number of table columns
+ 
+{\bf\backslash numrows} -- number of table lines
+ 
+{\bf\backslash numline} -- number of the currently loaded row (for use in print reports)
+ 
+{\bf\backslash lineno} sernumline -- serial number of the actual loaded line of CSV table 
+
+{\bf\backslash csvreport} -- prints the report on file open 
+
+{\bf\backslash printline} -- lists the current CSV row table in a condensed form
+ 
+{\bf\backslash printall} -- CSV output table in a condensed form 
+
+{\bf\backslash setfiletoscan}{{\it filename}} -- setting of name of CSV file
+
+{\bf\backslash opencsvfile}{{\it filename}} -- open CSV table
+
+{\bf\backslash setheader} -- set a header flag
+
+{\bf\backslash unsetheader} or {\bf\backslash resetheader} -- unset a header flag
+
+ 
+
+{\bf\backslash nextrow} -- next row of CSV table (with test of EOF)
+
+{\bf\backslash setsep}{{\it delimiter}} -- set delimiter of columns
+
+{\bf\backslash unsetsep} or {\bf\backslash resetsep} -- unset to default values
+
+{\bf\backslash nextline} or {\bf\backslash nextrow} -- move pointer into next line of opening CSV file
+
+
+setlinepointer, resetlinepointer
+
+linepointer
+
+
+
+{\bf\backslash setld}{{\it delimiter}} -- set left quoter
+
+{\bf\backslash resetld} -- unset left quoter to default values
+
+{\bf\backslash setrd}{{\it delimiter}} -- set right quoter
+
+{\bf\backslash resetrd} -- unset right quoter to default values
+
+{\bf\backslash blinehook} -- begin line hook macro (process before first column value of each row)
+
+{\bf\backslash elinehook} -- end line hook macro (process after last column value of each row)
+
+{\bf\backslash bfilehook} -- begin file hook macro (process before whole file processing)
+
+{\bf\backslash efilehook} -- end file hook macro (process after whole file processing)
+
+
+
+
+
+
+
+
+
+\resethooks
+\newif\ifissetheader
+\newif\ifnotsetheader
+\newif\ifEOF
+\newif\ifnotEOF
+\newif\ifemptyline
+\newif\ifnotemptyline
+\newif\ifemptylinesmarking
+\newif\ifemptylinesnotmarking
+
+\numrows
+\numemptyrows
+\numnotemptyrows
+\numcols
+\numline
+\nextnumline
+\setnumline
+\resetnumline
+\linepointer
+\setlinepointer
+\resetlinepointer
+\setfiletoscan
+\setheader
+\resetheader
+\notmarkemptylines 
+\markemptylines
+\setsep
+\resetsep
+\csvfilename
+\nextline,\nextrow
+\blinehook
+\elinehook
+\bfilehook
+\efilehook
+\bch
+\ech
+\resethooks
+\printline
+\printall
+\csvreport, \csvreport{} 
+
+\xlsname
+\hookxlsname
+\macroname
+\hookmacroname
+ 
+\readline
+\colname[#1]
+\indexcolname[#1]
+\xlscolname[#1]
+\csvcell[#1,#2]
+\doloopfromto
+\doloopforall, \doloopforall{\action}
+\doloopaction, \doloopaction{\action}, \doloopaction{\action}{4}, \doloopaction{\action}{2}{5}
+\doloopif{value1}{[compare_operator]}{value2}{macro_for_doing} [compareoperators] <, >, ==(eq), ~=(neq), >=, <=, in, until, while
+\doloopifnum
+\doloopuntil
+\doloopwhile
+\filelineaction, \filelineaction{filename.csv} 
+\thenumexpr
+ 
+
+
+  
+
+
+
+Due compatibility:
+
+\let\unsetsep\resetsep
+\let\unsetheader\resetheader
+\let\lineno\linepointer
+\let\sernumline\linepointer
+\let\resetlineno\resetlinepointer
+\let\resetsernumline\resetlinepointer
+\def\nextrow{\readline\nextline}

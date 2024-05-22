@@ -1,0 +1,15 @@
+\usemodule[handlecsv]
+
+
+\startbuffer[single-cards]
+\executesystemcommand{context --purgeall --result=test-\lineno.pdf --arguments="cA={\cA}","cB=\cB" test.tex}
+\stopbuffer
+
+\starttext
+\opencsvfile{cards.csv}
+
+\startitemize[n]
+\doloopif{\cA}{~=}{}{\getbuffer[single-cards]\item \cA }
+\stopitemize
+
+\stoptext

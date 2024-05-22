@@ -1,0 +1,102 @@
+\usemodule[scancsv]
+
+\setuppapersize[C6, landscape]
+\setuppagenumbering[location=]
+
+% Structure of CSV file - you can use macros in CSV table too
+% name;address;postcode;city;linecolor
+% ME;STREET;0000;HERE;\green;
+% You;Square;9999;There;\red;
+% we;another Square;111;anyplace;\blue;
+
+
+% Library is making \name, \address, \postcode, \city and \linecolor macros 
+% when you using \setheader command. 
+
+% Your example:
+\unexpanded\def\lineaction{
+\edef\lowercasename{\lowercase{\name}}
+\edef\uppercaseaddress{\uppercase{\address}}
+name: {\linecolor\name}\ -- lowercase name: \lowercasename\crlf
+address: \address\ -- upercase address: \uppercaseaddress\crlf
+\postcode\ \city\crlf
+
+\page
+}
+
+
+% My example with hooks:
+\unexpanded\def\tablelineaction{%
+	\edef\ehname{\hname}%
+	\edef\ehaddress{\haddress}%
+	\edef\ehpostcode{\hpostcode}%
+	\edef\ehcity{\hcity}%
+\ehname \ehaddress \ehpostcode \ehcity %
+}
+
+% My simple example with hooks:
+\def\simpletablelineaction{%
+\bTD{\linecolor\numline}\eTD\hname\haddress\hpostcode\hcity%
+}
+
+
+\setsep{;} % set separator
+\setheader % set information about header
+\setfiletoscan{mailmergedatatable.csv}
+	
+\starttext
+% process all file
+
+Here is begin of processing...
+
+\filelineaction
+
+And here is end....
+
+\page
+
+And now we can use internal hooks:
+
+\def\bch{\bTD } % begin column hook
+\def\ech{\eTD} % end column hook
+\def\blinehook{\bTR } % begin line hook
+\def\elinehook{\eTR} % end line hook
+\def\bfilehook{\bTABLE } % begin CSV file hook
+\def\efilehook{\eTABLE} % end CSV file hook
+
+Here is begin of processing...
+
+%process all file too (endless cycle)
+\doloopif{1}{==}{1}{\tablelineaction}
+
+And here is end....
+
+\page
+
+Printing only specific data: 
+
+\doloopif{\name}{eq}{You}{\tablelineaction}
+ 
+\page
+
+Simpletablelineaction:
+
+\doloopif{1}{==}{1}{\simpletablelineaction}  
+
+\page
+ 
+Another using of hooks:
+
+\def\bch{\bgroup\linecolor\bf } % begin column hook
+\def\ech{\egroup,\ } % end column hook
+\def\blinehook{Here is new \numline. line of CSV file:\crlf } % begin line hook
+\def\elinehook{\hairline\par} % end line hook
+\def\bfilehook{Here is all CSV file:\blank[2*big] } % begin CSV file hook
+\def\efilehook{\par Here is end of file processing\par} % end CSV file hook 
+
+\doloopif{1}{==}{1}{\tablelineaction}  
+
+
+  
+\stoptext
+

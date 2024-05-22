@@ -1,0 +1,43 @@
+\starttext
+
+
+\startluacode
+xlsname='A'
+interfaces.definecommand ('do'..xlsname, {
+    arguments = { { "option", "string" }  },
+    macro = function (opt_1)
+       if #opt_1>0 then context(opt_1) else context('nothing') end 
+    end
+})
+interfaces.definecommand (xlsname, {
+    macro = function ()
+       context.dosingleempty()
+			 context['do'..xlsname]()
+    end
+})
+\stopluacode
+
+\A[5]
+ 
+ 
+\A
+
+
+		
+\stoptext			
+
+
+
+
+interfaces.definecommand ('do'..xlsname, {
+    arguments = { { "option", "string" }  },
+    macro = function (opt_1)
+		  if #opt_1>0 then context('csvcell['..xlsname..','..opt_1..']') else context('csvcell['..xlsname..',\\linepointer]') end 
+    end
+})
+interfaces.definecommand (xlsname, {
+    macro = function ()
+       context.dosingleempty()
+       context['do'..xlsname]()
+    end
+})

@@ -1,0 +1,570 @@
+\usemodule[handlecsv]
+%\usemodule[handlecsv-tools]
+
+\def\lastname{\dosingleempty\dolastname}
+
+\def\dolastname[#1]%
+   {\iffirstargument%
+	 		arg. #1
+    \else
+    	arg. nic
+   \fi
+}
+
+
+%\unexpanded\def\lineaction{\numrows \cA, \cB, \cC, \cD, \cE, \cF, \cG, \cH, \cI. \crlf}
+
+
+\unexpanded\def\vypisobsah{VYPISOBSAH \lineno:\sernumline: %
+% for lide-specialheadernames.csv  table. This table has a special (TeX problematic) header
+	\ifissetheader\Lastname, \Firstname, \Flag, \MonThu, \ThuPM, \Fri, \Sat, \Sun, \Email. \crlf
+	\else\cA, \cB, \cC, \cD, \cE, \cF, \cG, \cH, \cI. \crlf
+	\fi
+% 	\ifnotsetheader \Lastname, \Firstname, \Flag, \MonThu, \ThuPM, \Fri, \Sat, \Sun, \Email. \crlf
+% 	\else \cA, \cB, \cC, \cD, \cE, \cF, \cG, \cH, \cI. \crlf
+% 	\fi
+}
+
+\unexpanded\def\Vypisobsah{VYPISOBSAH \lineno:\sernumline: %
+\ifissetheader\columncontent['Příjmení'] -- \Prijmeni, \columncontent['Jméno'] -- \Jmeno, \columncontent['Příznak'], \columncontent['123'] -- \IIIIII (MonThu), \columncontent['!?*'] -- \xxx (ThuPM), \Fri, \Sat, \Sun, \Email. \crlf
+	\else\cA, \cB, \cC, \cD, \cE, \cF, \cG, \cH, \cI. \crlf
+	\fi
+% 	\ifnotsetheader \Lastname, \Firstname, \Flag, \MonThu, \ThuPM, \Fri, \Sat, \Sun, \Email. \crlf
+% 	\else \cA, \cB, \cC, \cD, \cE, \cF, \cG, \cH, \cI. \crlf
+% 	\fi
+}
+
+
+\unexpanded\def\lineaction{LINEACTION \lineno:\sernumline: \Vypisobsah}
+
+\unexpanded\def\action{ACTION \lineno:\sernumline: \Vypisobsah}
+
+%\def\Vypisobsah{\cA\crlf}
+
+\setheader
+\setsep{,}
+% \unsetsep
+%\opencsvfile{lide.csv}
+%\opencsvfile{lide-withoutheader.csv}
+\opencsvfile{lide-specialheadernames.csv}
+
+
+\starttext
+
+%\csvreport%{lide.csv}
+ 
+For ConTeXt testing of header settings are defined two newifs:
+
+\backslash ifissetheader --> \ifissetheader TRUE \else FALSE\fi
+
+\backslash ifnotsetheader  --> \ifnotsetheader TRUE \else FALSE\fi
+
+
+
+\blank[big]
+
+
+\colname[1]
+
+
+\type{\colname[2]}: \colname[2]
+
+\type{\xlscolname[5]}: \xlscolname[5]
+
+
+\type{\indexcolname['Firstname']}: \indexcolname['Firstname']
+
+\type{\indexcolname['cC']}: \indexcolname['cC']
+
+ 
+ 
+\type{\columncontent[2]}: \columncontent[2]
+
+\type{\columncontent['Firstname']}: \columncontent['Firstname']
+
+\type{\columncontent['B']}: \columncontent['B']
+
+\type{\columncontent['Firstnam']}: \columncontent['Firstnam'] % not exist this column
+
+\type{\columncontent['š23cv']}: \columncontent['š23cv']  % not exist this column
+
+\type{\columncontent['Příjmení']}: \columncontent['Příjmení']  % not exist this column
+
+\type{\columncontent['Prijmeni']}: \columncontent['Prijmeni']  % not exist this column
+
+\type{\columncontent['Jméno']}: \columncontent['Jméno']  % not exist this column
+
+\type{\columncontent['Jmeno']}: \columncontent['Jmeno']  % not exist this column
+
+\type{\columncontent['123']}: \columncontent['123']  % not exist this column
+
+\type{\columncontent['!?*']}: \columncontent['!?*']  % not exist this column
+
+
+
+\type{\numberxlscolname['F']}: \numberxlscolname['F']
+ 
+ 
+
+\dorecurse{\numrows}{\recurselevel: \readline{\recurselevel} \columncontent['Příjmení'] -- \columncontent['Jméno'] -- \columncontent['!?*']\crlf } 
+ 
+% \dorecurse{9}{\edef\actualcolname{\colname[\recurselevel]}\recurselevel: \colname[\recurselevel] -- \indexcolname[\actualcolname]\crlf
+% }
+
+
+Macros:
+
+\backslash{numrows}: \numrows
+
+\backslash{numcols}: \numcols
+
+\backslash{csvfilename}:  \csvfilename
+
+\blank[big]
+
+
+Column names:
+
+\startluacode
+	for i=1,thirddata.handlecsv.gNumCols do
+		context('colname '..i..': \\backslash '..thirddata.handlecsv.gColumnNames[i]..' (\\backslash c'..thirddata.handlecsv.ar2colnum(i)..')\\crlf')
+	end
+\stopluacode
+
+Table column names:
+
+\startluacode
+context(thirddata.handlecsv.gColumnNames[1]..' [1]\\crlf')
+context(thirddata.handlecsv.gColumnNames[2]..' [2]\\crlf')
+context(thirddata.handlecsv.gColumnNames[3]..' [3]\\crlf')
+\stopluacode
+
+Column names macros: (\backslash colname[i]\ and\ \backslash xlscolname[i])
+
+\dorecurse{10}{\recurselevel: \colname[\recurselevel] and \xlscolname[\recurselevel]\crlf}
+
+
+\blank[big]
+
+
+
+
+\blank[big]
+
+Table cells:
+ 
+\startluacode
+context(thirddata.handlecsv.gTableRows[1][1]..' [first row, first column]\\crlf')
+context(thirddata.handlecsv.gTableRows[1][2]..' [first row, second column]\\crlf')
+context(thirddata.handlecsv.gTableRows[5][9]..' [fifth row, nineth column]\\crlf')
+\stopluacode
+
+\blank[big]
+
+Table cell contents by TeX macro:
+
+row 1, column 1 \csvcell[1,1]
+
+row 2, column 1 \csvcell[2,1]
+
+row 5, column 9 \csvcell[9,5]
+
+
+'Lastname' column (ie first column) and first row: \backslash csvcell['Lastname',1] --> \csvcell['Lastname',1]
+ 
+'Firstname' column (ie second column) and first row: \backslash csvcell['Firstname',1] --> \csvcell['Firstname',1]
+ 
+'Email' column (ie nineth column) and fifth row: \backslash csvcell['Email',5] --> \csvcell['Email',5]
+
+\backslash csvcell['A',1] --> \csvcell['A',1]
+
+\backslash csvcell['Prijmeni',1] --> \csvcell['Prijmeni',1]
+
+\backslash csvcell['Příjmení',1] --> \csvcell['Příjmení',1] % OK
+
+
+\backslash csvcell['Jméno',1] --> \csvcell['Jméno',1]  % OK
+
+\backslash csvcell['Příznak',1] --> \csvcell['Příznak',1]  % OK
+
+
+\backslash csvcell['B',3]  --> \csvcell['B',3]
+
+\backslash csvcell['I',5] --> \csvcell['I',5]
+
+
+List of ten rows of 'Firstname' column (\backslash dorecurse loop using):
+
+\dorecurse{10}
+ {Firstname[\recurselevel] : \csvcell['Firstname',\recurselevel] \crlf}
+
+
+Undefined and defined cells: 
+
+\backslash csvcell['Is',5] --> \csvcell['Is',5]
+
+\backslash csvcell['I',51] --> \csvcell['I',51]
+
+\backslash csvcell['I',0]  --> \csvcell['I',0] 
+
+\backslash csvcell['I',50] --> \csvcell['I',50]
+
+
+\def\myrow{13}
+\def\mycolumn{'A'}
+
+\backslash csvcell[\mycolumn,\myrow] --> \csvcell[\mycolumn,\myrow]
+
+
+\def\myrow{31}
+\def\mycolumn{'Firstname'}
+
+\backslash csvcell[\mycolumn,\myrow] --> \csvcell[\mycolumn,\myrow]
+
+
+
+
+List of all CSV table:
+
+\bTABLE
+\dorecurse{\numrows}{
+	\bTR
+	\dorecurse{\numcols}{\bTD \csvcell[##1,#1] \eTD}
+	\eTR
+}
+\eTABLE
+
+
+OR:
+
+\bTABLE
+    \dorecurse{\numrows}{\bTR
+        \dorecurse{\numcols}{\bTD \csvcell[\currentTABLEcolumn,\currentTABLErow] \eTD}
+    \eTR}
+\eTABLE
+   
+
+
+
+
+\blank[big]
+
+% OK
+% \dorecurse{51}
+%  {\readline{\recurselevel} \par
+% 	\recurselevel: \Vypisobsah
+% }
+
+
+\blank[big]
+
+
+\dostepwiserecurse{1}{\numcols}{1}{
+\csvcell[\recurselevel,0]
+}
+
+
+
+%DOLOOP FROM - TO:
+%
+% OK: \doloopfromto{3}{10}{\Vypisobsah}
+% 
+% OK: \doloopfromto{5}{8}{\lineaction}
+% 
+% DOLOOP FOR ALL:
+% 
+% do Lineaction
+% 
+% OK: \doloopforall
+% 
+% do specific action
+% 
+% OK: \doloopforall{\Vypisobsah}
+% 
+% 
+% DOLOOPACTION:
+% 
+% DO LINEACTION (for all lines):
+% 
+% OK: \doloopaction % implicit use \lineaction macro
+% 
+% DO SPECIFIC ACTION (for all lines):
+% 
+% OK: \doloopaction{\action} % use \action macro for all lines of open CSV file
+% 
+% DO SPECIFIC ACTION (for first lines):
+% 
+% OK: \doloopaction{\action}{4} % use \action macro for first 4 lines
+% 
+% DO SPECIFIC ACTION (for lines from - to specific lines):
+% 
+% OK: \doloopaction{\action}{2}{5} % use \action macro for lines from 2 to 5
+% 
+% 
+% FILELINEACTION:
+% 
+% Do for all lines of opening table
+% 
+% OK: \filelineaction
+% 
+% 
+% Do for all lines of specific table name 
+% 
+% OK: \filelineaction{lide2.csv}
+
+
+DOLOOPIF CYCLES:
+
+%\doloopif{value1}{[compare_operator]}{value2}{macro_for_doing} % [compareoperators] <, >, ==(eq), ~=(neq), >=, <=, in, until, while 
+
+
+
+
+
+
+AAAAAAAAAAAAAAAAAA
+
+\resetlinepointer
+\dorecurse{5}{\recurselevel: \readline{\recurselevel}\Vypisobsah\nextline}
+
+\resetsernumline
+\dorecurse{5}{\recurselevel: \readline[\recurselevel]\Vypisobsah\nextline}
+
+
+\readline[7]
+
+\Vypisobsah
+
+SSSSSSSSSSSSS
+
+\readline
+
+\Vypisobsah
+
+xxxxxxxxxxxxxxx
+
+1
+\startluacode
+thirddata.handlecsv.readline(1)
+\stopluacode
+\Vypisobsah
+
+5
+\startluacode
+thirddata.handlecsv.readline(5)
+\stopluacode
+\Vypisobsah
+
+0
+\startluacode
+thirddata.handlecsv.readline(0)
+\stopluacode
+\Vypisobsah
+
+nic
+\startluacode
+thirddata.handlecsv.readline(thirddata.handlecsv.gCurrentLinePointer)
+\stopluacode
+\Vypisobsah
+
+
+
+SSSSSSSSSSS
+
+DOLOOP CYCLE:
+% \resetlinepointer
+% \doloop{ 
+%  \linepointer: 
+%  \readline
+%  \lineaction\nextline
+%  \ifnum\linepointer>20\exitloop\fi
+% }
+
+\resetlinepointer
+\doloop{ 
+ \linepointer: 
+ \readline
+ \lineaction\nextline
+ \ifEOF\exitloop\fi
+}
+ 
+ 
+ 
+ XXX
+\setlinepointer{7}
+\doloop{%
+\ifnum\linepointer<9
+ \linepointer: 
+ \readline
+ \lineaction
+ \nextline
+ \else
+ \exitloop 
+\fi
+} 
+
+
+ XXX
+\resetlinepointer
+\doloop{%
+\ifnum\linepointer<9
+ \linepointer: 
+ \readline
+ \lineaction
+ \nextline
+ \else
+ \exitloop 
+\fi
+} 
+
+
+% \doloop
+%   {Some kind of typesetting punishment \par
+%    \ifnum\pageno>5 \exitloop \fi}
+   
+DOLOOP CYCLE:DOLOOP CYCLE:DOLOOP CYCLE:DOLOOP CYCLE:DOLOOP CYCLE:
+
+
+nic \readline
+
+
+0 \readline{0}
+
+100 \readline{100}
+
+6 \readline{6}
+
+100 \readline{100}
+
+50 \readline{50}
+
+51 \readline{51}
+
+'a' \readline{'a'}
+
+a \readline{a}
+
+
+
+%\Vypisobsah
+
+
+
+
+\startluacode
+function test(opt)
+--  if (interfaces.tolist(opt) > 0) 
+--%  	then context('kladne') 
+--% 	else context('zaporne') 
+--%  end
+    context("%s",interfaces.tolist(opt))
+end
+
+interfaces.definecommand {
+    name = "test",
+    arguments = {
+        { "option", "list" },
+    },
+    macro = test,
+}
+
+\stopluacode
+
+test: \test[5]
+
+test \test .....
+
+
+\opencsvfile{lide.csv}
+
+And now \backslash filelineaction 
+
+%\doloopfromto{1}{5}{\lineaction}
+
+%\filelineaction
+
+
+\lastname
+
+\lastname[3]
+
+
+
+11111111111111111111111111111111111111111111111111111111111
+
+\def\rowfrommacro#1{\the\numexpr(#1+0)}
+
+\csvcell['A',\rowfrommacro{\numcols}]
+
+\csvcell['A',\linepointer]
+
+\csvcell['A',\numrows]
+
+
+
+
+
+
+
+
+\stoptext
+
+
+
+--~ \startluacode
+--~ function test(opt_1, opt_2, arg_1)
+--~     context.startnarrower()
+--~     context("options 1: %s",interfaces.tolist(opt_1))
+--~     context.par()
+--~     context("options 2: %s",interfaces.tolist(opt_2))
+--~     context.par()
+--~     context("argument 1: %s",arg_1)
+--~     context.stopnarrower()
+--~ end
+
+--~ interfaces.definecommand {
+--~     name = "test",
+--~     arguments = {
+--~         { "option", "list" },
+--~         { "option", "hash" },
+--~         { "content", "string" },
+--~     },
+--~     macro = test,
+--~ }
+--~ \stopluacode
+
+--~ test: \test[1][a=3]{whatever}
+
+--~ \startluacode
+--~ local function startmore(opt_1)
+--~     context.startnarrower()
+--~     context("start more, options: %s",interfaces.tolist(opt_1))
+--~     context.startnarrower()
+--~ end
+
+--~ local function stopmore(opt_1)
+--~     context.stopnarrower()
+--~     context("stop more, options: %s",interfaces.tolist(opt_1))
+--~     context.stopnarrower()
+--~ end
+
+--~ interfaces.definecommand ( "more", {
+--~     environment = true,
+--~     arguments = {
+--~         { "option", "list" },
+--~     },
+--~     starter = startmore,
+--~     stopper = stopmore,
+--~ } )
+--~ \stopluacode
+
+--~ more: \startmore[1] one \startmore[2] two \stopmore one \stopmore
+
+
+
+\startluacode
+for i=1,200 do 
+ context(i..' - '..thirddata.handlecsv.ar2xls(i)..' - '..thirddata.handlecsv.xls2ar(thirddata.handlecsv.ar2xls(i))..'\\crlf')
+end
+\stopluacode
+

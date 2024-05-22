@@ -1,0 +1,100 @@
+\usemodule[handlecsv]
+\opencsvfile{numbers.csv}
+\starttext
+
+\startbuffer[rows]
+\startxrow
+    % \startxcell\Romannumerals{\cA}\stopxcell % When \cA is empty, then \Romannumerals fail
+   \startxcell \cA -- \cB \stopxcell % WORKS FINE ALLWAYS
+\stopxrow
+\stopbuffer
+
+\startbuffer[abc]
+\Romannumerals{\cA}\\
+\stopbuffer
+
+
+\startxtable[option=stretch, split=yes]
+
+\resetlinepointer % MUST BE HERE!!! I had to cancel pointer reset because of the ability to use multiple loops consecutively during file processing.
+
+% doloopif loops:
+%     \doloopif{\cA}{~=}{}{\getbuffer[rows]}
+%     \doloopif{\cA}{==}{}{\getbuffer[rows]}
+%
+% doloopuntil = repeatuntil loop (repeats the action until the condition is met. If it is not never met, will list all record!)
+	\doloopuntil{\cA}{}{\getbuffer[rows]} % =\repeatuntil{\cA}{}{\getbuffer[rows]} % 
+%	\doloopuntil{\cA}{5}{\getbuffer[rows]} % 
+%
+% doloopwhile = whiledo loop (repeat action when the condition is met. When the condition is not met for the first line, the action will NOT BE performed!)
+%\doloopwhile{\cA}{1}{\getbuffer[rows]} % =
+\whiledo{\cA}{1}{\getbuffer[rows]} %
+
+%\doloopfromto{1}{10}{\cA -- \cB\crlf}
+
+%\doloopforall{\cA -- \cB\crlf}
+%\setlinepointer{15}
+%\doloopif{\cA}{<=}{5}{\cA -- \cB\crlf}
+
+\stopxtable
+
+\stoptext
+
+
+
+
+
+
+
+\usemodule[handlecsv]
+
+
+\startbuffer[rows]
+\startxrow%
+   % \startxcell\Romannumerals{\cA}\stopxcell%
+    \startxcell{\lineno -- \numline -- \cA}\stopxcell%
+        \startxcell{\lineno -- \numline -- \cA}\stopxcell%
+            \startxcell{\lineno -- \numline -- \cA}\stopxcell%
+%   \lineno -- \numline -- \cA, 
+\stopxrow%
+\stopbuffer
+
+
+\startbuffer[abc]
+\Romannumerals{\cA}\\
+\stopbuffer
+
+\starttext
+\opencsvfile{numbers.csv}
+
+%\resetlinepointer
+*** \numline
+
+\startxtable[option=stretch, split=yes]
+%\resetnumline
+    \doloopif{\cA}{~=}{}{\getbuffer[rows]} %OK
+ %       \doloopif{\cA}{neq}{}{\getbuffer[rows]} %OK
+%    \doloopif{\cA}{neq}{}{\getbuffer[rows]} %OK
+%    \doloopif{\cA}{==}{}{\getbuffer[rows]}
+%   \doloopif{\cA}{~=}{}{\getbuffer[rows]}
+%    \doloopuntilneq{\cA}{~=}{}{\getbuffer[rows]} %OK
+%   \doloopuntilneq{\cA}{==}{}{\getbuffer[rows]} %OK
+%   \doloopuntileq{\cA}{~=}{}{\getbuffer[rows]} %OK
+%   \doloopuntileq{\cA}{~=}{}{\getbuffer[rows]} %OK
+%\dorecurse{5}{\getbuffer[rows]}  
+
+\stopxtable
+
+\hairline
+
+\numline
+
+\addtonumline{100}
+
+\numline
+
+\doloopfromto{1}{\numrows}{\numline--\cA\crlf}
+
+\numline
+
+\stoptext

@@ -1,0 +1,41 @@
+\usemodule[handlecsv]
+
+\startbuffer[action]
+\numline\ -- \lineno -- \cA\ \cB, \cC\crlf
+\stopbuffer
+
+\starttext
+\opencsvfile{numbers.csv}
+
+\doloopfornext{3}{\getbuffer[action]} % go up from current line
+
+\hairline
+
+\doloopfornext{3}{\getbuffer[action]}
+
+\hairline
+
+\setlinepointer{15}
+
+\setnumline{110}
+
+\doloopfornext{4}{\getbuffer[action]}
+
+\hairline
+
+\doloopfornext{-5}{\getbuffer[action]} % go down from current line
+
+\hairline
+
+\resetnumline
+\setlinepointer{15}
+\doloopfornext{-100}{\getbuffer[action]} % test of underflowing
+
+\hairline
+
+\setlinepointer{5}
+\setnumline{1}
+
+\doloopfornext{50}{\getbuffer[action]} % test of overflowing
+
+\stoptext

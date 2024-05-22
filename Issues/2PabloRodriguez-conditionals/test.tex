@@ -1,0 +1,185 @@
+\usemodule[handlecsv]
+\usemodule[handlecsv-extra]
+
+
+
+% -- POZN 	nemělo by raději být gColNames v řádku 672??  viz		returnparametr=thirddata.handlecsv.gColumnNames[csvfile][column]
+
+% Toto bylo již zakomponováno do t-handlecsv.lua library dne 23.2.2018
+%\startluacode
+%-- Substitute text in cell content of specified CSV file with other text
+%function thirddata.handlecsv.substitutecontentofcellof(csvfile,column,row,whattoreplace,substitution)
+%  local csvfile=thirddata.handlecsv.handlecsvfile(csvfile)
+%  local column=thirddata.handlecsv.gColNames[csvfile][column]
+%  local whattoreplace=tostring(whattoreplace)
+%  local substitution=tostring(substitution)
+%  return thirddata.handlecsv.getcellcontentof(csvfile,column,row):gsub(whattoreplace,substitution)
+%end
+%
+%-- Substitute text in cell content of current CSV file with other text
+%function thirddata.handlecsv.substitutecontentofcell(column,row,whattoreplace,substitution)
+%  local csvfile=thirddata.handlecsv.getcurrentcsvfilename()
+%  local column=thirddata.handlecsv.gColNames[csvfile][column]
+%  return thirddata.handlecsv.substitutecontentofcellof(csvfile,column,row,whattoreplace,substitution)
+%end
+%
+%-- Substitute text in cell content of current row of current CSV file with other text
+%function thirddata.handlecsv.substitutecontentofcellofcurrentrow(column,whattoreplace,substitution)
+%  local row=thirddata.handlecsv.linepointer()
+%  return thirddata.handlecsv.substitutecontentofcell(column,row,whattoreplace,substitution)
+%end
+%\stopluacode
+%
+%
+%% Substitution of text #2 in cell content by text #3. Substitution is done in the current column of column #1 (number, XLS name or cX name)
+%\def\Xreplacecontentin#1#2#3{\ctxlua{context(thirddata.handlecsv.substitutecontentofcellofcurrentrow('#1','#2','#3'))}}%
+
+%\def\replacecontentin#1#2#3{\ctxlua{context(thirddata.handlecsv.getcellcontent(thirddata.handlecsv.xls2ar('#1'),thirddata.handlecsv.linepointer()):gsub("#2","#3"))}}%
+%\def\Xcontentreplace#1#2#3{\ctxlua{context(thirddata.handlecsv.getcellcontent(thirddata.handlecsv.gColNames[thirddata.handlecsv.getcurrentcsvfilename()]['#1'],thirddata.handlecsv.linepointer()):gsub("#2","#3"))}}%
+
+
+%
+%% Zatím nezařazeno do knihovny <t-handlecsv.lua>, ale zařazeno do pomocné knihovny <t-handlecsv-unused-yet.lua>.
+%\startluacode
+%function thirddata.handlecsv.addleadingcharacters(character, tonumberortext, width)
+%-- Add leading characters to number to align with the width
+%   local strcharacter=tostring(character)
+%   local strnumberortext=tostring(tonumberortext)
+%   strnumberortext = string.rep(strcharacter, width-#strnumberortext)..strnumberortext
+%   return strnumberortext -- It returns a strange result unless the leading character is just one.
+%end
+%
+%function thirddata.handlecsv.addleadingzeros(tonumberortext, width)
+%-- Add leading zeros to number to align with the width
+%   return thirddata.handlecsv.addleadingcharacters(0, tonumberortext, width)
+%end
+%
+%function thirddata.handlecsv.addzeros(tonumber)
+%-- Add leading zeroes depending on the number of rows
+%    local width=string.len(tostring(thirddata.handlecsv.numrows()))
+%    return thirddata.handlecsv.addleadingzeros(tonumber, width)
+%end
+%
+%\stopluacode
+%
+%\def\addleading#1#2#3{\ctxlua{context(thirddata.handlecsv.addleadingcharacters('#1','#2','#3'))}}
+%\def\addzeros#1#2{\ctxlua{context(thirddata.handlecsv.addleadingzeros('#1','#2'))}}
+%\def\zeroed#1{\ctxlua{context(thirddata.handlecsv.addzeros('#1'))}}
+%\def\zeroedlineno{\ctxlua{context(string.rep( "0",(tostring(thirddata.handlecsv.numrows())):len() - (tostring(thirddata.handlecsv.linepointer())):len()) .. thirddata.handlecsv.linepointer())}} % from Pablo
+%
+
+\startbuffer[example]
+
+1. \replacecontentin{A}{\\\\}{_} %subst. \\ to x in colmn A of current row
+
+\def\lbreak{\\\\} % use macro
+
+2. \replacecontentin{A}{\lbreak}{x}  %the same
+
+3. \replacecontentin{1}{\\\\}{ }  %subst. \\ to space in 1th colmn of current row
+
+4. \replacecontentin{cA}{\\\\}{ } %subst. \\ to space in \cA colmn of current row
+
+
+Unusual uses:
+
+5. \replacecontentin{A}{John\\\\}{\\bgroup\\bf\\red David \\egroup }
+ 
+6. \replacecontentin{1}{John\\\\Wayne}{Wayne \\bgroup\\bf\\blue John\\egroup } 
+
+\def\gettextfrom[#1]{\replacecontentin{#1}{\\\\}{  }}% Your macro
+
+7. \gettextfrom[1], \gettextfrom[A], \gettextfrom[cA]  
+
+\stopbuffer
+
+
+\startbuffer[single-card]
+
+This examples:
+
+\typebuffer[example]
+
+Gets theese results:
+
+\getbuffer[example]
+
+
+\stopbuffer
+
+\starttext
+\opencsvfile{cards.csv}
+
+
+%zeroedlineno: \zeroedlineno --- \cA 
+
+\dorecurse{3}{
+\replacecontentin{cA}{\cA}{ccc \cA ccc }\nextrow
+ 
+}
+
+
+\startluacode
+context(tostring(thirddata.handlecsv.substitutecontentofcellof("cards.csv","cA",1,"John","JOHN")))
+context(tostring(thirddata.handlecsv.substitutecontentofcell("cA",1,"John","JOHNOVO")))
+context(thirddata.handlecsv.substitutecontentofcellofcurrentrow("A","John","Náhrada"))
+\stopluacode
+
+
+
+\doloopif{\cA}{~=}{}{\getbuffer[single-card]}
+
+\startluacode
+for i=1, 10 do
+context (thirddata.handlecsv.addzeros(i))
+context("\\crlf")
+end
+\stopluacode
+
+
+\hairline
+
+ {\tt
+\addleading{X}{Hello}{15}
+
+\addleading{X}{}{15}
+
+\addleading{Y}{He}{15}
+
+\addleading{-}{Hello Hello}{15} 
+
+
+\addleading{Q}{1}{15} 
+
+\addleading{9}{1234}{15} 
+
+\addleading{_}{\\cA}{15} % fail
+
+\addleading{<}{Jonathan Wayne}{15}
+
+\addleading{\\ }{\numline}{15} 
+
+\addleading{\\percent}{\numline}{15} 
+
+\addleading{.}{\numline}{15} 
+
+\addzeros{\\cA}{15} % fail
+
+\addzeros{\cB}{15}
+
+\zeroed{\numline}
+
+\zeroed{\linepointer}
+
+\zeroed{12}
+
+\zeroed{\cB}
+
+\zeroed{\\cA}  % fail
+}
+
+\hairline
+
+
+
+\stoptext

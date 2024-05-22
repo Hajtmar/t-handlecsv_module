@@ -1,0 +1,95 @@
+\usemodule[scancsv]
+
+\setupexternalfigures[directory={graphics/, flags/}]
+
+\definecolor[rgbred][r=160,g=0,b=0] %%RGB [160,0,0]
+\setupcolors[state=start, rgb=yes, textcolor=rgbred]
+
+
+
+\usemodule[simplefonts]
+
+
+
+% Zadávané hodnoty:
+\newdimen\cardwidth\cardwidth=54mm
+\newdimen\cardheight\cardheight=85mm
+\newcount\countofhor\countofhor=2
+\newcount\countofvert\countofvert=5
+\newdimen\disthor\disthor=0.5mm
+\newdimen\distvert\distvert=0.5mm
+
+%Zbytek se už vypočítává
+\definemeasure[topspace] [\dimexpr(\printpaperheight-(\cardheight + \distvert)*\countofvert+\distvert)/2\relax]
+\definemeasure[backspace] [\dimexpr(\printpaperwidth-(\cardwidth + \disthor)*\countofhor+\disthor)/2\relax]
+
+
+%\enablemode[print]
+
+\doifmodeelse{print}{
+\definepapersize[BC][width=\cardwidth,height=\cardheight]
+%\setuppapersize [BC][A4,landscape]
+\setuppapersize [BC][A4]
+\setuppaper     [topspace=\measure{topspace},backspace=\measure{backspace},dx=\disthor,dy=\distvert,nx=\countofhor,ny=\countofvert]
+\setuplayout    [page] [topspace=\measure{topspace},backspace=\measure{backspace}]
+\setuplayout    [page]
+\setuplayout    [location=middle]
+\setuparranging [XY]
+}{
+  \definepapersize[BC][width=\cardwidth,height=\cardheight]
+\setuppapersize [BC][BC]
+\setuppaper     [topspace=\measure{topspace},backspace=\measure{backspace},dx=\disthor,dy=\distvert,nx=\countofhor,ny=\countofvert]
+\setuplayout    [page] [topspace=\measure{topspace},backspace=\measure{backspace}]
+
+}
+
+
+
+\setuppagenumbering [state=stop]
+
+%\defineoverlay[pozadifront][{\externalfigure[bckgfront.jpg][width=\cardwidth,height=\cardheight]}]
+\defineoverlay[pozadifront][{\externalfigure[karta1-final-posledni.png][width=\cardwidth,height=\cardheight]}]
+%\defineoverlay[pozadiback][{\externalfigure[op_back.jpg][width=\cardwidth,height=\cardheight]}]
+
+\setupbackgrounds [page][page][background={pozadifront}]
+\setuplayout[location=middle,marking=on]
+
+\def\flagpicture{\externalfigure[\Flag][height=5mm, frame=on, framecolor=black]}
+%\def\logoctm{\if\LogoCTM1\externalfigure[logoctm.png][height=2.7cm, frame=off]\fi}
+%\def\logote{\if\LogoTE1\externalfigure[logotexperience2010.png][height=12mm, frame=off]\fi}
+\def\logoctm{\externalfigure[logoctm+te.png][height=8mm, frame=on]}
+%\def\logote{\externalfigure[logotexperience2010.png][height=7mm, frame=off]}
+\definefont[bigf][Sans at 30pt]
+\definefont[bigf][WALBBOT_ at 18pt]
+%\definefont[bigf][AntPolt-Bold at 20pt]
+%\definefont[bigf][AntykwaTorunska-Bold at 20pt]
+%\definefont[bigf][texgyreadventor-bold.otf at 20pt]
+
+
+
+\startbuffer[JanoBadget]
+{\setuppositioning[unit=mm,yoffset=3mm]%
+\startpositioning%
+%\startfont[WALBBOT_]
+\position(1,52){\midaligned{{\bigf\Firstname}}}%
+\position(1,60){\midaligned{{\bigf\Lastname}}}%
+%\stopfont
+\stoppositioning%
+}%
+\stopbuffer
+
+\unexpanded\def\lineaction{
+\getbuffer[JanoBadget]\page
+}
+
+%\showframe[edge]
+
+\starttext
+
+% \usetypescript[bonum]
+% \setupbodyfont[bonum,10pt]
+
+\setsep{,}
+\setheader
+\filelineaction{badgets.csv} 
+\stoptext 

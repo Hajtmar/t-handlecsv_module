@@ -1,0 +1,129 @@
+% Use CSV file:
+%"Name";"Surname";"Birthdate"
+%"1-John";"Smith";10/03/02
+%"2-John";"Smith";10/03/02
+%;;
+%;;
+%"3-John";"Smith";10/03/02
+%"4-John";"Smith";10/03/02
+%;;
+%"5-John";"Smith";10/03/02
+%"6-John";"Smith";10/03/02
+%;;
+%;;
+%;;
+%"7-Jane";"Amr";03/03/92
+%"8-Jane";"Amr";03/03/92
+%;;
+%;;
+%
+%
+
+\usemodule[handlecsv]
+\setheader
+\opencsvfile{a.csv}
+
+
+\startluacode
+function writeall()
+context("\\par All:\\par")
+for i=1,thirddata.handlecsv.gNumRows["a.csv"] do
+for j=1,thirddata.handlecsv.gNumCols["a.csv"] do
+
+context("[")
+context(i,"-",j,"] ---> ")
+if thirddata.handlecsv.gTableRows["a.csv"][i][j]=="" then context("EMPTY") else context(thirddata.handlecsv.gTableRows["a.csv"][i][j],", ") end
+context(", ")
+end
+context("\\par")
+end
+context("\\par")
+end
+
+
+function writeempty()
+context("\\par EmptyRows: ")
+context(thirddata.handlecsv.gNumEmptyRows["a.csv"])
+context(" (")
+for i=1,#thirddata.handlecsv.gTableEmptyRows["a.csv"] do context(thirddata.handlecsv.gTableEmptyRows["a.csv"][i],", ") end
+context(")")
+end
+
+function writenotempty()
+context("\\par NotEmptyRows: ")
+context(thirddata.handlecsv.gNumNotEmptyRows["a.csv"])
+context(" ({")
+for i=1,#thirddata.handlecsv.gTableNotEmptyRows["a.csv"] do context(thirddata.handlecsv.gTableNotEmptyRows["a.csv"][i],", ") end
+context(")")
+end
+\stopluacode
+
+\def\writestatus{
+Current status:\par
+\startluacode
+writeall()
+writeempty()
+writenotempty()
+\stopluacode
+\par
+non--empty: \numnotemptyrows\par
+empty: \numemptyrows\par
+total: \numrows\par
+%\hairline
+}
+
+
+\starttext
+\subject{Before markemptylines:}
+
+\writestatus
+
+\markemptylines
+
+\subject{After markemptylines:}
+
+\writestatus
+
+\notmarkemptylines
+
+\subject{After notmarkemptylines:}
+
+\writestatus
+
+\subject{AND NOW WE REMOVE EMPTY LINES:}
+
+\subject{BEFORE REMOWING:}
+
+\writestatus
+
+\removeemptylines
+
+\subject{AFTER REMOWING:}
+
+\writestatus
+
+
+\opencsvfile{a.csv}
+
+\subject{Status without closing CSV file:}
+
+\writestatus
+
+\subject{And now status after closing and reopening of CSV file:}
+
+\closecsvfile{a.csv}
+\opencsvfile{a.csv}
+
+\writestatus
+
+
+\markemptylines
+
+\subject{And after markemptylines:}
+
+\writestatus
+\stoptext
+
+
+
+

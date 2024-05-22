@@ -1,0 +1,12 @@
+Id;Pokoj;Cislo;Jmeno;Prijmeni;Nick;Pozn;ZZZZZZ;XXXXXXX;Pohlavi;Deti;PlatnostOd;PlatnostDo;NumHod
+1;0;190982214;Tomáš;Banka;Tom;ssssssssssssss;tomas_banka.jpg;;muž/male;;1.1.2010;31.12.2099;5
+2;0;271637741;Slávek;Brabec;Slávek;;slavek_brabec.jpg;;muž/male;;1.1.2010;31.12.2099;10
+3;1;258815468;Ondřej;Drábek;Šimi;;ondra_drabek.jpg;;muž/male;Maruška a Jéňa;1.1.2010;31.12.2099;3
+4;1;296758182;Jan;Drábek;Jéňa;;jena_drabek.jpg;;muž/male;;1.1.2010;31.12.2099;2
+5;1;939431754;Marijana;Drábková;Maruška;;maruska_drabkova.jpg;;žena/female;;1.1.2010;31.12.2099;-1
+6;1;969647287;Markéta;Drábková;Markéta;;marketa_drabkova.jpg;;žena/female;Maruška a Jéňa;1.1.2010;31.12.2099;0
+7;9;356956251;Šimon;Grega;Šimi;;simonek_grega.jpg;;muž/male;;1.1.2010;31.12.2099;10
+8;9;413246048;Jan;Grega;Vašek;;vasek_grega.jpg;;muž/male;Táďa a Šimík;1.1.2010;31.12.2099;3
+9;9;871091308;Inka;Gregová;Šimi;;inka_gregova.jpg;;žena/female;Táďa a Šimík;1.1.2010;31.12.2099;19
+10;9;522584853;Tadeáš;Grega;Táďa;;tada_grega.jpg;;muž/male;;1.1.2010;31.12.2099;25
+11;9;522584853;Jaroslav;Hajtmar;Jarda;;jarda_hajtmar.jpg;;muž/male;;1.1.2010;31.12.2099;29

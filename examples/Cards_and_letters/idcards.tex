@@ -1,0 +1,35 @@
+\setuppapersize[A4][A4]      % Velikost papíru bude A5 a bude na stránce opět o téže velikosti. 
+\setupcolors[state=start]    % Zapne používání barev.
+\setuppagenumbering[state=stop]
+\setuplayout[width=fit, height=fit, leftmargin=0cm, rightmargin=0cm, backspace=0cm, cutspace=0cm, topspace=0cm, header=0cm, footer=0cm, grid=no]
+
+\usemodule[handlecsv]
+\setheader
+
+\setupbodyfont[cmr,sansserif,10pt]
+
+\setupwhitespace[medium]
+
+
+\unexpanded\def\lineaction{
+\framed[height=49.1mm, width=70mm]{
+			{\tfc \Jmeno\ \Prijmeni}\par
+			\blank[big]
+			Your identifier is \inframed{{\bf\ssb \RegCis}}.\par
+			Write it and tick correctly on the answer sheet! Results will be published under this identifier on the Internet at http://pz2010.ourhighschool.edu/
+}
+}
+
+
+
+\starttext
+\startcolumns[n=3, distance=2mm, align=middle]
+\setheader
+	\filelineaction{4l.csv}
+	\filelineaction{4l-n.csv}
+	\filelineaction{8l.csv}
+\stopcolumns
+
+
+\stoptext
+

@@ -1,0 +1,115 @@
+% !TEX TS-program = ConTeXt (LuaTeX)
+
+\setuppapersize[A5]
+\usemodule[handlecsv]
+\setheader
+
+
+\opencsvfile{grades.csv}
+
+\definenumber[behave]
+
+\def\Comment{\doiftext{\cE}{\setnumber[behave][\numline]Behavior: {\bf\cE}\crlf}}
+
+\def\Notes{\noindent\cC\ --- \cD\crlf}
+
+\def\FinalComment{\doiftext{\csvcell['A',\thenumexpr{\rawcountervalue[behave]}]}{\Comment}}
+
+\starttext
+
+\startbuffer[text]
+\expanded{%
+    \doifemptyelse{\cA}%
+    {\Notes\FinalComment}
+		%
+    {\FinalComment\subject{\cA\ \cB} \Notes}% notes needed here too
+}%
+\nextline%
+\stopbuffer
+
+\doloopforall{\getbuffer[text]}
+
+\stoptext
+
+
+
+
+% \setuppapersize[A5]
+% \usemodule[handlecsv]
+% \setheader
+% \opencsvfile{grades.csv}
+% \definenumber[behave]
+% 
+% % \def\testbehaving{
+% % 	\doifemptyelse{\cA}
+% % 	{}
+% % 	{\def\behave{\doiftextelse{\cE}{\setnumber[behave]{\numline}Behavior: {\bf\cE}\crlf}{xxx}}
+% % 	}
+% % }
+% 
+% \def\testbehaving{
+% \def\behave{\doiftextelse{\cE}{\setnumber[behave][\numline]Behavior: {\bf\cE}\crlf}{xxx}}
+% }
+% 
+% 
+% \def\Comment{\doiftext{\cE}{\setnumber[behave][\numline]Behavior: {\bf\cE}\crlf}}
+% \def\Notes{\noindent\cC\ --- \cD\crlf}
+% \def\FinalComment{
+% 	\doiftext{\csvcell['A',{\getnumber[behave]}]}
+% 	{\Comment}
+% }
+% 
+% \starttext
+% 
+% \startbuffer[text]
+% \testbehaving
+% \expanded{%
+%     \doifemptyelse{\cA}%
+%     {{\getnumber[behave]}% \Notes\Comment
+% 		}%
+%     {
+% 		\subject{\cA\ \cB} 
+% 		{xx\getnumber[behave]xxx}
+% 		%\Notes\Comment
+% 		}% notes needed here too
+% }%
+% \nextline%
+% \stopbuffer
+% 
+% \doloopforall{\getbuffer[text]}
+% 
+% 
+% 
+% 
+% \stoptext
+% 
+
+% \setuppapersize[A5]
+% \usemodule[handlecsv]
+% \setheader
+% \opencsvfile{grades.csv}
+% \def\behave{}
+% 
+% 
+% \def\Notes{\noindent\cC\ --- \cD\crlf\behave}
+% 
+% \starttext
+% 
+% \startbuffer[text]
+% \expanded{%
+%     \doifemptyelse{\cA}%
+%     {\Notes}%
+%     {\behave\subject{\cA\ \cB}}% notes needed here too
+% }%
+% \nextline%
+% \stopbuffer
+% 
+% 
+% 
+% \def\behave{\doifemptyelse{\cA}{}{\ifnum\numline>1 \doiftextelse{\cE}{Behavior: {\bf\cE}\crlf}{}\else{}\fi}}
+% %\def\behave{\doifemptyelse{\cA}{}{\doiftextelse{\cE}{Behavior: {\bf\cE}\crlf}{}}}
+% 
+% \doloopforall{\getbuffer[text]}
+% 
+% \stoptext
+

@@ -1,0 +1,75 @@
+\usemodule[handlecsv]
+\opencsvfile{numbers.csv}
+
+\startbuffer[numbers]
+\lineno\qquad\cA\par
+\stopbuffer
+
+
+\starttext
+
+
+5 to 35:
+
+\doloopfromto{5}{35}{\getbuffer[numbers]}
+
+5 to 8:
+
+\doloopfromto{5}{8}{\getbuffer[numbers]}
+
+
+9 to 3:
+
+\doloopfromto{9}{3}{\getbuffer[numbers]}
+
+3 to 9:
+
+\doloopfromto{3}{9}{\getbuffer[numbers]}
+
+
+19 to 35:
+
+\doloopfromto{19}{35}{\getbuffer[numbers]}
+
+35 to 17:
+
+\doloopfromto{35}{17}{\getbuffer[numbers]}
+
+
+5 to 5:
+
+\doloopfromto{5}{5}{\getbuffer[numbers]}
+
+35 to 35:
+
+\doloopfromto{35}{35}{\getbuffer[numbers]}
+
+2 to 50:
+
+\doloopfromto{2}{50}{\getbuffer[numbers]}
+
+90 to 3:
+
+\doloopfromto{90}{3}{\getbuffer[numbers]}
+
+-1 to 3:
+
+\doloopfromto{-1}{3}{\getbuffer[numbers]}
+
+
+-3 to 3
+
+\doloopfromto{-3}{3}{\getbuffer[numbers]}
+
+-1 to -3
+
+\doloopfromto{-1}{-3}{\getbuffer[numbers]}
+
+
+-3 to -1
+
+\doloopfromto{-3}{-1}{\getbuffer[numbers]}
+
+
+
+\stoptext

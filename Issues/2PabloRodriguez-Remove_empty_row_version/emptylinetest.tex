@@ -1,0 +1,13 @@
+   \setuppapersize[A8,landscape]
+    \setuppagenumbering[location=]
+    \usemodule[scancsv-2015-02-19]
+
+    \unexpanded\def\lineaction{\Name\ arrived on \Date\\}
+
+    \setheader
+    \setsep{;}
+    \setfiletoscan{mail.csv}
+
+    \starttext
+        \filelineaction
+    \stoptext

@@ -1,0 +1,33 @@
+
+%Environment xtable somehow angry. Therefore, an example with the environment TABLE:
+
+\usemodule[handlecsv]
+\opencsvfile{numbers.csv}
+
+\usehooks
+\def\bfilehook{\bTABLE[option=stretch, align=center] } % begin file hook
+\def\efilehook{\eTABLE} % end file hook
+\def\blinehook{\bTR } % begin line hook
+\def\elinehook{\eTR} % end line hook
+\def\bchcA{} % begin hook of cell A
+\def\echcA{} % end hook of cell A
+\def\bch{\bTD } % begin column hook
+\def\ech{\eTD} % end column hook
+
+
+\starttext
+
+\unexpanded\def\lineaction{% combine hooks and nohooks fields
+\expanded{
+	\hcA % use hooked item from column A
+  \bTD % use nonhooked item
+        \doifelse{\csvcell['A',\thenumexpr{\numline+1}]}{undefined}
+            {---}{\csvcell['A',\thenumexpr{\numline+1}]}
+	\eTD
+}
+}
+
+\filelineaction
+
+\stoptext
+

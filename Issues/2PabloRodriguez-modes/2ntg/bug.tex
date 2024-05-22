@@ -1,0 +1,23 @@
+
+
+\enablemode[mymode]
+% \disablemode[mymode]
+
+\starttext
+
+\startmode[mymode]
+mode 'mymode' is enabled!
+\stopmode
+
+\startnotmode[mymode]
+mode 'mymode' is disbled!
+\stopnotmode
+
+
+\doifmodeelse{mymode}{mode 'mymode' is enabled!}{mode 'mymode' is disbled!}
+
+% Undefined control sequence error ???
+\doifnotmodeelse{mymode}{mode 'mymode' is disbled!}{mode 'mymode' is enabled!}
+
+
+\stoptext

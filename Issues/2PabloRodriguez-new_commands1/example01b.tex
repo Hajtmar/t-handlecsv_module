@@ -1,0 +1,20 @@
+\usemodule[handlecsv]
+
+\startbuffer[languages]
+\edef\savecC{\cC}
+
+\cA\lineno\ speaks:    \lineno\ \cB, \nextrow
+\start
+ \doloopwhile{\cA}{}{\lineno \cB, }\lineno.
+\stop
+
+% OR: {\doloopwhile{\cA}{}{\lineno \cB, }\lineno.}
+
+
+He is the \savecC\ student.\par\blank[big]
+\stopbuffer
+
+\starttext
+ \opencsvfile{languages.csv}
+ \doloopif{\cA}{~=}{}{\getbuffer[languages]}
+\stoptext

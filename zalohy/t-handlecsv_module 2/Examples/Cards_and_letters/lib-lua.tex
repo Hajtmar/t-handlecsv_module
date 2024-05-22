@@ -1,0 +1,119 @@
+\setuptolerance[verytolerant, stretch]
+
+\def\a{\doifelse{m}{\Pohl}{}{{\red a}} }
+\def\aa{\doifelse{m}{\Pohl}{{\red ý}}{{\red á}} }
+\def\vassyndcera{\doifelse{m}{\Pohl}{{\red Váš syn}}{{\red Vaše dcera}} }
+\def\ka{\doifelse{m}{\Pohl}{}{{\red ka}} }
+\def\ka{\doifelse{m}{\Pohl}{}{{\red ka}} }
+
+
+\def\beginhook{\normalcatcodes}
+
+
+\def\hlavicka{
+	\framed[width=20cm,bottomframe=on,frame=off]{
+		\startfiguretext[left,nonumber]{}
+		{\externalfigure[logo.png][height=3.5cm]} 
+		{\startpacked\switchtobodyfont[8pt]
+			\crlf
+			{\bf Název školy}\crlf
+			Ulice\crlf
+			PSČ Město\crlf
+			\crlf
+			IČO: 11111111\crlf
+			tel.: 111/222 333\crlf
+			fax: 111/222 444\crlf
+			e-mail: reditel@skoly.cz\crlf
+			www: http://www.skola.cz
+		\stoppacked
+		}
+		\stopfiguretext		
+	}
+}%\hlavicka{
+
+
+
+\def\podpisreditele{
+			\starttable[|l w50mm|c|]
+			\NC 	\NC {\bf Mgr. Ředitel Školy} \MR
+			\NC 	\NC ředitel školy\MR		
+			\stoptable
+}%\podpisreditele
+
+
+\def\adresnistitek#1#2{
+\null\blank[3cm]
+			\starttable[|l w50mm|l|]
+			\NC č.j.: {{\red\bf #1}} 	\NC {\bf {\red\PrijmeniZZ\ \JmenoZZ} } \MR
+			\NC 														\NC {\red\UliceZZ}  \MR		
+			\NC Škola, {\red #2} 				\NC{\red \PSCZZ\  \ObecZZ  }\MR		 
+			\stoptable
+}%adresnistitek
+
+\def\adresnistitekrozhodnuti#1#2#3{
+			\starttable[|l w50mm|l|]
+			\NC 								\NC Do vlastních rukou \MR
+			\NC Č.j.: {{\red \bf #1}} 	\NC {{\red\bf \PrijmeniZZ\  \JmenoZZ} } \MR
+			\NC Sp.zn. : {{\red\bf #2}} 						\NC {\red\UliceZZ}  \MR		
+			\NC Škola, {\red #3} 		\NC{\red \PSCZZ\  \ObecZZ } \MR		 
+			\stoptable			
+}%adresnistitek
+
+\def\adresnistitekknalepeni{
+			\framed[width=6.5cm,height=2.2cm,offset=2mm,align=right]{
+			{\tfa
+			{\bf \PrijmeniZZ\  \JmenoZZ }\crlf
+			\null\ \UliceZZ \crlf
+			\null\ \PSCZZ\  \ObecZZ \crlf
+			}
+			}
+			\blank[big]		 
+}%adresnistitekknalepeni
+
+
+
+\def\zakzakyne{
+			\starttable[|l|l|]
+			\NC uchazeče: 		\NC {\bf {\bf \Prijmeni\  \Jmeno } } \MR
+			\NC narozeného:		\NC \DatNar  \MR		
+			\NC bytem: 				\NC \Ulice,\ \PSC\  \Obec  \MR		 
+			\stoptable
+}%zakzakyne
+
+\def\ucastnik{
+			\starttable[|l|l|]
+			\NC příjmení a~jméno: \NC {\bf {\bf \Prijmeni\  \Jmeno } } \MR
+			\NC datum narození :			\NC \DatNar  \MR		
+			\NC bydliště: 						\NC \Ulice, \PSC\ \Obec  \MR		 
+			\stoptable  
+}%ucastnik
+
+\def\Uchazec{
+			{\setuptables[height=0, distance=0]
+			\starttable[|l|l|]
+			\NC uchazeč\ka 				\NC {\bf {\bf {\red\Prijmeni\  \Jmeno} } } \MR
+			\NC narozen\aa 				\NC {\bf {\red\DatNar} } \MR		
+			\NC bytem 						\NC {{\red\bf \Ulice,\ \PSC\  \Obec }} \MR		 
+			\stoptable
+			}  
+}%uchazec
+
+
+\def\uchazec{
+			{\setuptables[height=0, distance=0]
+			\starttable[|l|l|]
+			\NC příjmení a~jméno: 				\NC {\bf {\bf{\red\Prijmeni\ \Jmeno} } } \MR
+			\NC datum narození: 				\NC {\bf{\red\DatNar} } \MR		
+			\NC bydliště: 						\NC {{\red\bf\Ulice,\ \PSC\ \Obec }} \MR		 
+			\stoptable
+			}  
+}%uchazec
+
+
+\def\dataucastnika#1#2#3{
+			\starttable[|l|l|]
+			\NC #1 	\NC {\bf {\bf\Prijmeni\ \Jmeno } } \MR
+			\NC #2	\NC \DatNar  \MR		
+			\NC #3 	\NC \Ulice, \PSC\ \Obec \MR		 
+			\stoptable  
+}%ucastnik

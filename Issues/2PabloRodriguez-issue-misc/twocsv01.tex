@@ -1,0 +1,20 @@
+\usemodule[handlecsvtest]
+
+\startbuffer[numbers]
+
+% \edef\cAnumbers{\cA}
+
+  \doloopif{\cnumbersxcsvA}{==}{\clettersxcsvB}{\cnumbersxcsvA: \clettersxcsvA, \clettersxcsvB}
+%\cnumbersxcsvA - \cnumbersxcsvB
+\stopbuffer
+
+\starttext
+\opencsvfile{numbers.csv}
+  \opencsvfile{letters.csv}
+  
+
+
+\doloopforall{\getbuffer[numbers]}
+
+
+\stoptext

@@ -1,0 +1,19 @@
+
+% main.tex file:
+\usemodule[handlecsv]
+
+\startbuffer[single-certificates]
+\executesystemcommand{context --purgeall --result=certificate-\lineno.pdf --arguments="submittedargumentcA=\cA" certificate.tex}% create pdf file
+\startTEXpage
+	\externalfigure[certificate-\lineno.pdf]% and now insert this pdf file into this file...
+\stopTEXpage
+\page
+\stopbuffer
+
+\starttext
+\opencsvfile{participants.csv}
+\startitemize[n]
+\dorecurse{\numrows}{\getbuffer[single-certificates]\nextrow}
+%~ \doloopif{\cA}{~=}{}{\getbuffer[single-certificates]\item}
+\stopitemize
+\stoptext

@@ -1,0 +1,73 @@
+Id;Pokoj;Cislo;Jmeno;Prijmeni;Nick;Pozn;Filename;;Pohlavi;Deti;PlatnostOd;PlatnostDo
+1;0;190982214;Tomáš;Banka;Tom;;tomas_banka.jpg;;muž/male;;1.1.2010;31.12.2099
+2;0;271637741;Slávek;Brabec;Slávek;;slavek_brabec.jpg;;muž/male;;1.1.2010;31.12.2099
+3;1;258815468;Ondřej;Drábek;Ondra;;ondra_drabek.jpg;;muž/male;Maruška, Jéňa;1.1.2010;31.12.2099
+4;1;296758182;Jan;Drábek;Jéňa;;jena_drabek.jpg;;muž/male;;1.1.2010;31.12.2099
+5;1;939431754;Marie;Drábková;Maruška;;maruska_drabkova.jpg;;žena/female;;1.1.2010;31.12.2099
+6;1;969647287;Markéta;Drábková;Markéta;;marketa_drabkova.jpg;;žena/female;Maruška, Jéňa;1.1.2010;31.12.2099
+7;9;356956251;Šimon;Grega;Šimi;;simonek_grega.jpg;;muž/male;;1.1.2010;31.12.2099
+8;9;413246048;Václav;Grega;Vašek;;vasek_grega.jpg;;muž/male;Táďa, Šimík;1.1.2010;31.12.2099
+9;9;871091308;Inka;Gregová;Inuš;;inka_gregova.jpg;;žena/female;Táďa, Šimík;1.1.2010;31.12.2099
+10;9;522584853;Tadeáš;Grega;Táďa;;tada_grega.jpg;;muž/male;;1.1.2010;31.12.2099
+11;2;616872041;Robert;Grof;Bob;;bob_grof.jpg;;muž/male;Emča, Viktorka;1.1.2010;31.12.2099
+12;2;387927616;Lenka;Grofová;Lenka;;lenka_grofova.jpg;;žena/female;Emča, Viktorka;1.1.2010;31.12.2099
+13;2;536099498;Viktorie;Grofová;Viki;;viktorka_grofova.jpg;;žena/female;;1.1.2010;31.12.2099
+14;2;690567655;Ema;Grofová;Emča;;emca_grofova.jpg;;žena/female;;1.1.2010;31.12.2099
+15;0;537016745;Jaroslav;Hajtmar;Jarda;;jarda_hajtmar.jpg;;muž/male;Hanča, Janča, Lucka;1.1.2010;31.12.2099
+16;0;771672362;Hana;Hajtmarová;Hanča;;hanca_hajtmarova.jpg;;žena/female;;1.1.2010;31.12.2099
+17;0;861159260;Ivana;Hajtmarová;Iva;;iva_hajtmarova.jpg;;žena/female;Hanča, Janča, Lucka;1.1.2010;31.12.2099
+18;0;43064169;Jana;Hajtmarová;Janča;;janca_hajtmarova.jpg;;žena/female;;1.1.2010;31.12.2099
+19;0;594803222;Lucie;Hajtmarová;Lucka;;lucka_hajtmarova.jpg;;žena/female;;1.1.2010;31.12.2099
+20;6;703957779;Lea;Hawerlandová;Lele;;lele_hawerlandova.jpg;;žena/female;;1.1.2010;31.12.2099
+21;7;581410471;Yvonna;Hawerlandová;Yvonnka;;yvonnka_hawerlandova.jpg;;žena/female;Lele;1.1.2010;31.12.2099
+71;7;581410472;Leo;Hawerland;Leo;;leo_hawerland.jpg;;muž/male;Lele;1.1.2010;31.12.2099
+22;0;604974337;Martin;Hošek;Marťa;;marta_hosek.jpg;;muž/male;;1.1.2010;31.12.2099
+23;0;622311012;Barbora;Hošková;Barča;;bara_hoskova.jpg;;žena/female;;1.1.2010;31.12.2099
+24;0;844313479;Lenka;Hošková;Lenka;;lenka_hoskova.jpg;;žena/female;Barča, Marťa;1.1.2010;31.12.2099
+25;5;75445764;František;Jančuš;Fany;;fany_jancus.jpg;;muž/male;Vendulka, Vilda;1.1.2010;31.12.2099
+26;5;160292780;Vilém;Jančuš;Vilda;;vilik_jancus.jpg;;muž/male;;1.1.2010;31.12.2099
+27;5;136132215;Vendula;Jančušová;Vendy;;vendulka_jancusova.jpg;;žena/female;;1.1.2010;31.12.2099
+28;5;188410257;Veronika;Jančušová;Verča;;veronika_jancusova.jpg;;žena/female;Vendulka, Vilda;1.1.2010;31.12.2099
+29;3;210336519;Tomáš;Jelínek;Jelen;;tomas_jelinek.jpg;;muž/male;Tomík, Honzík;1.1.2010;31.12.2099
+30;3;847242427;Jan;Jelínek;Honzík;;jenicek_jelinek.jpg;;muž/male;;1.1.2010;31.12.2099
+31;3;462994162;Tomáš;Jelínek;Tomík;;tomik_jelinek.jpg;;muž/male;;1.1.2010;31.12.2099
+32;3;503555885;Petra;Jelínková;Peťka;;petka_jelinkova.jpg;;žena/female;Tomík, Honzík;1.1.2010;31.12.2099
+33;0;916169901;Darja;Joao;Darja;;darja_joao.jpg;;žena/female;Madalen. Daniel;1.1.2010;31.12.2099
+34;0;677369075;Antonio;Joao;Tony;;tony_joao.jpg;;muž/male;Madalen. Daniel;1.1.2010;31.12.2099
+35;0;884591115;Miroslav;Kamler;Mirek;;mirek_kamler.jpg;;muž/male;;1.1.2010;31.12.2099
+36;4;960374469;Pavel;Koupil;Pavel;;pavel_koupil.jpg;;muž/male;Honza, Míša;1.1.2010;31.12.2099
+37;4;230752350;Jan;Koupil;Honza;;honza_koupil.jpg;;muž/male;;1.1.2010;31.12.2099
+38;4;819410061;Michaela;Koupilová;Míša;;misa_koupilova.jpg;;žena/female;Honza, Míša;1.1.2010;31.12.2099
+39;4;780301464;Michael;Koupil;Mišák;;misa_koupil.jpg;;muž/male;;1.1.2010;31.12.2099
+40;8;225404633;Jiří;Kovačičín;Jirka;;jirka_kovacicin.jpg;;muž/male;Péťa;1.1.2010;31.12.2099
+41;8;5898193;Petr;Kovačičín;Péťa;;peta_kovacicin.jpg;;muž/male;;1.1.2010;31.12.2099
+42;8;931817553;Marcela;Kovačičínová;Marcela;;marcela_kovacicinova.jpg;;žena/female;Péťa;1.1.2010;31.12.2099
+43;10;252493291;Adam;Krejčíř;Áďa;;ada_krejcir.jpg;;muž/male;;1.1.2010;31.12.2099
+44;6;542281466;Daniel;Krejčíř;Dan;;dan_krejcir.jpg;;muž/male;Natálka, Monča;1.1.2010;31.12.2099
+45;10;41552691;David;Krejčíř;Davča;;david_krejcir.jpg;;muž/male;;1.1.2010;31.12.2099
+46;0;311702079;Jaroslav;Krejčíř;Jarda;;jarda_krejcir.jpg;;muž/male;Tom, Dan;1.1.2010;31.12.2099
+47;10;28321425;Tomáš;Krejčíř;Tom E.;tomas_krejcir2.jpg;tomas_krejcir.jpg;;muž/male;Áďa, Davča;1.1.2010;31.12.2099
+48;10;319555431;Kateřina;Krejčířová;Kačka;;katka_krejcirova.jpg;;žena/female;Áďa, Davča;1.1.2010;31.12.2099
+49;6;503094582;Monika;Krejčířová;Moňula;;monula_krejcirova.jpg;;žena/female;;1.1.2010;31.12.2099
+50;6;319087597;Natálie;Krejčířová;Natálka;;natalka_krejcirova.jpg;;žena/female;;1.1.2010;31.12.2099
+51;0;391086161;Pavlína;Krejčířová;Pavla;;pavla_krejcirova.jpg;;žena/female;Tom, Dan;1.1.2010;31.12.2099
+52;0;453268735;Michal;Nátěsta;Míša;;michal_natesta.jpg;;muž/male;Míša;1.1.2010;31.12.2099
+53;0;166772945;Michaela;Nátěstová;Míša;;misa_natestova.jpg;;žena/female;;1.1.2010;31.12.2099
+54;0;183003445;Jana;Neumannová;Jana;;jana_neumannova.jpg;;žena/female;;1.1.2010;31.12.2099
+55;0;995292495;Miroslav;Neumann;Mirek;;mirek_neumann.jpg;;muž/male;;1.1.2010;31.12.2099
+56;0;313697510;Jan;Novák;Honza;;honza_novak.jpg;;muž/male;Kačka, Jana;1.1.2010;31.12.2099
+57;0;722803964;Lenka;Nováková;Lenka;;lenka_novakova.jpg;;žena/female;Kačka, Jana;1.1.2010;31.12.2099
+58;0;456819895;Zdeněk;Roller;Zdenál;;zdenek_roller.jpg;;muž/male;Adam;1.1.2010;31.12.2099
+59;0;283228568;Bára;Polívková;Barunka;;bara_polivkova.jpg;;žena/female;;1.1.2010;31.12.2099
+60;0;64436229;Jan;Šikula;Honza;;honza_sikula.jpg;;muž/male;;1.1.2010;31.12.2099
+61;0;196358455;Jiří;Šikula;Jirka;;jirka_sikula.jpg;;muž/male;Jirka, Honza;1.1.2010;31.12.2099
+62;0;132350980;Jiří;Šikula ml.;Jirka;;jirka_sikula_ml.jpg;;muž/male;;1.1.2010;31.12.2099
+63;0;748832699;Iva;Šikulová;Iva;;iva_sikulova.JPG;;žena/female;Jirka, Honza;1.1.2010;31.12.2099
+64;0;413442497;Ivana;Štrublová;Iva;;iva_strublova.jpg;;žena/female;;1.1.2010;31.12.2099
+65;0;68650561;Jiří;Štrubl;Jirka;;jirka_strubl.jpg;;muž/male;;1.1.2010;31.12.2099
+66;0;292567362;Lubomír;Zedek;Luboš;;lubos_zedek.jpg;;muž/male;;1.1.2010;31.12.2099
+67;0;427657306;Leona;Zedková;Leonka;;leona_zedkova.jpg;;žena/female;;1.1.2010;31.12.2099
+68;0;717273300;Karel;Flos;Karel;;karel_flos.jpg;;muž/male;;1.1.2010;31.12.2099
+69;0;817573100;Ondřej;Kropáček;Ondra;;ondra_kropacek.jpg;;muž/male;;1.1.2010;31.12.2099
+70;0;792567362;Jan;Drábek;Honza;;honza_drabek.jpg;;muž/male;;1.1.2010;31.12.2099
+72;0;283228569;Bára;Rollerová;Barunka;;bara_polivkova.jpg;;žena/female;;1.5.2010;31.12.2110

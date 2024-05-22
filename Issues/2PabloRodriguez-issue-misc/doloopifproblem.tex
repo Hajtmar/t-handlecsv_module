@@ -1,0 +1,103 @@
+%%%%% !TEX TS-program = ConTeXt (LuaTeX)
+
+
+\usemodule[handlecsv]
+\setheader
+\opencsvfile{grades.csv}
+
+\def\Comment{\doiftext{\Behaviour}{Behavior: {\bf\Behaviour}\crlf}}
+\def\Notes{\noindent\cC\ --- \cD\crlf}
+
+\starttext
+
+\startbuffer[text]
+\expanded{%
+	\doifemptyelse{\Name}%
+	{\Notes}%
+	{{\subject{\Name\ \Surname}}\Comment}%
+}%
+\nextrow%
+\stopbuffer
+
+
+%\dorecurse{\numrows}{\getbuffer[text]}% 
+
+%OR: \doloopaction{\getbuffer[text]}%
+
+% OR: etc...
+
+\doloopforall{\getbuffer[text]}
+
+
+\stoptext
+
+
+
+% 
+% \usemodule[handlecsv]
+% \setheader
+% \opencsvfile{grades.csv}
+% \def\Comment{\doiftext{\cE}{Behavior: \cE}}
+% \definenumber[people]
+% \definenumber[notes]
+% \starttext
+% 
+% \startbuffer[text]
+% \setnumber[people][\numline]
+% {\bf\cA\ \cB}:\crlf
+% \def\Notes{\noindent\cC\ --- \cD\\}
+% \doloopif{\getnumber[people]}{<=}{\getnumber[notes]}{\Notes}
+% \setnumber[notes][\numline]
+% \Comment
+% \page
+% \stopbuffer
+% 
+% \doloop{\ifnotEOF\getbuffer[text]\nextrow\else\exitloop\fi}
+% \stoptext
+% 
+
+
+%%%%%%%%%%%%%%%%%%%
+
+% 
+% \usemodule[handlecsv]
+% \setheader
+% \opencsvfile{grades.csv}
+% \def\Comment{\doiftext{\cE}{Behavior: \cE}}
+% \definenumber[people]
+% \definenumber[notes]
+% \setnumber[people][\numline]
+% 
+% \def\Notes{\noindent\cC\ --- \cD\\}
+% 
+% 
+% \starttext
+% 
+% \startbuffer[text]
+% 
+% {\bf\cA\ \cB}:\crlf
+% 
+% \doloopif{\getnumber[people]}{<=}{\getnumber[notes]}{\Notes}
+% \setnumber[notes][\numline]
+% \Comment
+% \page
+% \stopbuffer
+% 
+% 
+% \doloop{\ifnotEOF\getbuffer[text]\nextrow\else\exitloop\fi}
+% 
+% 
+% \stoptext
+% 
+% % \startbuffer[text]
+% % \setnumber[people][\numline]
+% % {\bf\cA\ \cB}:\crlf
+% % \def\Notes{\noindent\cC\ --- \cD\\}
+% % \doloopif{\getnumber[people]}{<=}{\getnumber[notes]}{\Notes}
+% % \setnumber[notes][\numline]
+% % \Comment
+% % \page
+% % \stopbuffer
+% % 
+% % 
+% % \doloop{\ifnotEOF\getbuffer[text]\nextrow\else\exitloop\fi}

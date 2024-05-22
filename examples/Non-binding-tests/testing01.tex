@@ -1,0 +1,87 @@
+%\usemodule[handlecsv] % use new module
+\usemodule[handlecsv]
+
+\starttext
+
+\setheader
+\opencsvfile{cities.csv}
+
+get: \getcsvcell['CountryAbbrev',7]
+
+\cA
+
+\opencsvfile{selectedcountries.csv}
+
+
+get: \getcsvcell['Abbrev',7]
+
+\cB
+
+\nextrow
+
+po next \cB
+
+\cC
+
+
+xx \getcsvcellof[selectedcountries.csv]['Abbrev',5]
+
+
+zz \getcsvcellof[cities.csv]['CountryAbbrev',7]
+
+
+po selectedcountries.csv:
+
+null 1 - Abbrev: \getcsvcellof[]['Abbrev',2]
+
+null 1a - Abbrev: \getcsvcellof[]['Abbrev',3]
+
+null 1b - Abbrev: \getcsvcellof['']['Abbrev',4]
+
+null 1bb - Abbrev: \getcsvcellof[' ']['Abbrev',5]
+
+% not work null 1bbb - Abbrev: \getcsvcellof[""]['Abbrev',2]
+
+% not work  null 1bbbb - Abbrev: \getcsvcellof[" "]['Abbrev',2]
+
+not null 1c \getcsvcellof['cities.csv']['CountryAbbrev',7]
+
+not null 1d \getcsvcellof[cities.csv]['CountryAbbrev',5]
+
+not null 1e - Abbrev: \getcsvcellof['selectedcountries.csv']['Abbrev',2]
+
+not null 1f - Abbrev: \getcsvcellof[selectedcountries.csv]['Abbrev',3]
+
+% not working not null 1f - Abbrev: \getcsvcellof["selectedcountries.csv"]['Abbrev',2]
+
+\opencsvfile{cities.csv}
+
+po cities.csv:
+
+null 2 - Abbrev: \getcsvcellof[]['Abbrev',2]
+
+null - 3  CountryAbbrev:  \getcsvcellof[]['CountryAbbrev',2]
+
+\opencsvfile{selectedcountries.csv}
+
+po selectedcountries.csv:
+
+null - 4  CountryAbbrev:  \getcsvcellof[]['CountryAbbrev',2]
+
+null -  5 Abbrev: \getcsvcellof[]['Abbrev',2]
+
+
+\opencsvfile{cities.csv}
+
+po cities.csv:
+
+null - Abbrev:   \getcsvcellof[]['Abbrev',2]
+
+\opencsvfile{selectedcountries.csv}
+
+po selectedcountries.csv:
+
+null - CountryAbbrev: \getcsvcellof[]['CountryAbbrev',2]
+
+null - Abbrev: \getcsvcellof[]['Abbrev',2]
+\stoptext

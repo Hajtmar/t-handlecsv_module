@@ -1,0 +1,53 @@
+% https://tex.stackexchange.com/questions/245791/conditional-pagebreak-depending-on-counter
+\usemodule[handlecsv]
+\opencsvfile{holidays.csv}
+
+\definecounter[RealLine][numberconversion=a, numberstopper={)}]
+
+\def\realline{
+	\iftrialtypesetting
+	\else
+		\doifnot{\cA}{}{
+			\incrementcounter[RealLine]
+%			\convertedcounter[RealLine][numberconversion=R].
+%			\convertedcounter[RealLine][numberconversion=A])
+		\convertedcounter[RealLine]
+
+		}
+	\fi
+}
+
+\setcounter[RealLine][0]
+
+
+
+
+\startbuffer[groups]
+\doiftextelse{\nextcell{'C'}}
+    {\doiftextelse{\cA}
+        {\startxrow[topframe=on, bottomframe=off, toffset=1.5ex]}
+        {\startxrow[topframe=off, bottomframe=off]}}
+    {\startxrow[topframe=off, bottomframe=on, toffset=1ex, boffset=1.5ex]}
+    \startxcell[align=center]{\ttx\setupinterlinespace\cD\realline}\stopxcell% changedline
+    \startxcell[align=center]{\ttx\setupinterlinespace\cA}\stopxcell
+    \startxcell {\ttx\setupinterlinespace\cB\par}\stopxcell
+    \startxcell {\ttx\setupinterlinespace\cC\par}\stopxcell
+\stopxrow
+\stopbuffer
+
+
+
+\starttext
+
+\startxtable[option=stretch, split=yes]
+    \startxrow[align=middle, foregroundstyle=\tfx]
+        \startxcell[width=.075\textwidth] Number\stopxcell
+        \startxcell[width=.075\textwidth] Participants\stopxcell
+        \startxcell[width=.4\textwidth] Countries\stopxcell
+        \startxcell[width=.4\textwidth] Cities\stopxcell
+    \stopxrow
+
+\doloopif{\cC}{~=}{}{\getbuffer[groups]}
+\stopxtable
+
+\stoptext

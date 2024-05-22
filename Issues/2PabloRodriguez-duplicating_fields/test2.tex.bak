@@ -1,0 +1,132 @@
+    \setuppagenumbering[location=]
+    \usemodule[hl2t-scancsv.lua]
+
+
+\def\readnthline#1{%
+\startluacode
+thirddata.scancsv.opencsvfile(thirddata.scancsv.gFile2Scan)
+local numrows = thirddata.scancsv.getnumrows(thirddata.scancsv.gFile2Scan)
+local numlineparametr=0
+if thirddata.scancsv.gCSVHeader then 
+	numlineparametr=tonumber('#1')+1
+else 	
+	numlineparametr=tonumber('#1')
+end
+
+local line = ""
+local outputline = ""
+local csvline={}
+
+local n=0
+for line in io.lines(thirddata.scancsv.gFile2Scan) do
+   n=n+1
+   if thirddata.scancsv.gCSVHeader and n==1 then end
+   if n==numlineparametr then outputline=line;break end
+end
+
+for i=1, thirddata.scancsv.gNumCols do
+	thirddata.scancsv.fillvaluesintomacros(i,'')
+end
+
+if outputline ~= nil and outputline ~= ""  then
+ csvline=thirddata.scancsv.parsecsvdata(outputline)
+ local numcols = 0
+	for _ in pairs(csvline) do numcols = numcols + 1 end
+	 	for i = 1, numcols do 	%-- create an associative array: the index column names
+	 	  %-- Experimental row:
+			thirddata.scancsv.gCSVField[thirddata.scancsv.ar2xls(i)]=csvline[i] %-- Fill the column field from the act. line data
+	 	  %--thirddata.scancsv.gCSVField[i]=csvline[i] -- not used
+			thirddata.scancsv.gCSV[thirddata.scancsv.gCSV[i]]=csvline[i] %-- values are data from a CSV row of the table column
+		  thirddata.scancsv.fillvaluesintomacros(i,csvline[i])
+	end %-- for
+end %  if outputline ~= nil then 
+\stopluacode
+}
+
+    \unexpanded\def\lineaction{
+		\previousName -- \Name\crlf
+		
+		-
+		
+		\nextrow
+		
+		\previousName -- \Name\crlf
+    
+		------
+		
+		}
+
+
+    
+    \setsep{;}
+       
+    \starttext
+    
+    \setheader
+    \opencsvfile{dates-table.csv}
+
+		SETHEADER - hlavička existuje:
+		
+		\def\zobraz{\cA-\Numline, \cB-\Name,\cC-\Begin,\cD-\End, PREV:\previousNumline}
+		\def\zobraztwo{\cA, \cB, \cC, \cD, PREV:\previouscA}
+
+    2. \readnthline{2} --> \zobraz,\previousNumline
+    
+		1. \readnthline{1}  --> \zobraz
+		
+		0. \readnthline{0}  --> \zobraz
+		
+		11. \readnthline{11}  --> \zobraz
+		
+		3. \readnthline{3}  --> \zobraz
+		
+		4. \readnthline{4}  --> \zobraz
+		
+		7. \readnthline{7}  --> \zobraz
+		
+		5. \readnthline{5}  --> \zobraz
+	
+	Změna:
+	
+	RESETHEADER - hlavička neexistuje:
+		
+		\resetheader
+		\opencsvfile{dates-table2.csv}
+		
+		2. \readnthline{2} \zobraz 
+    
+		1. \readnthline{1} \zobraz
+		
+		0. \readnthline{0} \zobraz
+		
+		11. \readnthline{11} \zobraztwo
+		
+		3. \readnthline{3} \zobraztwo
+		
+		4. \readnthline{4} \zobraztwo
+		
+		7. \readnthline{7} \zobraztwo
+		
+		5. \readnthline{5} \zobraztwo
+		
+		
+          %\filelineaction
+          
+%        \dorecurse{3}{
+%        \previousName -- \Name\crlf
+%        \nextrow xxx
+% 			 \previousName -- \Name\crlf
+% 			 \nextrow
+% 			 }   
+
+
+
+
+
+
+    \stoptext
+
+
+file = assert(io.open("dates-table.csv", "r"))
+for line in file:lines() do context(line) end
+file:close()

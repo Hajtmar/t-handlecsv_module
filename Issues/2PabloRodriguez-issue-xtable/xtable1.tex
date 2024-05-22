@@ -1,0 +1,160 @@
+
+
+
+% The problem here is that \testtrue is not expandable and not protected and 
+% therefore fragile. It is defined as \let\iftrue\iftrue. In an expandable 
+% context like \edef or \typeout the \let assignment is ignored, and both 
+% if-switches are expanded. Because there is only one \fi (which is taken as 
+% part of \iftrue) the compiler complains about the missing \fi.
+% http://tex.stackexchange.com/questions/35807/newif-conditional-causing-problem-in-typeout-or-edef
+
+\usemodule[handlecsv]
+\opencsvfile{numbers.csv}
+
+
+\def\refreshvalues{\linepointer -- \ifnum\linepointer<5\notEOFfalse\EOFtrue A\else\notEOFtrue\EOFfalse B\fi}
+
+
+\def\testik{
+\directlua{
+	if thirddata.handlecsv.getcurrentlinepointer() > thirddata.handlecsv.gNumRows[thirddata.handlecsv.getcurrentcsvfilename()] then
+     context([[\global\EOFtrue]])
+     context([[\global\notEOFfalse]])
+  else
+  	  context([[\global\EOFfalse]])
+     context([[\global\notEOFtrue]])
+  end	
+}
+}
+
+
+
+
+\startbuffer[myxtable]
+\startxrow %
+\startxcell %
+% 	\linepointer  -- \Romannumerals{\getcsvcell['A',\recurselevel]}% 
+% 	\linepointer  -- \Romannumerals{\cA}%
+ \linepointer  -- {\cA}%
+\stopxcell %
+\stopxrow %
+
+\stopbuffer
+
+
+
+\starttext
+
+
+
+I have no clue, why this example not work. It seems, that problem is in collision with startxtable macro.
+
+% The problem here is that \testtrue is not expandable and not protected and 
+% therefore fragile. It is defined as \let\iftrue\iftrue. In an expandable 
+% context like \edef or \typeout the \let assignment is ignored, and both 
+% if-switches are expanded. Because there is only one \fi (which is taken as 
+% part of \iftrue) the compiler complains about the missing \fi.
+% http://tex.stackexchange.com/questions/35807/newif-conditional-causing-problem-in-typeout-or-edef
+
+
+
+
+%\refreshvalues
+
+\refreshvalues
+\resetlinepointer
+
+\startxtable
+\doloop{%
+\ifnum\linepointer>10\exitloop
+\else  
+\getbuffer[myxtable]
+\nextrow
+\fi
+}%
+\stopxtable %
+
+
+xxxxxxxxxxxx
+
+\startxtable
+  \startxrow
+    \startxcell one \stopxcell
+    \startxcell two \stopxcell
+  \stopxrow
+  \startxrow
+    \startxcell alpha \stopxcell
+    \startxcell beta  \stopxcell
+  \stopxrow
+\stopxtable
+
+xxxxxxxxxxxx
+
+
+because this example is partly working:
+
+
+\resetlinepointer
+
+% remark \startxtable[option=stretch, split=yes]
+\doloop{
+\ifnotEOF %
+\getbuffer[myxtable]
+\nextrow\else
+\exitloop%
+\fi
+}%
+
+% remark  \stopxtable%
+
+Working example without doloop 
+
+\resetlinepointer
+\startxtable[option=stretch, split=yes]
+ \dorecurse{\numrows}{
+ \startxrow%
+  \startxcell
+	\Romannumerals{\csvcell['A',\recurselevel]}
+  \stopxcell%
+\stopxrow%
+}
+\stopxtable
+
+
+OR next working example with doloop but without ifnotEOF condition 
+
+
+\resetlinepointer
+\startxtable[option=stretch, split=yes]
+\doloop{\ifnum\recurselevel<\thenumexpr{\numrows+1}
+  \startxrow
+  \startxcell
+	\Romannumerals{\csvcell['A',\recurselevel]}
+  \stopxcell
+\stopxrow
+\nextrow
+\else
+\exitloop
+\fi
+}
+
+\stopxtable
+
+
+
+
+
+\stoptext
+
+
+% \resetlinepointer
+% \bTABLE
+% 
+% \doloop{
+% \ifnotEOF%
+% \bTR\bTD\Romannumerals{\csvcell['A',\recurselevel]}\eTD\eTR
+% \nextrow\else\exitloop%
+% \fi
+% }%
+% 
+% \eTABLE

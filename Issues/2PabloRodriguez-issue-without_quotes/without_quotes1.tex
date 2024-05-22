@@ -1,0 +1,31 @@
+% I have accidentally discovered a file without quoted fields fails to open with handlecsv.
+% 
+% Let’s imagine the contents of abcde.csv:
+% 
+% a
+% b
+% c
+% d
+% e
+% 
+% As source file for the following code:
+
+
+%\usemodule[scancsv]
+\usemodule[handlecsv]
+
+
+%\opencsvfile{abcde.csv} % error asi je to tím, že je jen jedno pole bez oddělovače ...
+%\opencsvfile{abcde2.csv} % error asi je to tím, že je jen jedno pole bez oddělovače ...
+%\opencsvfile{abcde3.csv} % už je OK
+%\opencsvfile{abcde4.csv} % už je OK
+%\opencsvfile{abcde5.csv} % už je OK
+\opencsvfile{abcde6.csv} % už je OK
+
+\starttext
+\startbuffer[text]
+\cA,
+\stopbuffer
+\doloop{\ifnotEOF\getbuffer[text]\nextrow\else\exitloop\fi}
+\stoptext
+

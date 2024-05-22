@@ -1,0 +1,29 @@
+\usemodule[handlecsv]
+
+
+\startbuffer[contents]
+    \item \cB
+\stopbuffer
+
+\startbuffer[letters]
+\cA\ has the following values:
+
+EMPTY:\par
+\startitemize[n]
+    	%\doloopwhile{\cA}{}{\getbuffer[contents]} 
+	\doloopif{\cA}{eq}{}{\getbuffer[contents]}
+\stopitemize
+
+NOT EMPTY:\par
+\startitemize[n]
+\doloopif{\cA}{neq}{}{\getbuffer[contents]}
+\stopitemize
+\stopbuffer
+
+
+
+\starttext
+\opencsvfile{letters.csv}
+\getbuffer[letters]
+
+\stoptext

@@ -1,0 +1,67 @@
+\usemodule[handlecsv]
+
+\setupexternalfigures[directory={graphics/, flags/}]
+
+
+
+% Zadávané hodnoty:
+\newdimen\cardwidth\cardwidth=90mm
+\newdimen\cardheight\cardheight=56mm
+\newcount\countofhor\countofhor=2
+\newcount\countofvert\countofvert=5
+\newdimen\disthor\disthor=0.5mm
+\newdimen\distvert\distvert=0.5mm
+
+%Zbytek se už vypočítává
+\definemeasure[topspace] [\dimexpr(\printpaperheight-(\cardheight + \distvert)*\countofvert+\distvert)/2\relax]
+\definemeasure[backspace] [\dimexpr(\printpaperwidth-(\cardwidth + \disthor)*\countofhor+\disthor)/2\relax]
+
+\definepapersize[BC][width=\cardwidth,height=\cardheight]
+%\setuppapersize [BC][A4,landscape]
+\setuppapersize [BC][A4]
+\setuppaper     [topspace=\measure{topspace},backspace=\measure{backspace},dx=\disthor,dy=\distvert,nx=\countofhor,ny=\countofvert]
+\setuplayout    [page] [topspace=\measure{topspace},backspace=\measure{backspace}]
+\setuplayout    [page]
+\setuplayout    [location=middle]
+\setuparranging [XY]
+
+
+\setuppagenumbering [state=stop]
+
+
+\defineoverlay[pozadifront][{\externalfigure[bckgfront.jpg][width=\cardwidth,height=\cardheight]}]
+%\defineoverlay[pozadiback][{\externalfigure[op_back.jpg][width=\cardwidth,height=\cardheight]}]
+
+\setupbackgrounds [page][page][background={pozadifront}]
+\setuplayout[location=middle,marking=on]
+
+\def\flagpicture{\externalfigure[\Flag][height=5mm, frame=on, framecolor=black]}
+%\def\logoctm{\if\LogoCTM1\externalfigure[logoctm.png][height=2.7cm, frame=off]\fi}
+%\def\logote{\if\LogoTE1\externalfigure[logotexperience2010.png][height=12mm, frame=off]\fi}
+\def\logoctm{\externalfigure[logoctm+te.png][height=8mm, frame=on]}
+%\def\logote{\externalfigure[logotexperience2010.png][height=7mm, frame=off]}
+\definefont[bigf][Sans at 30pt]
+%Lastname,Firstname,MonThu,ThuPM,Fri,Sat,Sun,Flag
+\startbuffer[Badget]
+{\setuppositioning[unit=mm,yoffset=3mm]%
+\startpositioning%
+\position(0,6){\midaligned{{\ss\bigf\Firstname}}}%
+\position(0,15){\midaligned{{\ss\bigf\Lastname}}}%
+\position(0,25){\midaligned{\flagpicture}}
+%\position(40,34){\logote}
+\position(0,34){\midaligned{\logoctm}}
+\stoppositioning%
+}%
+\stopbuffer
+
+\unexpanded\def\lineaction{
+\getbuffer[Badget]\page
+}
+
+%\showframe[edge]
+
+\starttext
+\setsep{,}
+\setheader
+\filelineaction{cm+te-sort+flags.csv} 
+\stoptext 

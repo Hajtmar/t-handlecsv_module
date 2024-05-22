@@ -1,0 +1,62 @@
+\usemodule[handlecsv]
+
+\opencsvfile{loop-sample.csv}
+
+\starttext
+
+
+
+\unexpanded\def\lineaction{
+    \startxrow
+        \startxcell \cB \stopxcell
+        \startxcell[align=center] \cC \stopxcell
+        \startxcell[align=left] \doiftextelse{\cD}{\cD}{---} \stopxcell
+    \stopxrow
+}
+
+
+\startbuffer[loop]
+\startxtable[frame=off,option=stretch]
+    \startxtablehead[style=\it]
+        \startxrow
+            \startxcell A \stopxcell
+            \startxcell[align=center] B\stopxcell
+            \startxcell[align=left] C\stopxcell
+        \stopxrow
+    \stopxtablehead
+    \filelineaction
+\stopxtable
+\stopbuffer
+
+\blank[big]
+
+
+First version:
+
+\getbuffer[loop]
+
+
+OR another version:
+
+
+\startxtable[frame=off,option=stretch]
+    \startxtablehead[style=\it]
+        \startxrow
+            \startxcell A \stopxcell
+            \startxcell[align=center] B\stopxcell
+            \startxcell[align=left] C\stopxcell
+        \stopxrow
+    \stopxtablehead
+
+
+
+\resetlinepointer% skip to begin of table % or you can use \opencsvfile or \opencsvfile{loop-sample.csv}  
+
+\doloop{\ifnotEOF\lineaction\nextrow\else\exitloop\fi}
+
+\stopxtable
+
+
+
+
+\stoptext

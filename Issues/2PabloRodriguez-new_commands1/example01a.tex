@@ -1,0 +1,53 @@
+
+\usemodule[handlecsv]
+
+\startbuffer[languages]
+\edef\savequality{\cC}
+\cA\ speaks:
+  {
+        \cB, \nextrow%
+       % \ctxlua{thirddata.handlecsv.readline(thirddata.handlecsv.gCurrentLinePointer[thirddata.handlecsv.gCurrentlyProcessedCSVFile])}%
+       \doloopwhile{\cA}{}{\cB, }
+%\dorecurse{50}{xxx xxx d }
+ }
+ 
+He is the \savequality\ student.\par\blank[big]
+\stopbuffer
+
+\starttext
+%\enabletrackers[resolvers.*]
+%\showboxes
+\enabletrackers[context.trace] 
+%\enabletrackers[visualizers.justification]
+%\enabletrackers[typesetters.suspects]
+%\enabletrackers[typesetters.spacing]
+%\enabletrackers[visualizers.*]
+
+ \opencsvfile{languages.csv}
+ \doloopif{\cA}{~=}{}{\getbuffer[languages]}
+\stoptext
+
+
+
+%%%%%%%%%%%%%
+
+
+\usemodule[handlecsv]
+
+\startbuffer[languages]
+\edef\savequality{\cC}
+\cA\ speaks:
+    %~ \savelineno
+    \startitemize
+       \item\cB\nextrow 
+       \doloopwhile{\cA}{}{\item\cB}
+   \stopitemize
+    %~ \setsavedlineno
+
+He is the \savequality\ student.\par\blank[big]
+\stopbuffer
+
+\starttext
+ \opencsvfile{languages.csv}
+ \doloopif{\cA}{~=}{}{\getbuffer[languages]}
+\stoptext

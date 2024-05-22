@@ -1,0 +1,82 @@
+\usemodule[handlecsv]
+
+
+\startbuffer[contents]
+    \item \cB
+\stopbuffer
+
+
+\startbuffer[getinformation]
+\item \cA\ has the following values: -- \cB
+\stopbuffer
+
+
+\startbuffer[searchandlistviauntil]%
+        \doloopwhile{\cA}{}{skip \linepointer, } % looking for nonempty cell and skip the unwanted rows
+        \doloopuntil{\cA}{}{\getbuffer[getinformation]} % write information of continuous list of acceptable rows
+\stopbuffer%
+
+
+\startbuffer[searchandlistviawhile]%
+        \doloopwhile{\cA}{}{skip \linepointer, } % looking for nonempty cell and skip the unwanted rows
+        \doloopuntil{\cA}{}{\getbuffer[getinformation]} % write information of continuous list of acceptable rows
+\stopbuffer%
+
+
+
+
+\startbuffer[looknextemptyvalue]%
+    \cA\ has the following values:
+    
+    \doloopuntil{\cA}{}{}% the same as   \doloopuntileq{\cA}{}{}%
+\stopbuffer%
+
+
+\startbuffer[letters]
+\startitemize[n]
+    \doloopwhile{\cA}{}{\getbuffer[contents]} % the same as   \doloopuntilneq{\cA}{}{\getbuffer[contents]} 
+\stopitemize
+
+\stopbuffer
+
+
+\starttext
+\opencsvfile{letters.csv}
+
+
+\section{List of empty values:}
+
+\resetlinepointer % necessary to set the beginning of the file
+
+\doloop{
+\getbuffer[looknextemptyvalue]
+\getbuffer[letters]
+\ifEOF\exitloop\fi
+}
+
+
+\section{List of nonempty values:}
+
+\resetlinepointer % necessary to set the beginning of the file
+
+\startitemize[n]
+\doloop{
+\ifEOF\exitloop\else\getbuffer[searchandlistviauntil]\fi}
+\stopitemize
+
+
+% Dorecurse alternative: 
+\section{Dorecurse alternative and while loop using }
+
+\resetlinepointer % necessary to set the beginning of the file
+
+\startitemize[A]
+\dorecurse{16}{% It does not matter, it will only be listed until the end of the file
+\getbuffer[searchandlistviawhile]
+}
+\stopitemize
+
+
+
+
+\stoptext

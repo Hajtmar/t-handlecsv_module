@@ -1,0 +1,53 @@
+\usemodule[handlecsv]
+
+
+\startbuffer[contents]
+    \item \cB
+\stopbuffer
+
+\startbuffer[looknextemptyvalue]%
+    \cA\ has the following values:
+    
+    \doloopuntil{\cA}{}{}%
+\stopbuffer%
+
+
+\startbuffer[letters]
+\startitemize[n]
+    \doloopwhile{\cA}{}{\getbuffer[contents]} 
+\stopitemize
+
+\stopbuffer
+
+
+\starttext
+\opencsvfile{letters.csv}
+
+\resetlinepointer
+
+First loop: 
+
+\getbuffer[letters] % no any value when first line not meet the condition
+
+No any value because first row not meet the condition.
+
+Second loop: 
+
+\getbuffer[looknextemptyvalue] % looking for a line that meets the condition
+\getbuffer[letters] % and now print values until the condition is met
+
+Third loop:
+
+\getbuffer[looknextemptyvalue]  % now again looking for a line that meets the condition
+\getbuffer[letters] % and again print values until the condition is met etc.
+
+
+{\bf This example that shows, how you can go through the whole file:}
+
+\resetlinepointer
+\doloop{
+\getbuffer[looknextemptyvalue]
+\getbuffer[letters]
+\ifEOF\exitloop\fi}
+
+\stoptext

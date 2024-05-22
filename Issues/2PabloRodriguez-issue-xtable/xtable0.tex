@@ -1,0 +1,33 @@
+
+\starttext
+
+\startbuffer[xtable]
+  \startxrow%
+  \startxcell%
+ 	\Romannumerals{\recurselevel}%
+  \stopxcell%
+\stopxrow%
+\stopbuffer
+
+
+\newif\ifNOTEOF
+%\global\notEOFtrue
+
+
+\def\test{\ifnum\recurselevel>5\global\NOTEOFfalse\else\global\NOTEOFtrue\fi}
+
+\startxtable[option=stretch, split=yes]
+\doloop{
+\test
+\ifNOTEOF
+\getbuffer[xtable]
+\else
+\exitloop
+\fi
+}
+\stopxtable%
+
+
+
+
+\stoptext

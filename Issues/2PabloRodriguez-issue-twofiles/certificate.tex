@@ -1,0 +1,14 @@
+% No need use handlecsv.lua library, because arguments are submit by external argument "submittedargumentcA".
+% Library is necessary use, when you want write more participants on this certificate from other or the same CSV file.
+
+% certificate.tex file:
+\setuppapersize[A8, landscape]
+\setupbodyfont[helvetica, 14pt]
+\setuppagenumbering[location=]
+\setupwhitespace[big]
+\setupinteractionscreen[option=max]
+\starttext
+\startalign[middle]To Whom It Might Concern\stopalign
+
+This is to certify that \env{submittedargumentcA}\ completed the course.
+\stoptext

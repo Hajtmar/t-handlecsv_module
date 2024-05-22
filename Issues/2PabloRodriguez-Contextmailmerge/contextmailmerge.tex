@@ -1,0 +1,19 @@
+\usemodule[scancsv]
+
+\setuppapersize[C6, landscape]
+\setuppagenumbering[location=]
+
+\unexpanded\def\lineaction{
+\Name\crlf
+\Address\crlf
+\Postcode--\City\crlf
+\page
+} 
+
+\setheader 
+\setsep{;}
+\setfiletoscan{mailmergedatatable.csv}
+
+\starttext
+	\filelineaction
+\stoptext

@@ -1,0 +1,21 @@
+\usemodule[handlecsv]
+
+\startbuffer[other-languages]
+	\item \cB
+	\if!\cA!\else\exitloop\fi % If is \cA is empty then exit loop
+\stopbuffer
+
+\startbuffer[languages]
+\cA\ speaks:
+    \startitemize
+        \doloopuntil{\cA}{}{\getbuffer[other-languages]}                 
+	\doloopwhile{\cA}{}{\getbuffer[other-languages]}
+    \stopitemize
+\stopbuffer
+
+
+\starttext
+ \opencsvfile{languages01.csv}
+ \doloopif{\cA}{~=}{}{\getbuffer[languages]}
+
+\stoptext

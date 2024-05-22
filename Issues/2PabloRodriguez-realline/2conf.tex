@@ -1,0 +1,30 @@
+\definecounter[mycounter]
+
+\def\getmycounter{\incrementcounter[mycounter]\getnumber[mycounter]}
+
+\startbuffer[groups]
+    \startxrow
+    \startxcell \getmycounter\stopxcell
+    \startxcell Content of column\stopxcell
+\stopxrow
+\stopbuffer
+
+
+
+\starttext
+
+%\setcounter[mycounter][0] % initializing at this point not working (the counter is 10 more than it should be). WHY?
+
+
+
+\startxtable
+    \startxrow
+        \startxcell Column 1\stopxcell
+        \startxcell Column 2\stopxcell
+    \stopxrow
+
+\setcounter[mycounter][0] % initializing at this point works fine
+\dorecurse{5}{\getbuffer[groups]}
+\stopxtable
+
+\stoptext

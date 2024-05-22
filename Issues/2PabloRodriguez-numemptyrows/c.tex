@@ -1,0 +1,19 @@
+\usemodule[handlecsv]
+\setheader
+\opencsvfile{a.csv}
+\starttext
+\startTEXpage[offset=1em]
+\markemptylines
+non--empty: \numnotemptyrows\\
+empty: \numemptyrows\\
+total: \numrows
+
+\startbuffer[text]
+\item This is item \#\linepointer.
+\stopbuffer
+
+\startitemize
+\doloopif{\cA}{~=}{}{\getbuffer[text]}
+\stopitemize
+\stopTEXpage
+\stoptext

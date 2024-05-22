@@ -1,0 +1,155 @@
+\usemodule[annotation]
+
+
+\defineannotation
+  [result]
+  [alternative=command,
+   command=\resultCommand]
+
+\define[2]\resultCommand
+  {\result{#2}}
+
+\defineframed[result][width=local,offset=3mm,frame=on,align=yes,background=color,backgroundcolor=yellow]
+
+\setupcolor[x11]
+
+\def\typeexampleandresult[#1]#2{
+
+\blank[2*big]
+
+{\em For example following source code:}
+
+\startframedtext[width=\textwidth, frame=on, align=yes, background=color, backgroundcolor=lightgray]
+{
+\switchtobodyfont[#2]
+\typebuffer[#1]
+}
+\stopframedtext
+
+\blank[big]
+
+{\em \dots\ produces the following output result:}
+
+\blank[big]
+
+\getbuffer[#1]
+
+}
+
+
+\startbuffer[example1-cell coordinates]
+\usemodule[handlecsv]
+
+\setheader %first row contents header with columns  names
+\setsep{,} %columns separators
+\opencsvfile{myfirstcsvexamplefile.csv} %open CSV table
+
+\startresult
+Content of \type{\csvcell[1,1]} (i.e. 1st colmn, 1st row) is {\bf \csvcell[1,1]}. \crlf
+Content of \type{\csvcell[2,3]} (i.e. 2nd colmn, 3rd row) is {\bf \csvcell[2,3]}. \crlf
+Content of \type{\csvcell[9,5]} is {\bf \csvcell[9,5]}. \crlf
+Header item \type{\csvcell[3,0]} has content {\ttbf \csvcell[3,0]}.
+\stopresult 
+\stopbuffer
+
+
+
+
+\startbuffer[example2-cell coordinates]
+\startresult
+\type{\csvcell['A',1]} --> {\bf \csvcell['A',1]} \crlf
+\type{\csvcell['cA',1]} --> {\bf \csvcell['cA',1]} (library authorized version)\crlf
+\type{\csvcell['B',3]}  --> {\bf \csvcell['B',3]} \crlf
+\type{\csvcell['cI',5]} --> {\bf \csvcell['cI',5]} \crlf
+Header item \type{\csvcell['J',0]} --> {\bf \csvcell['J',0]} \crlf
+Out of range \type{\csvcell['Q',157]} --> {\bf \csvcell['Q',157]}
+\stopresult
+\stopbuffer
+
+
+
+
+\startbuffer[example3-cell coordinates]
+\startresult
+Exact notation \type{\csvcell['first_name',1]} --> {\bf \csvcell['first_name',1]} \crlf
+\TeX\ variant name \type{\csvcell['firstxname',1]} --> {\bf \csvcell['firstxname',1]} \crlf
+\stopresult
+\stopbuffer
+
+
+
+
+\startbuffer[example4-cell coordinates]
+\startresult
+Exact notation \type{\csvcell['email',5]} --> {\bf \csvcell['email',5]} \crlf
+Exact notation \type{\csvcell['phone2',10]} --> {\bf \csvcell['phone2',10]} \crlf
+\TeX\ variant name \type{\csvcell['phoneII',10]} --> {\bf \csvcell['phoneII',10]} \crlf
+\type{\csvcell['NonExistentColumn',8]} --> {\bf \csvcell['NonExistentColumn',8]}
+\stopresult
+\stopbuffer
+
+
+
+\startbuffer[example5-cell coordinates]
+\startresult%
+\def\myrow{13}
+\def\mycol{7}
+\def\mynextrow{7}
+\def\myxlscolumn{'A'}
+\def\mycxlscolumn{'cC'}
+\def\mycolumnname{'email'}
+
+\type{\csvcell[\mycol,\myrow]} --> {\bf \csvcell[\mycol,\myrow]} \crlf
+\type{\csvcell[\myxlscolumn,\mynextrow]} --> {\bf \csvcell[\myxlscolumn,\mynextrow]} \crlf
+\type{\csvcell[\mycxlscolumn,\myrow]} --> {\bf \csvcell[\mycxlscolumn,\myrow]} \crlf
+\type{\csvcell[\mycolumnname,\mynextrow]} --> {\bf \csvcell[\mycolumnname,\mynextrow]}
+\stopresult
+\stopbuffer
+
+
+
+\startbuffer[example6-cell coordinates]
+\startresult
+\dorecurse{5}{\csvcell['first_name',\recurselevel], }
+\stopresult
+\stopbuffer
+
+
+
+\startbuffer[example7-cell coordinates]
+\startresult
+Header items are \dorecurse{\numcols}{{\ttbf\csvcell[\recurselevel,0]}, }
+\stopresult
+\stopbuffer
+
+
+\startbuffer[example8-cell coordinates]
+\setuppapersize[A3,landscape][A3,landscape]
+{\catcode`\#=12 %CSV file contains # characters (i.e. TeX problematic character)
+\switchtobodyfont[10pt]
+\setupTABLE[background=color,backgroundcolor=yellow]
+\setupTABLE[row][first][background=color,backgroundcolor=lightblue]
+\bTABLE[offset=2pt, split=yes]
+ \dorecurse{\numexpr(\numrows+1)}
+ {\bTR
+   \dorecurse{\numcols}
+	 {\bTD \csvcell[\currentTABLEcolumn,\currentTABLErow-1] \eTD}
+ \eTR}
+\eTABLE}
+\stopbuffer
+
+
+\startbuffer[examplex-cell coordinates]
+\startresult
+\stopresult
+\stopbuffer
+
+\startbuffer[examplex-cell coordinates]
+\startresult
+\stopresult
+\stopbuffer
+
+\startbuffer[examplex-cell coordinates]
+\startresult
+\stopresult
+\stopbuffer

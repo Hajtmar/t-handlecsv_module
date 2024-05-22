@@ -1,0 +1,91 @@
+\usemodule[handlecsv]
+
+\def\eval#1{\directlua{context(tonumber(#1))}}
+
+\def\commatodecimal#1{\directlua{context(string.gsub('#1', "," , "."))}}
+
+
+\def\priceforallitems{%
+\ctxlua{context(tostring(tonumber(%
+[==[\commatodecimal{\columncontent['Unit Price']}]==]*[==[\commatodecimal{\columncontent['Order Quantity']}]==])))}%
+% OR [==[\commatodecimal{\UnitxPrice}]==]*[==[\commatodecimal{\OrderxQuantity}]==])))}%
+}
+
+
+\unexpanded\def\lineaction{%
+\expanded{%
+\bTR
+\bTD\columncontent['Product Name']\eTD
+\bTD\columncontent['Order Quantity']\eTD
+\bTD\commatodecimal{\columncontent['Unit Price']}\eTD 
+\bTD\priceforallitems\eTD
+\eTR%
+}%
+\eaddto\totalprice{+\priceforallitems}% ADD into 
+}
+
+\catcode`\#=12 %CSV file contains # characters (i.e. TeX problematic character)
+
+
+\setupTABLE[background=color,backgroundcolor=white, offset=3pt]
+\setupTABLE[row][first][background=color,backgroundcolor=lightgray, style=bold]
+\setupTABLE[row][last][background=color,backgroundcolor=lightgray, style=bold]
+\setupTABLE[c][1][style=\tfx]
+\setupTABLE[c][2][align=middle]
+\setupTABLE[c][3][alignmentcharacter={.}, aligncharacter=yes, align=middle]
+\setupTABLE[c][4][alignmentcharacter={.}, aligncharacter=yes, align=middle, style=\ss]
+
+
+\def\firsttableline{
+\bTR
+\bTD Product name\eTD
+\bTD Quantity\eTD
+\bTD Unit Price\eTD
+\bTD Items price\eTD
+\eTR
+}
+
+\def\lasttableline{
+\bTR
+\bTD[nc=3]TOTAL PRICE\eTD
+\bTD\eval{\totalprice}\eTD
+\eTR
+}
+
+
+
+\starttext
+
+\setheader 
+\setsep{;}  
+\opencsvfile{superstore_sales_smalltable.csv}
+
+
+\title{Using \type{\dorecurse} cycle}
+
+\def\totalprice{0}
+
+
+\bTABLE[split=yes]
+\firsttableline
+\dorecurse{\numrows}{
+	\setlinepointer{\recurselevel}
+	\lineaction
+}
+\lasttableline
+\eTABLE
+
+
+
+
+\title{Using \type{\filelineaction} cycle}
+
+\def\totalprice{0}
+
+\bTABLE[split=yes]
+\firsttableline
+\filelineaction
+\lasttableline
+\eTABLE
+
+\stoptext

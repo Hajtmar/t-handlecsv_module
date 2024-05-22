@@ -1,0 +1,112 @@
+    \setuppagenumbering[location=]
+    \usemodule[scancsv]
+
+
+\def\readnthline#1{%
+\startluacode
+% context(thirddata.scancsv.gFile2Scan)
+local numrowscorrection=0
+local iter = io.lines(thirddata.scancsv.gFile2Scan)
+local numrows = thirddata.scancsv.getnumrows(thirddata.scancsv.gFile2Scan)
+
+if thirddata.scancsv.gCSVHeader then 
+	numrowscorrection=-1 	
+end
+local numlineparametr=tonumber('#1'+numrowscorrection)
+local line = ""
+if numrows>numlineparametr then
+for i=0, numlineparametr do
+    if not iter() then error 'sss'    
+    end
+end
+line = iter()
+context(line)
+end
+context(numrows.." Počet")
+\stopluacode
+}
+
+    \unexpanded\def\lineaction{
+		\previousName -- \Name\crlf
+		
+		-
+		
+		\nextrow
+		
+		\previousName -- \Name\crlf
+    
+		------
+		
+		}
+
+
+    
+    \setsep{;}
+       
+    \starttext
+    
+    \setheader
+    \opencsvfile{dates-table.csv}
+
+		SETHEADER - hlavička existuje:
+
+    2. \readnthline{2}
+    
+		1. \readnthline{1}
+		
+		0. \readnthline{0}
+		
+		11. \readnthline{11}
+		
+		3. \readnthline{3}
+		
+		4. \readnthline{4}
+		
+		7. \readnthline{7}
+		
+		5. \readnthline{5}
+	
+	Změna:
+	
+	RESETHEADER - hlavička neexistuje:
+		
+		\resetheader
+		\opencsvfile{dates-table2.csv}
+		
+		2. \readnthline{2}
+    
+		1. \readnthline{1}
+		
+%		0. \readnthline{0}
+		
+		11. \readnthline{11}
+		
+		3. \readnthline{3}
+		
+		4. \readnthline{4}
+		
+		7. \readnthline{7}
+		
+		5. \readnthline{5}
+		
+		
+          %\filelineaction
+          
+%        \dorecurse{3}{
+%        \previousName -- \Name\crlf
+%        \nextrow xxx
+% 			 \previousName -- \Name\crlf
+% 			 \nextrow
+% 			 }   
+
+
+
+
+
+
+    \stoptext
+
+
+file = assert(io.open("dates-table.csv", "r"))
+for line in file:lines() do context(line) end
+file:close()

@@ -1,0 +1,67 @@
+\startcomponent _manual_buffers-examples
+
+
+
+\startbuffer[example.1]
+
+\usemodule[handlecsv]  % this command load module into my source code
+\setheader % set a header flag i.e. CSV file has header in first line
+\setsep{,} % change settings of default separator (this is ; semicolon) 
+
+\opencsvfile{myfirstcsvexamplefile.csv}
+
+\unexpanded\def\sampleaction{%
+\catcode`\#=12
+\item \numline -- \csvcell['A',\linepointer]
+}
+
+
+\dorecurse{\numrows}
+{\numline - \csvcell['first_name',\recurselevel]
+\nextline\nextnumline\crlf
+}
+
+\startitemize[n]
+\doloopaction{\sampleaction}
+\stopitemize
+
+%\filelineaction
+
+
+\stopbuffer
+
+
+\startbuffer[example.makronames]
+
+\usemodule[handlecsv]  % this command load module into my source code
+\setheader % set a header flag i.e. CSV file has header in first line
+\setsep{,} % change settings of default separator (this is ; semicolon) 
+
+\opencsvfile{myfirstcsvexamplefile.csv}
+
+% {\catcode`\#=12
+% {\dorecurse{\numcols}{\numline: \xlscolname[\recurselevel] -- \columncontent[\recurselevel]\crlf}}
+% }
+
+
+\def\onerow#1{\readline{#1} {\dorecurse{\numcols}{\lineno: \xlscolname[\recurselevel] -- \columncontent[\recurselevel]\crlf}}}
+
+
+\resetlinepointer
+
+\onerow{1}
+
+\onerow{5}
+
+
+
+
+% {\catcode`\#=12
+% \dorecurse{\numcols}{\numline: \readline \xlscolname[\recurselevel] -- \columncontent[\recurselevel]\crlf}
+% }
+
+\stopbuffer
+
+
+
+\stopcomponent

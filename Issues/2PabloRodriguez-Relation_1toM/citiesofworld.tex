@@ -1,0 +1,15 @@
+\usemodule[scancsv]
+
+\unexpanded\def\lineaction{%
+\executesystemcommand{context --purgeall --result=citiesofworld-\Abbrev.pdf --arguments="CountryAbbrev=\Abbrev, Country=\Country" cities}%
+\startTEXpage
+	\externalfigure[citiesofworld-\Abbrev.pdf]
+\stopTEXpage
+\page
+}
+
+\starttext
+\setheader
+\opencsvfile{selectedcountries.csv}
+\filelineaction
+\stoptext

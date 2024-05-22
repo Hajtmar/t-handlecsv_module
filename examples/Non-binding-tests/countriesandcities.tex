@@ -1,0 +1,150 @@
+\usemodule[handlecsv]
+%
+%\setupTABLE[split=yes,location={middle,lohi}, height=4.5mm]
+%\setupTABLE[row][first][background=color,backgroundcolor=gray,foregroundcolor=black,height=8mm, align={middle,lohi}]
+%\setupTABLE[row][last][background=color,backgroundcolor=gray,foregroundcolor=black,height=8mm,align={middle,lohi}]
+%\setupTABLE[c][1][background=color,backgroundcolor=gray,align=middle, width=7mm]
+%\setupTABLE[c][2][align={right, lohi}, width=4cm]
+%\setupTABLE[c][3][align={middle, lohi}, width=2.5cm]
+%\setupTABLE[c][4][align={right, lohi}, width=7cm]
+%
+%
+%
+%  
+%\startbuffer[tableaction]
+%\expanded{\bTR\bTD\SerNum\eTD\bTD\Name\eTD\bTD\Population\eTD\bTD\Altitude\eTD\eTR}%
+%\stopbuffer
+%
+%
+%
+%\startbuffer{xxx}
+%\bTABLE
+%\bTR\bTD\ssx SerNum \eTD\bTD\ssx Name\eTD\bTD\ssx Population\eTD\bTD\ssx Altitude\eTD\eTR
+%
+%\bTR\bTD-- \eTD\bTD\ssx -- \eTD\bTD -- \eTD\bTD -- \eTD\eTR
+%\eTABLE
+%
+%\page[no]	
+%
+%\stopbuffer
+%
+
+
+  
+\starttext
+
+\setheader
+\opencsvfile{cities.csv}
+\opencsvfile{countries.csv}
+
+
+  	
+\blank[big]
+
+\startitemize[n]
+\dorecurse{\numrowsof[countries.csv]}{%
+\edef\abbrevcountry{\getcsvcellof[countries.csv]['Abbrev',\recurselevel]}%
+\item {\bf \getcsvcellof[countries.csv]['Country',\recurselevel]}
+\startitemize[n]
+\dorecurse{\numrowsof[cities.csv]}%
+{\doifelse{\getcsvcellof[cities.csv]['CountryAbbrev',\recurselevel]}{\abbrevcountry}{\item \getcsvcellof[cities.csv]['Name',\recurselevel] }{}% %\if\abbrevcity\recurselevel: \getcsvcellof[cities.csv]('Name',\recurselevel)\fi	
+}%
+\stopitemize
+\blank[big]
+}%
+\stopitemize
+
+
+
+\stoptext
+
+
+
+%\if\getcsvcellof[countries.csv]('Abbrev',\recurselevel]\getcsvcellof[cities.csv]('CountryAbbrev',] \CountryAbbrev\CountryAbbrev\tableaction\fi
+%\doloopif{\CountryAbbrev}{==}{\env{CountryAbbrev}}{\tableaction}
+
+
+\getcsvcellof[letters.csv][1,5]
+
+\getcsvcellof[letters.csv]['A',5]
+
+\getcsvcellof[numbers.csv][1,9]
+
+\hairline 
+
+\setsep{,}
+\setheader
+\opencsvfile{lide.csv}
+
+
+1: \getcsvcellof[lide.csv][1,9]
+
+A: \getcsvcellof[lide.csv]["A",9]
+
+cA: \getcsvcellof[lide.csv]["cA",9]
+
+Lastname: \getcsvcellof[lide.csv]["Lastname",9]
+
+Last name: \getcsvcellof[lide.csv]["Last name",9]
+
+Lastxname: \getcsvcellof[lide.csv]["Lastxname",9]
+
+
+Fitstname: \getcsvcellof[lide.csv]["Firstname",9]
+
+Firstxname: \getcsvcellof[lide.csv]["Firstxname",9]
+
+\dorecurse{\numrows[lide.csv]}{\getcsvcellof[lide.csv]["Lastname",\recurselevel]}
+
+
+\dorecurse{\numrows[numbers.csv]}{\getcsvcellof[numbers.csv]["B",\recurselevel]}
+
+xxx 
+
+\dorecurse{\numrows[lide.csv]}{\recurselevel. \getcsvcellof[numbers.csv][1,\recurselevel] -- \getcsvcellof[numbers.csv]['B',\recurselevel] -- \getcsvcellof[numbers.csv]['C',\recurselevel] -- \getcsvcellof[numbers.csv][7,\recurselevel]\crlf }
+
+xxx 
+
+
+\dorecurse{\numrows[letters.csv]}{\getcsvcellof[letters.csv]["B",\recurselevel]}
+
+\dorecurse{\numrows[letters.csv]}{\getcsvcellof[letters.csv][2,\recurselevel]}
+
+
+
+
+numrows lide.csv: \numrows[lide.csv]
+
+numcols lide.csv: \numcols{lide.csv}
+
+numrows numbers.csv: \numrows[numbers.csv]
+
+numcols numbers.csv: \numcols{numbers.csv}
+
+numrows letters.csv: \numrows[letters.csv]
+
+numcols letters.csv: \numcols{letters.csv}
+
+numcols: \numcols
+
+
+\stoptext
+
+
+
+
+
+\midaligned{\ssb List of biggest cities of \env{Country} (\env{CountryAbbrev})}
+
+\blank[big]
+
+\setheader 
+\opencsvfile{cities.csv}
+
+\bTABLE
+\bTR\bTD\ssx SerNum \eTD\bTD\ssx Name\eTD\bTD\ssx Population\eTD\bTD\ssx Altitude\eTD\eTR
+\doloopif{\CountryAbbrev}{==}{\env{CountryAbbrev}}{\tableaction}
+\bTR\bTD-- \eTD\bTD\ssx -- \eTD\bTD -- \eTD\bTD -- \eTD\eTR
+\eTABLE
+
+\page[no]	

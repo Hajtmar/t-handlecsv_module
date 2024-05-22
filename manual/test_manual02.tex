@@ -1,0 +1,520 @@
+% Možnosti získávání údajů z CSV tabulky pomocí maker
+% \cA, \cB, .... a odpovídající \Firstname, \Lastname atd...
+% \csvcell['',radek] - univerzální přístu k informacím ...
+% \columncontent['sloupec']
+% \colA, \colB, ... resp \colA[5], \colB[7],....atd...
+% \colFirstname, \colFirstname[11]
+
+
+
+\def\foo{XXXX}
+
+\usemodule[handlecsv-test]
+% \usemodule[handlecsv-tools]
+
+%\setuppapersize[A0]
+%\setuplayout[A0]
+
+\starttext
+
+
+\setheader % set a header flag i.e. CSV file has header in first line
+\setsep{,} % change settings of default separator (this is ; semicolon) 
+\opencsvfile{myfirstcsvexamplefilewithoutheader.csv}
+\opencsvfile{myfirstcsvexamplefile1.csv}
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+\startluacode
+local pocet=#thirddata.handlecsv.gColumnNames
+context('Počet je: ')
+context(pocet)
+
+local keyset={}
+local n=0
+
+for k,v in pairs(thirddata.handlecsv.gColNames) do
+  n=n+1
+  keyset[n]=k
+end
+
+table.sort(keyset)
+
+for i=1,n do
+context(''..keyset[i]..', ')
+end
+
+
+context('\\crlf')
+
+for i=1,#thirddata.handlecsv.gColumnNames do
+context('\\backslash '..thirddata.handlecsv.gColumnNames[i]..', ')
+end
+    
+\stopluacode
+
+
+
+
+
+Column names:
+
+\dorecurse{\numcols}{\colname[\recurselevel] -- \xlscolname[\recurselevel] -- \cxlscolname[\recurselevel] -- \texcolname[\recurselevel]\crlf }
+
+
+ Available macros:
+  
+\dorecurse{\numcols}{\backslash columncontent['\colname[\recurselevel]'] -- \xlscolname[\recurselevel] -- \cxlscolname[\recurselevel] -- \texcolname[\recurselevel]\crlf }
+
+sss
+
+
+\cA, \csname cA\endcsname \csname first_name\endcsname
+
+ss
+
+First names:
+
+\dorecurse{\numrows}{
+\columncontent['first_name'] \nextrow \crlf
+}
+
+Column contents:
+
+\dorecurse{\numcols}{
+\texcolname[\recurselevel]
+\edef\namea{'\texcolname[\recurselevel]'}
+\columncontent[\namea]
+\columncontent[\recurselevel] \nextrow \crlf
+}
+
+
+Zajímavý obrat:
+
+\dorecurse{\numcols}{
+Name of column \recurselevel is \colname[\recurselevel]. Content of this column is \columncontent[\recurselevel]. Content this column by other metod is \edef\texname{'\texcolname[\recurselevel]'} -- \columncontent[\texname]. Serial number of column is \indexcolname[\texname].\crlf 
+}
+
+
+
+Stepping
+\resetlinepointer
+
+1. \columncontent[1] \nextrow \crlf
+2. \columncontent['1'] \nextrow \crlf
+3. \columncontent['firstxname'] \nextrow \crlf
+4. \columncontent['first_name'] \nextrow \crlf
+5. \columncontent['firstxname'] \nextrow \crlf
+6. \columncontent['cA'] \nextrow \crlf
+7. \columncontent['A'] \nextrow \crlf
+
+
+Other Steppings:
+
+\setheader % set a header flag i.e. CSV file has header in first line
+\setsep{,} % change settings of default separator (this is ; semicolon) 
+\opencsvfile{myfirstcsvexamplefile1.csv}
+%\opencsvfile{myfirstcsvexamplefilewithoutheader.csv}
+
+\readline
+
+\enablemode[XXX]
+0. \cA -- \firstxname
+
+
+
+
+1. \linepointer -- \colA -- \colA[11] -- \colfirstxname -- \colfirstxname[11] -- \columncontent[4]\nextrow\crlf
+2. \linepointer -- \colA -- \colA[11] -- \colfirstxname -- \colfirstxname[11]  -- \columncontent[4] \nextrow\crlf
+3. \linepointer -- \colA -- \colA[11] -- \colfirstxname -- \colfirstxname[11] -- \columncontent[4]\nextrow\crlf
+
+\cA -- \firstxname
+
+
+
+
+Cykly:
+
+\dorecurse{\numrows}{%  
+	rl: \recurselevel\setlinepointer{\recurselevel}: 
+	1. \colfirstxname[\recurselevel] --
+	2. \firstxname -- 
+	3. \colcity[\recurselevel] --	
+	4. \city --  
+	5. \columncontent[5] -- 
+	6. \columncontent['city']
+	\crlf}
+
+
+\unexpanded\def\lineaction{
+1. \linepointer --
+  2. \firstxname -- 	
+	4. \city --  
+	5. \columncontent[5] -- 
+	6. \columncontent['city']
+\crlf
+}
+
+
+FLA:
+
+\filelineaction
+
+
+
+
+\title{Tabulkové použití} 
+
+% Nyní ukázky použití v tabulkovém režimu. Toto použití vyžaduje expanzi uvnitř prostředí \bTABLE ... \eTABLE
+% nebo použití jiných maker ... 
+
+
+\unexpanded\def\lineaction{\expanded{\bTR\bTD\cA\eTD\bTD\columncontent['Jmeno'] -- \colJmeno[6] -- \colJmeno \eTD\bTD\Prijmeni\eTD\eTR}}
+\unexpanded\def\tab{\expanded{\bTR\bTD\cA - \colJmeno\eTD\bTD\colJmeno\eTD\bTD\Prijmeni\eTD\eTR}}
+\unexpanded\def\xtab{\expanded{\bTR\bTD\cA - \colJmeno\eTD\bTD\colJmeno\eTD\bTD\Prijmeni\eTD\eTR}}
+\unexpanded\def\tableaction{\expanded{\bTR\bTD\cA\eTD\bTD\colJmeno\eTD\bTD\Prijmeni\eTD\eTR}}
+\unexpanded\def\xtableaction{\expanded{\bTR\bTD\cA\eTD\bTD\colJmeno\eTD\bTD\Prijmeni\eTD\eTR}}
+
+
+\setheader
+\opencsvfile{../lisajdb1a.csv}
+
+
+
+\startitemize[n]
+\sym{T1}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+	\doloopaction %OK implicitně používá \lineaction 
+						%\doloopaction{\tab} %NOK - bez kompilační chyby, ale vypisuje všechny stejné záznamy
+						%\doloopaction{\tab}{4} %NOK - bez kompilační chyby, ale vypisuje všechny stejné záznamy
+						%\doloopaction{\tab}{2}{5} %NOK - bez  kompilační chyby, ale vypisuje všechny stejné záznamy  
+										%\doloopaction{\xtab} %KIKS - kompilace končí zastavením a chybou (nesnáší \expanded ???)
+						%\doloopforall{\tab}  %NOK - bez kompilační chyby, ale vypisuje všechny stejné záznamy
+\eTABLE
+
+
+
+\sym{T2}\par
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+\doloopfromto{3}{7}{\lineaction}
+\eTABLE
+
+
+\sym{T3}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+	\doloopforall{\tab}  %OK
+	\doloopif{Jan}{==}{\Jmeno}{\tab} %NOK - bez  kompilační chyby, ale vypisuje všechny stejné záznamy
+\eTABLE
+
+
+\sym{T4}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+	\doloopif{Jan}{~=}{\Jmeno}{\tab} %NOK - bez  kompilační chyby, ale vypisuje všechny stejné záznamy
+\eTABLE
+
+
+
+\sym{T5}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+	\doloopif{Jan}{==}{\Jmeno}{\tab} %OK	
+	\doloopuntil{\Jmeno}{Ondřej}{\tab} %OK
+\eTABLE
+
+
+\sym{T6}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+	\doloopif{Jan}{~=}{\Jmeno}{\tab} %OK	
+\eTABLE
+
+
+\sym{T7}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+	\doloopuntil{\Jmeno}{Jan}{\tab} %OK
+	\dorecurse{5}{\tab\nextrow} %NOK - bez  kompilační chyby, ale vypisuje všechny stejné záznamy
+\eTABLE
+	
+\sym{T8}\par
+\opencsvfile	
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+	\dorecurse{5}{\xtab\nextrow} %OK	
+\eTABLE
+
+
+\sym{T9}\par
+\opencsvfile	
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+	\doloop{\lineaction\nextrow\ifnum\numline>7\exitloop\fi} %OK
+\eTABLE
+
+\sym{T10}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+	\doloop{\xtab\nextrow\ifnum\numline>7\exitloop\fi} %OK	
+	\doloop{\tab\nextrow\ifnum\numline>7\exitloop\fi} %NOK - bez  kompilační chyby, ale vypisuje všechny stejné záznamy
+	\doloop{\tab\nextrow\ifnum\numline>7\exitloop\fi} %NOK - bez  kompilační chyby, ale vypisuje všechny stejné záznamy
+\eTABLE
+
+\sym{T11}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+	\doloop{\xtab\nextrow\ifnum\numline>7\exitloop\fi} %OK	
+\eTABLE
+
+\sym{T12}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+	\doloop{\ifEOF\exitloop\else\lineaction\nextrow\fi} %OK
+\eTABLE
+
+\sym{T13}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+	\doloop{\lineaction\nextrow\if\Id3\exitloop\fi} %OK
+\eTABLE	
+
+\stopitemize
+
+
+	
+\unexpanded\def\lineaction{\expanded{\bTR\bTD\cA\eTD\bTD\colJmeno\eTD\bTD\Prijmeni\eTD\eTR}}	
+
+
+
+\startitemize[n]
+
+\sym{T14}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+	\doloopaction %OK provádí implicitně makro \lineaction pro všechny záznamy otevřeného CSV souboru uvnitř tabulky (netřeba \expanded) 
+\eTABLE
+	
+\sym{T15}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR	
+	\doloopaction{\lineaction} %OK stejné jako předchozí ... makro \lineaction zadáno explicitně (netřeba \expanded)
+\eTABLE
+	
+\sym{T16}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+	\doloopaction{\tab} %OK provede makro \tab pro všechny záznamy otevřeného CSV souboru uvnitř tabulky (netřeba \expanded)
+									%\tdoloopaction{\xtab} %KIKS - nefunguje dobře, není chyba kompilace (problém s \expanded???)
+\eTABLE
+
+\sym{T17}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR	
+	\doloopaction{\tab}{3} %OK provede makro \tab pro záznamy 1-3 otevřeného CSV souboru uvnitř tabulky (netřeba \expanded)
+\eTABLE
+
+	
+\sym{T18}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR	
+	\doloopaction{\tab}{3}{6}  %OK provede makro \tab pro záznamy 3-6 otevřeného CSV souboru uvnitř tabulky (netřeba \expanded)
+ \eTABLE
+
+	
+\sym{T19}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR 
+  \doloopforall %OK ... ekvivalentní \tdoloopaction - udělá \lineaction pro všechny záznamy (netřeba \expanded)
+\eTABLE
+	
+\sym{T20}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+	\doloopforall{\tab} %OK ... ekvivalentní \tdoloopaction - udělá \tab pro všechny záznamy (netřeba \expanded)
+\eTABLE
+	
+\sym{T21}\par
+
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR  
+	\doloopif{\Jmeno}{==}{Jan}{\tab} %OK provede makro \tab pro všechny záznamy CSV souboru, které vyhovují podmínce tj. rovnost prvních dvou parametrů (netřeba \expanded)
+\eTABLE
+
+\sym{T22}\par
+
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR  
+	\doloopif{\Jmeno}{~=}{Jan}{\tab} %OK provede makro \tab pro všechny záznamy CSV souboru, které vyhovují podmínce tj. rovnost prvních dvou parametrů (netřeba \expanded)
+\eTABLE
+
+	
+\sym{T23}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR	
+  \doloopuntil{\Jmeno}{Slávek}{\tab} %OK provede makro \tab pro všechny záznamy CSV souboru, které vyhovují podmínce tj. rovnost prvních dvou parametrů (netřeba \expanded)
+\eTABLE
+	
+\sym{T24}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR  
+	\filelineaction %OK provede makro \lineaction pro všechny záznamy otevřeného CSV souboru (netřeba \expanded)
+\eTABLE
+	
+\sym{T25}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+  \filelineaction{../lisajdb1a.csv} %OK provede makro \lineaction pro všechny záznamy CSV souboru lisajdb1a.csv (netřeba \expanded)
+\eTABLE
+	
+\sym{T26}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+  \filelineaction{../lisajdb2a.csv}{4} %OK provede makro \lineaction pro záznamy 1-4 CSV souboru lisajdb2a.csv  (netřeba \expanded)
+\eTABLE
+	
+\sym{T27}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+	\filelineaction{../lisajdb2a.csv}{4}{6} %OK provede makro \lineaction pro záznamy 4-6 CSV souboru lisajdb2a.csv  (netřeba \expanded)
+\eTABLE
+	
+\sym{T28}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+	\filelineaction %OK ... ekvivalentní \tdolooplineaction - provádí \lineaction pro všechny záznamy otevřeného CSV souboru 
+\eTABLE
+	
+\sym{T29}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+	\filelineaction{../lisajdb1a.csv}
+\eTABLE
+	
+\sym{T30}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+	\filelineaction{../lisajdb1a.csv}{4}
+\eTABLE
+	
+\sym{T31}\par
+\opencsvfile
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+	\filelineaction{../lisajdb1a.csv}{3}{7}
+\eTABLE
+	
+\stopitemize
+
+
+ %\printline
+ 
+ %\printall
+ 
+ %\csvreport 
+  
+\page 
+
+
+\opencsvfile{../lisajdb2a.csv}
+
+%\printline
+
+%\printall
+
+%\csvreport 
+
+
+
+\bTABLE
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
+	\filelineaction{../lisajdb2a.csv}{3}{7}
+\eTABLE
+
+
+
+\stoptext
+
+
+
+
+\startluacode
+    interfaces.setmacro("foo","bar")
+\stopluacode
+
+\foo
+
+\start
+\startluacode
+    interfaces.setmacro("foo","foo","global")
+\stopluacode
+\stop
+
+\foo

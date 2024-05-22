@@ -1,0 +1,62 @@
+\setuppapersize[A4][A4]    
+
+\setuppagenumbering[state=stop]% , alternative=doublesided]
+\setuplayout[
+	backspace=0mm,  
+	leftmargin=0mm, % Nenastavovat!!!
+	width=middle, % Nenastavovat!!!
+	rightmargin=0mm, % Nenastavovat!!!
+	cutspace=0mm,
+	topspace=0mm, 
+	headerdistance=0mm, % Nenastavovat!!! 
+	header=0mm, % Nenastavovat!!!
+	height=middle, % Nenastavovat!!!
+	footerdistance=0mm, % Nenastavovat!!!
+	footer=0mm, % Nenastavovat!!!
+	bottomspace=0.01mm, %!!!! Pokud nastavím přímo 0mm, tak se použije pro bottomspace hodnota topspace
+	location=middle,
+]
+
+\newcount\countofhor
+\newcount\countofvert
+\newdimen\distancebetweencards
+\newdimen\distancecelkem
+\newdimen\cardwidth
+\newdimen\cardheight
+
+
+
+\countofhor=1 % hodnota potřebná pro luaskript, když není nastavena, tiskne se automaticky
+\countofvert=4 % hodnota potřebná pro luaskript
+\distancebetweencards=1mm
+
+
+\cardheight=\dimexpr(\makeupheight/\countofvert)
+\cardheight=\dimexpr(\cardheight - \dimexpr(0.5mm))
+\cardwidth=\dimexpr((\makeupwidth-\dimexpr(\distancebetweencards)*(\countofhor-1))/\countofhor)
+
+\setupcolors[state=start]    % Zapne používání barev.
+
+% Kompilace - minimals
+\usemodule[handlecsv] % Kompilace pomocí ConTeXtu ala TeXLive 2011
+\setheader
+\opencsvfile{tickets.csv}
+
+\defineoverlay[pozadifront][{\externalfigure[empty_ticket.pdf][width=\cardwidth,height=\cardheight, frame=off]}]
+
+\unexpanded\def\lineaction{%
+\framed[height=\cardheight, width=\cardwidth,background={pozadifront}, frame=off]{%
+\setuppositioning[unit=mm, xoffset=-5mm, yoffset=13mm]
+\startpositioning
+{\position(0,0){\framed[width=1.5cm, frame=off, align=middle]{\ss\bf\Rada.}}}
+{\position(140,0){\framed[width=1.5cm, frame=off, align=middle]{\ss\bf\Rada.}}}
+{\position(0,8){\framed[width=1.5cm, frame=off, align=middle]{\ss\bf\Sedadlo}}}
+{\position(140,8){\framed[width=1.5cm, frame=off, align=middle]{\ss\bf\Sedadlo}}}
+\stoppositioning}
+} 
+
+
+
+\starttext%
+ 	\filelineaction{tickets.csv}
+\stoptext

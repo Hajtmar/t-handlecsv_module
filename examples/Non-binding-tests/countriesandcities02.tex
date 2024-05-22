@@ -1,0 +1,158 @@
+%\usemodule[handlecsv] % use new module
+\usemodule[handlecsv] % use new module
+%\usemodule[handlecsvcells] % use new module
+%\usemodule[handlecsvcellsold] % use new module
+
+
+\setupTABLE[split=yes,location={middle,lohi}, style=\ssx]
+\setupTABLE[row][first][background=color,backgroundcolor=gray,foregroundcolor=black,height=8mm, align={middle,lohi}]
+\setupTABLE[row][last][background=color,backgroundcolor=gray,foregroundcolor=black,height=8mm,align={middle,lohi}]
+\setupTABLE[c][1][background=color,backgroundcolor=gray,align=middle, width=15mm,style=\ssxx]
+\setupTABLE[c][2][width=4cm,style=\ssxx]
+\setupTABLE[c][3][width=2.5cm,style=\ssxx]
+\setupTABLE[c][4][width=7cm,style=\ssxx]
+
+
+\def\Name{\getcsvcellof[cities.csv]['Name',\recurselevel]} 
+\def\SerNum{\getcsvcellof[cities.csv]['SerNum',\recurselevel]}
+\def\Population{\getcsvcellof[cities.csv]['Population',\recurselevel]}
+\def\Altitude{\getcsvcellof[cities.csv]['Altitude',\recurselevel]}
+\def\numcountries{\numrowsof[selectedcountries.csv]}
+\def\numcities{\numrowsof[cities.csv]}
+
+  
+\startbuffer[tableaction]
+\expanded{\bTR\bTD\SerNum \eTD\bTD\Name \eTD\bTD\Population\eTD\bTD\Altitude\eTD\eTR}%
+\stopbuffer
+
+  
+\starttext
+
+\title{Example of together using of two opened CSV files at the same time}
+
+CSV file \type{selectedcountries.csv} consist of information about countries, file \type{cities.csv} consist of information about cities.
+Relation is mediated through the country abbreviation field \type{Abbrev}  (in \type{selectedcountries.csv}) and field \type{CountryAbbrev} (in \type{cities.csv} file).
+
+\blank[big]
+
+% Open two CSV files at one time together
+\setheader
+\opencsvfile{cities.csv}
+
+
+\readlineof[cities.csv]{5}
+
+xxx
+
+\cA
+
+zzzz
+
+\readline
+\cA
+
+xxx
+
+\readline{5}
+\cA, \cB, \cC
+
+zzz
+
+\resetlinepointer
+\cA
+
+\cB
+
+\opencsvfile{selectedcountries.csv}
+
+\cA
+ 
+ \getcsvcellof[selectedcountries.csv]['Abbrev',5]
+
+
+\getcsvcellof[cities.csv]['CountryAbbrev',7]
+
+\cB
+
+
+
+Numcities \numcities
+
+Numcountries: \numcountries
+
+\opencsvfile{selectedcountries.csv}
+
+\opencsvfile{cities.csv}
+
+1111111
+\readlineof[cities.csv]{5}
+\cA, \cB, \cC
+
+222222
+
+\readlineof[selectedcountries.csv]{5}
+\cA, \cB, \cC
+
+3333333
+
+\opencsvfile{cities.csv}
+\readline{7}
+\cA, \cB, \cC
+
+
+
+qqqqq
+
+
+\directlua{context(thirddata.handlecsv.getcurrentcsvfilename())}
+
+
+\directlua{context(thirddata.handlecsv.gCurrentlyProcessedCSVFile,"xxx")}
+
+qqqq
+
+\opencsvfile{selectedcountries.csv}
+
+%\readlineof[,5]
+
+\cA, \cB, \cC
+
+\setcurrentcsvfile[cities.csv]
+
+\dorecurse{\numcountries}{ % For all countries from selectedcountries.csv file DO:
+   \edef\abbrevcountry{\getcsvcellof[selectedcountries.csv]['Abbrev',\recurselevel]}
+
+	{\bf Cities of \getcsvcellof[selectedcountries.csv]['Country',\recurselevel]:}
+	\resetlinepointerof[cities.csv]
+
+	\blank[big]
+
+	\bTABLE
+	\bTR\bTD Id \eTD\bTD Name\eTD\bTD Population\eTD\bTD Altitude\eTD\eTR
+	 \resetlinepointer
+		\dorecurse{\numcities}{% For all cities
+			%\doifelse{\getcsvcell[cities.csv]['CountryAbbrev',\recurselevel]}{\abbrevcountry}{\getbuffer[tableaction] }{} % if city is in country then write it, else nothing
+			\expdoif{\getcsvcellof[cities.csv]['CountryAbbrev',\recurselevel]}{\abbrevcountry}{\getbuffer[tableaction] } % if city is in country then write it, else nothing
+		\nextrow
+		}
+	\bTR\bTD-- \eTD\bTD\ssx -- \eTD\bTD -- \eTD\bTD -- \eTD\eTR
+	\eTABLE
+	\blank[big]
+}
+
+
+\hairline
+\opencsvfile{selectedcountries.csv}
+
+%\cA
+ 
+ \getcsvcellof[selectedcountries.csv]['Abbrev',5]
+
+
+\getcsvcellof[cities.csv]['CountryAbbrev',7]
+
+%\cB
+
+
+
+\stoptext

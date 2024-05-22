@@ -1,0 +1,608 @@
+\usemodule[handlecsv] % use new module
+
+  
+\starttext
+
+\setheader
+
+
+\opencsvfile{cities.csv}
+
+\opencsvfile{selectedcountries.csv}
+
+\opencsvfile{selectedcountries.csv}
+
+\opencsvfile{selectedcountries.csv}
+
+\opencsvfile{cities.csv}
+
+\opencsvfile{superstore_sales_smalltable.csv}
+
+\opencsvfile{cities.csv}
+
+\opencsvfile{superstore_sales_smalltable.csv}
+
+\type{\setcurrentcsvfile{selectedcountries.csv}} \setcurrentcsvfile[selectedcountries.csv]   %- stejné jako \setfiletoscan{cities.csv}
+
+\type{\numrows:} \numrows
+
+\type{\numrowsof[selectedcountries.csv]:} \numrowsof[selectedcountries.csv]
+
+\type{\numrowsof[cities.csv]:} \numrowsof[cities.csv]
+
+
+\type{\numcols:} \numcols
+
+gNumCols selectedcountries.csv:  \ctxlua{context(thirddata.handlecsv.gNumCols['selectedcountries.csv'])}
+
+gNumCols selectedcountries.csv:  \ctxlua{context(thirddata.handlecsv.gNumCols['cities.csv'])}
+
+handlecsv.handlecsvfilename()):  \ctxlua{context(thirddata.handlecsv.setgetcurrentcsvfile())}
+
+
+\type{\numcolsof[selectedcountries.csv]:} \numcolsof[selectedcountries.csv]
+
+\type{\numcolsof[cities.csv]:} \numcolsof[cities.csv]
+
+\type{\linepointer \csvfilename} \csvfilename -- \linepointer 
+
+\hairline
+
+\type{\setfiletoscan{cities.csv}} \setfiletoscan{cities.csv}  %- stejné jako \setcurrentcsvfile{cities.csv}
+%\opencsvfile
+
+\type{\numrows:} \numrows
+
+\type{\numrowsof[selectedcountries.csv]:} \numrowsof[selectedcountries.csv]
+
+\type{\numrowsof[cities.csv]:} \numrowsof[cities.csv]
+
+\type{\numcols:} \numcols
+
+\type{\numcolsof[selectedcountries.csv]:} \numcolsof[selectedcountries.csv]
+
+\type{\numcolsof[cities.csv]:} \numcolsof[cities.csv]
+
+\type{\linepointer \csvfilename} \csvfilename -- \linepointer 
+
+\hairline
+
+
+
+\type{\numcols:} \numcols
+
+
+\type{\csvfilename:} \csvfilename
+
+
+
+\type{\citiescA:} \citiescA
+
+\type{\cA, \cB, \cC:} \cA, \cB, \cC
+
+\type{\linepointer \csvfilename} \csvfilename -- \linepointer 
+
+\type{\nextrow: } \nextrow
+
+\type{\cA, \cB, \cC:} \cA, \cB, \cC
+
+\type{\linepointer \csvfilename} \csvfilename -- \linepointer 
+
+\type{\readline} \readline
+
+\type{\cA, \cB, \cC:} \cA, \cB, \cC
+
+\type{\readline[selectedcountries.csv]} \readline[selectedcountries.csv]
+
+\type{\nextrow: } \nextrow
+
+\type{\cA, \cB, \cC:} \cA, \cB, \cC
+
+\type{\linepointer \csvfilename} \csvfilename -- \linepointer 
+
+\type{\nextline: } \nextline
+
+\type{\cA, \cB, \cC:} \cA, \cB, \cC
+
+
+
+
+\dorecurse{\numrows}{
+\recurselevel -- \linepointer
+}
+
+\hairline
+
+selectedcountries.csv : \numrowsof[selectedcountries.csv]
+
+%\resetlinepointerof[selectedcountries.csv]
+
+\opencsvfile{cities.csv}
+
+\dorecurse{\numrowsof[selectedcountries.csv]}
+{
+
+ \recurselevel -- \linepointerof[selectedcountries.csv] 
+
+%\setlinepointerof[selectedcountries.csv]
+
+linepointer: \ctxlua{context(thirddata.handlecsv.gCurrentLinePointer['selectedcountries.csv'])}
+
+numrows: \ctxlua{context(thirddata.handlecsv.gNumRows['selectedcountries.csv'])}
+
+COUNTRIES
+
+cA \cA -- colA  \colA -- colA recurselevel \colA[\recurselevel]\crlf 
+cB \cB -- colB \colB -- colB recurselevel \colB[\recurselevel]\crlf 
+cC \cC -- colC \colC -- colC recurselevel \colC[\recurselevel]
+
+\edef\CA{\cA}
+\edef\COLA{\colA}
+
+CA COLA {\CA--\COLA}
+
+
+\ifx\CO\COLA Hurá \else PRD \fi
+
+\doifelse{\cA}{\colA}{Hurá 1 ...}{Sorry jako 1 !}
+
+\doifelse{\cA}{5}{Hurá 2 ...}{Sorry jako 2 !}
+
+\doifelse{5}{\cA}{Hurá 2 ...}{Sorry jako 2 !}
+
+\doifelse{5}{\colA}{Hurá 3 ...}{Sorry jako 3 !}
+
+\doifelse{\colA}{5}{Hurá 4 ...}{Sorry jako 4 !}
+
+CITIES
+
+%\cA, \cB, \cC
+
+
+\nextrow
+
+%\nextrowof[selectedcountries.csv]
+
+}
+
+\hairline
+
+\def\OK{AAA}
+
+\def\AAA{AAA}
+\def\aaa{AAA}
+\def\Aaa{\OK}
+
+\doifelse{\AAA}{\aaa}{OK}{not OK}
+
+\doifelse{\AAA}{\Aaa}{OK}{not OK}
+
+\def\AAA[#1]{#1}
+
+\def\aaa{AAA}
+
+\doifelse{\AAA[AAA]}{\aaa}{OK}{not OK}
+
+
+
+
+
+\hairline
+
+\type{\resetlinepointer:} \resetlinepointer
+
+\type{\linepointer:} \linepointer
+
+\type{\setlinepointer{5}:} \setlinepointer{5}
+
+\type{\linepointer:} \linepointer
+
+
+
+\type{\resetlinepointerof[selectedcountries.csv]:} \resetlinepointerof[selectedcountries.csv]
+
+\type{\linepointerof[selectedcountries.csv]:} \linepointerof[selectedcountries.csv]
+
+\type{\setlinepointerof[selectedcountries.csv]{7}:} \setlinepointerof[selectedcountries.csv]{7}
+
+\type{\linepointerof[selectedcountries.csv]:} \linepointerof[selectedcountries.csv]
+
+
+\hairline
+
+\def\GV[#1,#2,#3]{
+\ctxlua{context(thirddata.handlecsv.getcellcontentof('#1',#2,#3))}
+}
+
+\def\GW[#1,#2]{
+\ctxlua{context(thirddata.handlecsv.getcellcontent(#1,#2))}
+}
+
+\dorecurse{10}{
+\GV[cities.csv,2,\recurselevel]\crlf
+}
+
+\hairline
+
+\setcurrentcsvfile[selectedcountries.csv]
+\dorecurse{10}{
+\GW[1,\recurselevel]\crlf
+}
+
+\hairline
+\setcurrentcsvfile[cities.csv]
+\dorecurse{10}{
+\GW[2,\recurselevel]\crlf
+}
+
+XXX
+
+\opencsvfile{superstore_sales_smalltable.csv}
+
+\columncontent['Product Name']
+
+XXX
+
+\def\GCN#1{
+\ctxlua{context(thirddata.handlecsv.gOpenFiles[#1])}
+}
+
+\ctxlua{
+count = 0
+for k,v in pairs(thirddata.handlecsv.gOpenFiles) do
+     count = count + 1
+end
+context(count)
+}
+
+\ctxlua{
+context(thirddata.handlecsv.isopenfile('superstore_sales_smalltable.csv'))
+}
+
+\ctxlua{
+context(thirddata.handlecsv.isopenfile('superstore_sales_smalltable.cv'))
+}
+
+
+
+*\GCN{'superstore_sales_smalltable.csv'}*
+
+gColNames: {\ctxlua{context(thirddata.handlecsv.gColNames['superstore_sales_smalltable.csv']['Product Name'])}}
+
+gColNames 2: {\ctxlua{context(thirddata.handlecsv.gColNames[thirddata.handlecsv.getcurrentcsvfilename()]['Product Name'])}}
+
+Columncontent['Product Name'] \columncontent['Product Name']
+
+columncontent['Product Name'] \columncontent['Product Name']
+
+linepointer: {\ctxlua{context(thirddata.handlecsv.linepointer())}}
+
+getcellcontent 1:  {\ctxlua{context(thirddata.handlecsv.getcellcontent(thirddata.handlecsv.gColNames['superstore_sales_smalltable.csv']['Product Name'],thirddata.handlecsv.linepointer()))}}
+
+getcellcontent 2: {\ctxlua{context(thirddata.handlecsv.getcellcontent(thirddata.handlecsv.gColNames[thirddata.handlecsv.getcurrentcsvfilename()]['Product Name'],thirddata.handlecsv.linepointer()))}}
+
+
+
+
+get number of open files: {\ctxlua{context(thirddata.handlecsv.getnumberofopencsvfiles())}
+
+
+
+\hairline
+
+\readlineof[cities.csv]{5}
+
+\cA -- \citiescA
+
+\cB -- \citiescB
+
+\hairline
+
+
+\readline
+
+\cB
+
+\nextrow
+
+\readline
+
+\cB
+
+
+\readline{5}
+
+\cA, \cB, \cC
+
+\readline{6}
+
+\cA, \cB, \cC
+
+
+\readlineof[selectedcountries.csv]{6}
+
+
+\selectedcountriescA -- \cA
+
+\selectedcountriescB -- \cB
+
+\type{\cC} ??? \cC % na tohle dát pozor, protože se při menším počtu sloupců nevyresetuje hodnota starých maker
+
+
+\currentcsvfile
+
+\resetlinepointer
+
+\cA
+
+\cB
+
+\opencsvfile{selectedcountries.csv}
+
+\cA, \cB, \cC
+
+\hairline
+ 
+ \getcsvcellof[selectedcountries.csv]['Abbrev',5]
+
+
+\getcsvcellof[cities.csv]['CountryAbbrev',7]
+
+\cB
+
+
+\hairline
+
+\opencsvfile{selectedcountries.csv}
+
+\opencsvfile{cities.csv}
+
+\readlineof[cities.csv]{5}
+
+cities - 5: \cA, \cB, \cC
+
+
+
+\readlineof[selectedcountries.csv]{5}
+
+5 - countries:\cA, \cB, \cC
+
+
+\opencsvfile{cities.csv}
+
+\readline{7}
+
+cities 7: \cA, \cB, \cC
+
+
+\hairline
+
+\directlua{context(thirddata.handlecsv.getcurrentcsvfilename())}
+
+selectedcountries.csv
+
+\directlua{context(thirddata.handlecsv.gCurrentlyProcessedCSVFile)}
+
+
+\opencsvfile{selectedcountries.csv}
+
+%\readlineof[,5]
+
+\cA, \cB, \cC
+
+
+
+%columnA: \columnA{6} 
+
+%\columnB{}
+
+%DEFINICE: \definice{6}
+
+
+%DEFINICE: \definice{1}
+
+%DEFINICE: \definice{8}
+
+columnA 1 \columnA{1}
+
+columnA 6  \columnA{6}
+
+column B 4 \columnA{4} \columnB{4}
+
+column  \columnA{} \columnB{}
+
+\nextrowof[selectedcountries.csv]
+
+column  \columnA{} \columnB{}
+
+\nextrowof[selectedcountries.csv]
+
+column  \columnA{} \columnB{}
+
+\nextrowof[selectedcountries.csv]
+
+column  \columnA{} \columnB{}
+
+\nextrowof[selectedcountries.csv]
+
+column bez zavoeres  \columnA \columnB
+
+
+
+column CCC: 
+BBB\columnA{AAA}BBB
+AAA\columnB{BBB}AAA
+
+colB \colB
+
+colB 6 \colB[6]
+
+\resetlinepointer
+
+\dorecurse{\numrows}{
+\recurselevel -- \linepointer -- \columnA{}, \columnB{}\crlf
+
+%\edef\mymacro{\columnB{\recurselevel}}
+\edef\mymacro{\getcsvcell['cA',\recurselevel]}
+
+\edef\abbrevcountry{\Abbrev}
+
+\def\US{US}
+
+\if\mymacro\US OK \else NOT \fi \crlf
+
+\doif{\getcsvcell['cA',\recurselevel]}{\US}{equal content}
+
+\doifsamestringelse{\mymacro}{US}{equal content}{not equal content}
+
+\doifinstringelse{\mymacro}{US}{equal content}{not equal content}
+
+\doifincsnameelse{\mymacro}{US}{equal content}{not equal content}
+
+
+
+%\recurselevel -- \columnB{} -- \test -- \doifelse{\test}{\US}{OK}{Not Ok} ---- \crlf
+%\recurselevel -- \columnB{9} -- \test -- {\columnB{9}} -- \doifsamestringelse{\test}{\US}{OK}{Not Ok} ---- \crlf
+
+\nextrow
+}
+
+
+XXXXX
+
+\setcurrentcsvfile[cities.csv]
+\resetlinepointerof[cities.csv]
+
+\edef\abbrevcountry{\Abbrev}
+
+\dorecurse{\numrowsof[cities.csv]}{% For all cities
+
+\recurselevel: \CountryAbbrev[\recurselevel], 
+\citiescE, 
+\colE[\recurselevel] -- \colE, 
+\columnE{\recurselevel},
+
+
+
+
+\doif{\getcsvcellof[cities.csv]['CountryAbbrev',\recurselevel]}{US}{\recurselevel -- \Name\crlf } % if city is in country then write it, else nothing
+% NOT OK \expdoif{\citiesCountryAbbrev[\recurselevel]}{US}{Huráááááááá \recurselevel -- \Name\crlf } % if city is in country then write it, else nothing
+% NOT OK \expdoif{\columnE{\recurselevel}}{US}{Huráááááááá \recurselevel -- \Name\crlf } % if city is in country then write it, else nothing
+%OK \expdoif{\citiescE}{US}{Huráááááááá \recurselevel -- \Name\crlf } % if city is in country then write it, else nothing
+% NOT OK \expdoif{\colE[\recurselevel]}{US}{Huráááááááá \recurselevel -- \Name\crlf } % if city is in country then write it, else nothing
+% NOT OK \expdoif{\colE}{US}{Huráááááááá \recurselevel -- \Name\crlf } % if city is in country then write it, else nothing
+\nextrowof[cities.csv]
+}
+
+
+
+%\dorecurse{\numrowsof[cities.csv]}{% For all cities
+\resetlinepointerof[cities.csv]
+
+%{\bf \getcsvcellof[cities.csv]['CountryAbbrev',\recurselevel]:}
+
+%\columnE{\recurselevel}
+
+
+\define[1]\ListEntry{
+\doloopif{\cE}{==}{#1}{Huráááááááá \getcsvcellof[cities.csv]['CountryAbbrev',\linepointer] -- \Name\crlf}
+}
+
+%\doloopif{\cE}{==}{\getcsvcellof[cities.csv]['CountryAbbrev',\recurselevel]}{Huráááááááá \getcsvcellof[cities.csv]['CountryAbbrev',\recurselevel] -- \recurselevel -- \Name\crlf}  % 
+\processcommalist[CN,TH,IQ,JP]{\ListEntry}
+
+%}
+
+
+% DefiniceA :\definiceA{5}:
+
+
+\startluacode
+context(thirddata.handlecsv.getcellcontentof('cities.csv',0,0))
+\stopluacode
+
+
+\stoptext
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\dorecurse{5}{ % For all countries from selectedcountries.csv file DO:
+
+}
+
+
+\hairline
+
+\opencsvfile{selectedcountries.csv}
+
+\cA
+ 
+\getcsvcellof[selectedcountries.csv]['Abbrev',5]
+
+
+\getcsvcellof[cities.csv]['CountryAbbrev',7]
+
+\cB
+
+
+
+\startluacode
+
+local row="145"
+local testrow=123
+
+	if type(row)=='string' then
+		local testrow=tonumber(row)
+		if testrow==nil then
+		  row=0
+		else
+		   row=testrow
+		end
+	end
+	 context(row)
+
+context("\\crlf")	
+
+context(testrow)
+
+				for i=1,thirddata.handlecsv.gNumRows['cities.csv'] do
+					for j=1,thirddata.handlecsv.gNumCols['cities.csv'] do
+				context(thirddata.handlecsv.gTableRows['cities.csv'][i][j])
+				local stri=tostring(i)
+				local strj=tostring(j)
+--				thirddata.handlecsv.gTableRows['cities.csv'][stri][strj]=thirddata.handlecsv.gTableRows['cities.csv'][i][j]
+				end
+				end
+
+
+
+\stopluacode

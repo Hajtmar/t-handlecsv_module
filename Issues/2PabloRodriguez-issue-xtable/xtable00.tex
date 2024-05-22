@@ -1,0 +1,20 @@
+\usemodule[handlecsv]
+\opencsvfile{numbers.csv}
+
+\starttext
+
+\unexpanded\def\lineaction{
+\startxrow
+    \startxcell\csvcell['A', \numline]\stopxcell
+    \startxcell
+        \doifelse{\csvcell['A',\thenumexpr{\numline+1}]}{}
+            {---}{\csvcell['A',\thenumexpr{\numline+1}]}
+    \stopxcell
+\stopxrow
+}
+
+\startxtable[option=stretch, align=center]
+    \filelineaction
+\stopxtable
+
+\stoptext

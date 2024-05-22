@@ -1,0 +1,27 @@
+\usemodule[handlecsv]
+\setuppapersize[A4,landscape]
+\switchtobodyfont[10pt]
+\opencsvfile{sample.csv}
+
+
+\setupTABLE[split=yes,location={middle,lohi}, height=6mm]
+\setupTABLE[row][first][background=color,backgroundcolor=gray,foregroundcolor=black,height=8mm, align={middle,lohi}]
+\setupTABLE[row][last][background=color,backgroundcolor=gray,foregroundcolor=black,height=8mm,align={middle,lohi}]
+\setupTABLE[c][1][background=color,backgroundcolor=gray,align=middle, width=20mm]
+\setupTABLE[c][2][align={right, lohi}, width=4cm]
+\setupTABLE[c][3][align={middle, lohi}, width=2.5cm]
+\setupTABLE[c][4][align={right, lohi}, width=7cm]
+
+
+\starttext
+
+\startbuffer[loop]
+\expanded{\bTR\bTD $\cA$\eTD\bTD \cB\eTD\bTD \cC\eTD\bTD \cD\eTD\eTR}
+\stopbuffer
+
+\bTABLE
+\doloopforall{\getbuffer[loop]}
+\eTABLE
+
+
+\stoptext

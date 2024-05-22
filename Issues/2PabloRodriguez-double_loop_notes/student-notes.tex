@@ -1,0 +1,16 @@
+\usemodule[scancsv]
+\setuppapersize[A8]
+
+\unexpanded\def\lineaction{%
+\executesystemcommand{context --purgeall --result="student-\Name-\Surname_notes.pdf" --arguments="NameArgument=\Name, SurnameArgument=\Surname" one_student_note(command_line_compile_only)}%
+\copypages[student-\Name-\Surname_notes.pdf]
+\page
+}
+
+
+\starttext
+\setheader
+\opencsvfile{studentsdatatable.csv}
+\title{Student notes:}
+\filelineaction
+\stoptext

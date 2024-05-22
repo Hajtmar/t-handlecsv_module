@@ -1,0 +1,34 @@
+\usemodule[scancsv]
+\setuppapersize[A5]
+\starttext
+
+
+\def\writestudentnote{
+ {\bf\cA\ \cB:}\crlf
+\doloopif{\cA}{~=}{}{\typenotes}
+\doloopif{\cA}{==}{}{\typenotes}
+
+%~ \doloop if \previouscA or \cA are empty,
+%~ but \exitloop if \previouscA is empty and \cA is not empty
+
+\page
+}
+
+\unexpanded\def\typenotes{
+  \noindent\cC\ --- \cD\\
+}
+
+\unexpanded\def\lineaction{
+    \writestudentnote
+    \page
+    }
+
+\setheader
+\opencsvfile{grades.csv}
+
+\filelineaction
+
+%~ I need a filelineaction that only loops when \cA is not empty
+%~ \doloopif{\cA}{~=}{}
+
+\stoptext

@@ -1,0 +1,46 @@
+[Config]
+Compilator.SaveAll=0
+Compilator.Capture=0
+Compilator.HideOutput=0
+Compilator.ProgSaveAll=0
+Compilator.ProgRunSelection=0
+Compilator.LogType=0
+DefaultCPIndex=8
+LogtoEnd=0
+DontOpen=0
+AbsolutePath=0
+FileFormat=0
+ProjectFilesOnly=0
+[Project tree]
+manual
+	+Složka
+		..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\manual\_buffers-examples.tex
+		..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\manual\_manual_buffers-macros.tex
+		..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\manual\manual_handlecsv.tex
+		..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\t-handlecsv.lua
+		..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\manual\t-handlecsv_manual.tex
+[Open project files]
+0=..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\manual\_manual_buffers-macros.tex
+1=..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\manual\manual_handlecsv.tex
+2=..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\manual\_buffers-examples.tex
+3=..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\manual\t-handlecsv_manual.tex
+4=..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\t-handlecsv.lua
+[Selected Project Files]
+Main=
+Selected=..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\t-handlecsv.lua
+[..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\manual\_manual_buffers-macros.tex]
+TopLine=1
+Caret=1,2
+[..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\manual\manual_handlecsv.tex]
+TopLine=37
+Caret=30,74
+[..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\manual\_buffers-examples.tex]
+TopLine=13
+Caret=35,44
+[..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\manual\t-handlecsv_manual.tex]
+TopLine=400
+Caret=9,421
+[..\..\..\..\..\..\..\..\..\..\1da\ConTeXt\ConTeXt-Tests\my_way\ScanCSV\t-handlecsv_module\t-handlecsv.lua]
+TopLine=715
+Caret=1,744
+BookMark1=1,143

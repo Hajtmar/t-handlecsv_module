@@ -1,0 +1,170 @@
+\usemodule[handlecsv]
+
+\unexpanded\def\action{ACTION: \numline\  (\lineno): %
+	\ifissetheader\Lastname\ \Firstname\crlf
+	\else\cA\ \cB \crlf
+	\fi
+% OR
+% 	\ifnotsetheader \Lastname, \Firstname, \Flag, \MonThu, \ThuPM, \Fri, \Sat, \Sun, \Email. \crlf
+% 	\else \cA, \cB, \cC, \cD, \cE, \cF, \cG, \cH, \cI. \crlf
+% 	\fi
+}
+
+\unexpanded\def\lineaction{LINEACTION: \action}
+
+
+\def\pokec#1{\type{#1}  \blank[big]}
+
+\def\mezera{\blank[4*big]}
+
+\setheader
+\setsep{,}
+% \unsetsep
+\opencsvfile{ctm.csv}
+
+
+\starttext
+
+
+
+
+\section{\type{\doloopfromto} cycles}
+
+% \doloopfromto{from}{to}{action}  --  do action "action" from line "from" to line "to" of open CSV file
+
+\pokec{\doloopfromto{3}{8}{\action}}
+
+\resetnumline
+\doloopfromto{3}{8}{\action}
+
+\doloopfromto{8}{8}{\action}
+
+\Doloopfromto{3}{8}{\action}
+
+\mezera
+
+\pokec{\doloopfromto{5}{8}{\lineaction}}
+
+\resetnumline
+\doloopfromto{5}{8}{\lineaction}
+\Doloopfromto{5}{8}{\lineaction}
+
+\mezera
+
+
+\pokec{\doloopfromto{1}{\numrows}{\lineaction}}
+
+\resetnumline
+\doloopfromto{1}{\numrows}{\lineaction}
+
+ss
+\doloopfromto{1}{\numrows}{\lineaction}
+ss
+
+\mezera
+
+
+
+
+
+\section{\type{\doloopforall} cycles}
+
+% \doloopforall  % implicit do \lineaction for all lines of open CSV table
+% \doloopforall{\action}  % do \action macro for all lines of open CSV table
+
+
+
+\subsection{do \type{\lineaction} macro for all lines of opening csv table}
+\pokec{\doloopforall}
+
+\resetnumline
+\doloopforall
+
+
+\subsection{do specific \type{\action} macro for all lines of opening csv table}
+\pokec{\doloopforall{\action}}
+
+
+\resetnumline
+\doloopforall{\action}
+
+
+
+
+\section{\type{\doloopaction} cycles}
+
+% \doloopaction % implicit use \lineaction macro
+% \doloopaction{\action} % use \action macro for all lines of open CSV file
+% \doloopaction{\action}{4} % use \action macro for first 4 lines
+% \doloopaction{\action}{2}{5} % use \action macro for lines from 2 to 5
+
+\subsection{do \type{\lineaction} macro for all lines of opening csv table}
+\pokec{\doloopaction}
+
+\resetnumline
+\doloopaction % implicit use \lineaction macro
+
+
+\subsection{do specific \type{\action} macro for all lines of opening csv table} 
+\pokec{\doloopaction{\action}}
+
+\resetnumline
+\doloopaction{\action} % use \action macro for all lines of open CSV file
+
+
+\subsection{do specific \type{\action} macro for the first few lines of opening csv table}
+\pokec{\doloopaction{\action}{4} }
+
+\resetnumline
+\doloopaction{\action}{4} % use \action macro for first 4 lines
+
+
+\section{\type{\doloopaction} cycles}
+
+\subsection{do specific \type{\action} macro for specific continous range of lines (from -- to)}
+\pokec{\doloopaction{\action}{2}{5}}
+
+\resetnumline
+\doloopaction{\action}{2}{5} % use \action macro for lines from 2 to 5
+
+
+
+\section{\type{\filelineaction} cycles}
+
+% \filelineaction  % implicit do \lineaction for all lines of current open CSV table
+% \filelineaction{filename.csv}   % do \lineaction macro for all lines of specific CSV table (filename.csv)
+
+\subsection{do \type{\lineaction} macro for all lines of opening table}
+\pokec{\filelineaction}
+
+\resetnumline
+\filelineaction
+
+
+\subsection{do \type{\lineaction} macro for all lines of specific \type{filename.csv} table}
+\pokec{\filelineaction{ctm2.csv}}
+
+\resetnumline
+\filelineaction{ctm2.csv}
+
+
+\section{\type{\doloopif} cycles}
+
+% \doloopif{value1}{[compare_operator]}{value2}{macro_for_doing} % [compareoperators] <, >, ==(eq), ~=(neq), >=, <=, in, until, while
+% and specific variations of previous macro \doloopif 
+% \letvalue{doloopifnum}=\doloopif %\doloopifnum{value1}{[compare_operator]}{value2}{macro_for_doing} % [compareoperators] ==, ~=, >, <, >=, <=
+% \def\doloopuntil#1#2#3{\doloopif{#1}{until}{#2}{#3}}% \doloopuntil{\Trida}{3.A}{\tableaction}  % List all, until the test is not met - then just quit. Repeat until satisfied. If it is not never met, will list all records.
+% \def\doloopwhile#1#2#3{\doloopif{#1}{while}{#2}{#3}}% \doloopwhile{\Trida}{3.A}{\tableaction}  % List when the test is met, other just quit. 
+
+\opencsvfile{ctm2.csv} 
+
+\doloopif{\Fri}{==}{0}{\action}
+
+
+
+\stoptext
+
+
+% \def\pd#1{\directlua{context([==[\detokenize{#1}]==])}}
+% 
+% \pd{\numrows}

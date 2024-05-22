@@ -1,0 +1,45 @@
+\newwrite\outfile
+\immediate\openout\outfile=allfiles.tex
+
+\let\ea=\expandafter
+\everyeof={\eof}
+\let\endfile=\end
+\def\tmp#1{}\edef\\{\ea\tmp\string\\}  \edef\%{\ea\tmp\string\%}
+\def\printout{\immediate\write\outfile}
+\long\edef\catfilesA#1\eof{\noexpand\splitparts#1\\include.\relax}
+\ea\def\ea\splitparts\ea#\ea1\\include#2{%
+    \printout{#1}%
+    \ifx.#2\ea\endfile \else \ea\catfilesB \fi
+}
+\def\catfilesB #1.tex#2{%
+    \bgroup
+       \printout{\% --- included file #1.tex}
+       \let\endfile=\relax \ea\catfilesA\input #1.tex
+       \printout{\% --- end of file #1.tex}
+    \egroup
+    \splitparts
+}
+\def\catfiles{\endlinechar=`\^^J \newlinechar=\endlinechar
+    \def\do##1{\catcode`##1=12}\dospecials
+%   \tracingall
+    \catfilesA
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\catfiles
+
+
+aha \uff(a$#$
+
+\starttext
+
+\include cards.tex
+\include generate-test.tex
+\include test.tex
+\include generate-test.tex
+
+\stoptext 
+
+
+    uffEND
+
+\konecdokumentu

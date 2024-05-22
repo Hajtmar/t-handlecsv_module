@@ -1,0 +1,93 @@
+\usemodule[scancsv]
+
+
+\setupexternalfigures[directory={graphics/}]
+
+\setupcolors[state=start]
+\definecolor[fcol][black]
+\definecolor[mcol][black]
+\setupurl[color=blue]
+\setupinteraction[state=start,color=blue,contrastcolor=blue, style=normal]
+
+\def\href#1#2{\useURL[#2][{#2}][][{#1}]\goto{\url[#2]}[url(#1)]}
+\def\ahref#1{\color[linkcolor]{\ttx \href{#1}{<#1>}}}
+\def\fullahref#1{\color[linkcolor]{\ttx \href{#1}{http://#1}}}
+\def\mailto#1{\useURL[#1][mailto:#1][][#1]\from[{#1}]}
+\def\MailTo#1#2{\useURL[#1][mailto:#1][][#2]\from[{#1}]}
+\def\scancsvlua{\href{http://jaroslav.hajtmar.com/storage/tex/scancsv.lua/demo-scancsv.lua.zip}{scancsv.lua}}
+\def\ctm{\href{http://meeting.contextgarden.net/2010/programme.shtml}{4CM}}
+\def\te{\href{http://pavel.striz.cz/texperience/}{3TE}}
+
+\catcode`\_=12 
+
+\def\todate{(to date 7.~9.~2010)}
+
+
+
+\setuppagenumbering[state=stop]
+\setuplayout[width=middle, height=middle, topspace=1cm, header=0cm, footer=1cm]
+\setupbodyfont[regular, 9pt]
+
+%http://wiki.contextgarden.net/TABLE
+\setupTABLE[split=yes,location={middle,lohi}, height=4.5mm]
+\setupTABLE[row][first][background=color,backgroundcolor=gray,foregroundcolor=black,height=8mm, align={middle,lohi}]
+%\setupTABLE[row][last][background=color,backgroundcolor=gray,foregroundcolor=black,height=8mm,align={middle,lohi}]
+\setupTABLE[c][1][background=color,backgroundcolor=gray,align=middle, width=7mm]
+\setupTABLE[c][2][align={right, lohi}, width=4cm]
+\setupTABLE[c][3][align={middle, lohi}, width=1.5cm]
+\setupTABLE[c][4][align={middle, lohi}, width=5cm]
+
+
+\def\flagpicture{\externalfigure[\Flag.png][height=3.5mm, frame=on, framecolor=black]}
+\def\mejl{\mailto{\Email}}
+%\def\mejl{\MailTo{\Email}{e-mail}}
+	
+% Header of CSV file: Lastname,Firstname,MonThu,ThuPM,Fri,Sat,Sun
+%\unexpanded\def\tableaction{\expanded{\bTR\bTD\mcol\numline\eTD\bTD\fcol~\Lastname\ \Firstname~ \eTD\bTD\ \flagpicture\eTD\bTD\fcol\ttx\mejl\eTD\eTR}}
+%\def\lineaction{\externalfigure[\Flag.png][height=3.5mm, frame=on, framecolor=black] -  \Firstname\par}	
+
+
+\unexpanded\def\tableaction{%
+\expanded{
+\bTR\bTD\mcol\numline\eTD\bTD\fcol~\Lastname\ \Firstname~ \eTD\bTD\ \flagpicture\eTD\bTD\fcol\ttx\mejl\eTD\eTR
+}}
+	
+\unexpanded\def\lineaction{\tableaction}
+
+
+
+\starttext
+\midaligned{\ssb List of participants of \CONTEXT\ meeting and \TeX perience}
+
+\blank[small]
+
+\midaligned{\ssa Brejlov 13.\,--\,19.~9.~2010}
+
+\blank[medium]
+
+\midaligned{\todate}
+
+\blank[big]
+
+\setheader % Imform library, that in first row is header with information about names of columns
+\setsep{,}
+\setfiletoscan{lide.csv}
+
+% \placetable[none]{}{
+\bTABLE
+%\bTR\bTD\ssx Id \eTD\bTD\ssx Name\eTD\bTD\ssx Nationality\eTD\bTD\ssx E-mail\eTD\eTR
+%\doloopif{\Flag}{~=}{anl}{\tableaction} % repeat \lineaction macro for all rows of CSV file
+%\filelineaction % repeat \lineaction macro for all rows of CSV file
+\doloopif{\Flag}{~=}{anl}{\lineaction}
+%\doloopaction{\tableaction} 
+%\bTR\bTD-- \eTD\bTD-- \eTD\bTD-- \eTD\bTD\bTD-- \eTD\eTR
+\eTABLE
+%}
+\vfill
+\midaligned{\ssx This document was created (generated) using \scancsvlua\ library by Jaroslav Hajtmar.}
+\midaligned{\ssx Scancsv.lua presentation to be held on Saturday, 18.~9.~2010 on \ctm+\te\ in Brejlov.} 
+
+
+\page[no]
+\stoptext
+

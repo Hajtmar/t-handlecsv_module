@@ -1,0 +1,27 @@
+% This is sorce code of second  file ie. servingfile.tex
+% This file is compiled for each row of table notes.csv. Calling compilation provides automatically a main file mainfile.tex.
+% This file does not need to be processed (compiled) manually, but you can call with a parameter of the command line to generate a specific diploma.
+% Manual calling for one page document for particular person: context --arguments="cA=Mark" servingfile.tex
+% This file is automatically compiled when compiling the main file mainfile.tex
+
+\usemodule[handlecsv]
+
+\startbuffer[creatediploma]
+\startTEXpage[offset=1em]
+\cA\ got the note: \cB.
+\stopTEXpage
+\stopbuffer
+
+% notes.csv table structure:
+% ----------------------------------
+% John;1;john@xxx.com
+% Jane;2;jane@yyy.cz
+% Mark;2;mark@www.eu
+% Daisy;4;daisy@qqq.cz
+% ----------------------------------
+
+
+\starttext
+ \opencsvfile{notes.csv}
+ \doloopif{\cA}{==}{\env{cA}}{\getbuffer[creatediploma]} % \env{cA} content an argument passed through of command line when source code of mainfile.tex is calling to compiling of this source code
+\stoptext

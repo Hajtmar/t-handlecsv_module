@@ -1,0 +1,42 @@
+\usemodule[scancsv]
+
+
+\unexpanded\def\lineaction{%
+\crlf\Name\ \Surname\crlf
+% \opencsvfile{grades.csv}
+% \doloopif{\Name}{in}{\testingstring}{\otherlineaction}
+\doifelse{\testingstring}{\Name}
+	{%\rName\ \rSurname\ 
+		%\Subject\ \Note
+		
+		}%}%
+	{\edef\rName{\Name}%
+	 \edef\rSurname{\Surname}%
+	 %\Name\ \Surname\ 
+	 %\Subject\ \Note
+	 \doloopif{\Name}{==}{}{\otherlineaction}
+	 }%
+}
+
+\unexpanded\def\otherlineaction{%
+\Subject\ \Note\crlf
+}
+
+\def\testingstring{\previousName\Name}
+
+
+\starttext
+\setheader
+\opencsvfile{grades.csv}
+	
+% 4. \doloopif{value1}{[compare_operator]}{value2}{macro_for_doing} % [compareoperators] <, >, ==(eq), ~=(neq), >=, <=, in, until, while
+	
+\doloopif{\Name}{in}{\testingstring}{\lineaction}
+
+%\doloopif{\Name}{~=}{}{\otherlineaction}
+
+
+%\doloopif{\Name}{while}{Name 1}{\lineaction}
+
+
+\stoptext
