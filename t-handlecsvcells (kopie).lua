@@ -410,6 +410,138 @@ end -- of thirddata.handlecsvcells.opencsvfile(file)
 
 
 
+function thirddata.handlecsvcells.xopencsvfile(filetoscan) -- Open CSV tabule, inicialize variables
+	-- open the table and load it into the global variable thirddata.handlecsvcells.gTableRows
+	-- if the option thirddata.handlecsvcells.gCSVHeader==true is enabled, then into glob variable thirddata.handlecsvcells.gColumnNames
+	-- sets the column names from the title, if not then sets XLS notation, ie. cA, cB, cC, ...
+	-- into global variables thirddata.handlecsvcells.gNumRows and  thirddata.handlecsvcells.gNumCols it saves the number of rows and columns of the table
+	-- if the file header and the header line does not count the number of rows in the table
+	-- Additionally, they can defined ConTeXt macros  \csvfilename, \numrows a \numcols
+	 local inpcsvfile=thirddata.handlecsvcells.handlecsvcellsfilename(filetoscan)
+	 local currentlyprocessedcsvfile = io.loaddata(inpcsvfile)
+	 local mycsvsplitter = utilities.parsers.rfc4180splitter{
+    	separator = thirddata.handlecsvcells.gCSVSeparator,
+    	quote = thirddata.handlecsvcells.gCSVQuoter,
+    	strict = true,
+		}
+	 thirddata.handlecsvcells.g_gColNames[inpcsvfile]={}
+	 thirddata.handlecsvcells.g_gColumnNames[inpcsvfile]={}
+	 thirddata.handlecsvcells.g_gNumRows[inpcsvfile]={}
+	 thirddata.handlecsvcells.g_gNumCols[inpcsvfile]={}
+	-- for current opened file:
+	 thirddata.handlecsvcells.gColNames={}
+	 thirddata.handlecsvcells.gColumnNames={}
+	 thirddata.handlecsvcells.gNumRows={}
+	 thirddata.handlecsvcells.gNumCols={}
+
+	if thirddata.handlecsvcells.gCSVHeader then
+	 thirddata.handlecsvcells.g_gTableRows[inpcsvfile], thirddata.handlecsvcells.g_gColumnNames[inpcsvfile] = mycsvsplitter(currentlyprocessedcsvfile,true)
+	 inspect(thirddata.handlecsvcells.g_gTableRows[inpcsvfile]) -- read all rows
+	 inspect(thirddata.handlecsvcells.g_gColumnNames[inpcsvfile]) -- read header of CSV file
+	-- for current opened file:
+	 thirddata.handlecsvcells.gTableRows, thirddata.handlecsvcells.gColumnNames = mycsvsplitter(currentlyprocessedcsvfile,true)
+	 inspect(thirddata.handlecsvcells.gTableRows) -- read all rows
+	 inspect(thirddata.handlecsvcells.gColumnNames) -- read header of CSV file
+
+--	  local numcolsofinpcsvfile=#thirddata.handlecsvcells.g_gTableRows[inpcsvfile][1] -- read number of columns from first line
+--	  local numcolsofinpcsvfile=#thirddata.handlecsvcells.g_gColumnNames[inpcsvfile]  -- when is header, then in this variable are names of columns
+
+	else -- if thirddata.handlecsvcells.gCSVHeader
+	  thirddata.handlecsvcells.g_gTableRows[inpcsvfile], thirddata.handlecsvcells.g_gColumnNames[inpcsvfile] = mycsvsplitter(currentlyprocessedcsvfile)
+	  inspect(thirddata.handlecsvcells.g_gTableRows[inpcsvfile]) -- read all rows
+	  thirddata.handlecsvcells.g_gColumnNames[inpcsvfile]={} -- No header
+	-- for current opened file:
+	  thirddata.handlecsvcells.gTableRows, thirddata.handlecsvcells.gColumnNames = mycsvsplitter(currentlyprocessedcsvfile)
+	  inspect(thirddata.handlecsvcells.gTableRows) -- read all rows
+	  thirddata.handlecsvcells.gColumnNames={} -- No header
+
+	  -- ad now set column names for withoutheader situation:
+--	  local numcolsofinpcsvfile=#thirddata.handlecsvcells.g_gTableRows[inpcsvfile][1] -- numbers of columns
+
+		for i=1,#thirddata.handlecsvcells.g_gTableRows[inpcsvfile][1] do -- for all columns
+--		tex.sprint(i)
+--	 	tex.sprint('+++, ')
+--		tex.sprint(tostring(thirddata.handlecsvcells.ar2xls(i)))
+		 -- OK, but not used: thirddata.handlecsvcells.g_gColumnNames[inpcsvfile][i]=thirddata.handlecsvcells.tmn(thirddata.handlecsvcells.g_gTableRows[inpcsvfile][1][i])
+		 thirddata.handlecsvcells.g_gColumnNames[inpcsvfile][i]=tostring(thirddata.handlecsvcells.ar2xls(i)) -- set XLS notation (fill array with XLS names of columns like 'cA', 'cB', etc.)
+		 thirddata.handlecsvcells.gColumnNames[i]=tostring(thirddata.handlecsvcells.ar2xls(i)) -- set XLS notation (fill array with XLS names of columns like 'cA', 'cB', etc.)
+		end
+	end -- if thirddata.handlecsvcells.gCSVHeader
+
+
+	 	for i=1,#thirddata.handlecsvcells.g_gTableRows[inpcsvfile][1] do -- for all columns, generate column names:
+--	 	tex.sprint(i)
+--	 	tex.sprint(' - ')
+--	 	tex.sprint(tostring(thirddata.handlecsvcells.tmn(thirddata.handlecsvcells.g_gColumnNames[inpcsvfile][i])), ', ')
+--		tex.sprint(tostring(thirddata.handlecsvcells.g_gColumnNames[inpcsvfile][i]),', ')
+--		tex.sprint(tostring(thirddata.handlecsvcells.ar2xls(i)),', ')
+--		tex.sprint(tostring('c'..thirddata.handlecsvcells.ar2xls(i)),', ')
+-- table.insert(hirddata.handlecsvcells.g_gColNames[inpcsvfile],
+	 	    thirddata.handlecsvcells.g_gColNames[inpcsvfile][tostring(thirddata.handlecsvcells.tmn(thirddata.handlecsvcells.g_gColumnNames[inpcsvfile][i]))] = i -- for indexing use (register names of macros ie 'Firstname' etc...)
+			thirddata.handlecsvcells.g_gColNames[inpcsvfile][tostring(thirddata.handlecsvcells.g_gColumnNames[inpcsvfile][i])] = i -- for indexing use (register names of macros ie 'Firstname' etc...)
+			thirddata.handlecsvcells.g_gColNames[inpcsvfile][tostring(thirddata.handlecsvcells.ar2xls(i))] = i -- for indexcolname macro (register names of macros ie 'A', 'B', etc...)
+			thirddata.handlecsvcells.g_gColNames[inpcsvfile][tostring('c'..thirddata.handlecsvcells.ar2xls(i))] = i -- for indexcolname macro (register names of macros ie 'cA', 'cB', etc...)
+			-- for current opened file:
+	 	    thirddata.handlecsvcells.gColNames[tostring(thirddata.handlecsvcells.tmn(thirddata.handlecsvcells.g_gColumnNames[inpcsvfile][i]))] = i -- for indexing use (register names of macros ie 'Firstname' etc...)
+			thirddata.handlecsvcells.gColNames[tostring(thirddata.handlecsvcells.g_gColumnNames[inpcsvfile][i])] = i -- for indexing use (register names of macros ie 'Firstname' etc...)
+			thirddata.handlecsvcells.gColNames[tostring(thirddata.handlecsvcells.ar2xls(i))] = i -- for indexcolname macro (register names of macros ie 'A', 'B', etc...)
+			thirddata.handlecsvcells.gColNames[tostring('c'..thirddata.handlecsvcells.ar2xls(i))] = i -- for indexcolname macro (register names of macros ie 'cA', 'cB', etc...)
+
+		end
+
+		local j=#thirddata.handlecsvcells.g_gTableRows[inpcsvfile][1]
+
+		for i=1, #thirddata.handlecsvcells.g_gTableRows[inpcsvfile][1] do
+		j=j+1
+--		tex.sprint('i: ',i,'- j:', j,'***')
+		thirddata.handlecsvcells.g_gColumnNames[inpcsvfile][j]=tostring('c'..thirddata.handlecsvcells.ar2xls(i)) -- set XLS notation (fill array with XLS names of columns like 'cA', 'cB', etc.)
+		-- for current opened file:
+		thirddata.handlecsvcells.gColumnNames[j]=tostring('c'..thirddata.handlecsvcells.ar2xls(i)) -- set XLS notation (fill array with XLS names of columns like 'cA', 'cB', etc.)
+		end
+
+
+		if thirddata.handlecsvcells.gCSVHeader then
+			for i=1,#thirddata.handlecsvcells.g_gTableRows[inpcsvfile][1] do
+			j=j+1
+			thirddata.handlecsvcells.g_gColumnNames[inpcsvfile][j]=tostring(thirddata.handlecsvcells.ar2xls(i)) -- set XLS notation (fill array with XLS names of columns like 'cA', 'cB', etc.)
+			-- for current opened file:
+			thirddata.handlecsvcells.gColumnNames[j]=tostring(thirddata.handlecsvcells.ar2xls(i)) -- set XLS notation (fill array with XLS names of columns like 'cA', 'cB', etc.)
+			end
+
+			for i=1,#thirddata.handlecsvcells.g_gTableRows[inpcsvfile][1] do
+			j=j+1
+			thirddata.handlecsvcells.g_gColumnNames[inpcsvfile][j]=tostring(thirddata.handlecsvcells.tmn(thirddata.handlecsvcells.g_gColumnNames[inpcsvfile][i])) -- maybe TeX incorect names of columns
+			-- for current opened file:
+			thirddata.handlecsvcells.gColumnNames[j]=tostring(thirddata.handlecsvcells.tmn(thirddata.handlecsvcells.g_gColumnNames[inpcsvfile][i])) -- maybe TeX incorect names of columns
+			end
+		end
+
+--		for i=1, #thirddata.handlecsvcells.g_gColumnNames[inpcsvfile] do
+--		tex.sprint('x ', thirddata.handlecsvcells.g_gColumnNames[inpcsvfile][i],' x')
+--		end
+
+--		for k,v in pairs(thirddata.handlecsvcells.g_gColNames[inpcsvfile]) do print(k,v) end
+
+--		for i=1, #thirddata.handlecsvcells.g_gColNames do
+--		tex.sprint('y ', thirddata.handlecsvcells.g_gColNames[inpcsvfile][i],' y')
+--		end
+
+
+ 	 thirddata.handlecsvcells.g_gNumRows[inpcsvfile]=#thirddata.handlecsvcells.g_gTableRows[inpcsvfile] -- Getting number of rows
+  	 thirddata.handlecsvcells.g_gNumCols[inpcsvfile]=#thirddata.handlecsvcells.g_gTableRows[inpcsvfile][1] -- Getting number of columns
+	-- for current opened file:
+ 	 thirddata.handlecsvcells.gNumRows=#thirddata.handlecsvcells.g_gTableRows[inpcsvfile] -- Getting number of rows
+  	 thirddata.handlecsvcells.gNumCols=#thirddata.handlecsvcells.g_gTableRows[inpcsvfile][1] -- Getting number of columns
+    context([[\global\EOFfalse%]])
+  	 context([[\global\notEOFtrue%]])
+  	 thirddata.handlecsvcells.resetlinepointer()	-- set pointer to begin table (first row)
+--	 thirddata.handlecsvcells.setnumline(1)
+--  	 thirddata.handlecsvcells.resetmarkemptylines()
+--  	 if thirddata.handlecsvcells.gUseHooks then  thirddata.handlecsvcells.hooksevaluation() end
+end -- of thirddata.handlecsvcells.opencsvfile(file)
+
+
+
 -- Main function. Read data, parse them etc.
 function thirddata.handlecsvcells.readline(numberofline) --
 	local numberofline=numberofline
@@ -586,13 +718,17 @@ function thirddata.handlecsvcells.nextnumline()
 end
 
 
-function thirddata.handlecsvcells.numrows(csvfile)
+function thirddata.handlecsvcells.xnumrows(csvfile)
 --	local csvfile=thirddata.handlecsvcells.handlecsvcellsfilename(csvfile)
  if csvfile == '' then
   	context(thirddata.handlecsvcells.gNumRows)
   else
     context(thirddata.handlecsvcells.g_gNumRows[csvfile])
  end
+end
+
+function thirddata.handlecsvcells.numrows(csvfile)
+  context(thirddata.handlecsvcells.g_gNumRows[csvfile])
 end
 
 
@@ -645,6 +781,22 @@ end
 
 -- ConTeXt source:
 local string2print=[[%
+% Auxiliary macros of Mr. Olsak for defining macros with optional parameters
+\def\isnextcharA{\the\toks\ifx\tmp\next0\else1\fi\space}
+\long\def\isnextchar#1#2#3{\begingroup\toks0={\endgroup#2}\toks1={\endgroup#3}%
+   \let\tmp=#1\futurelet\next\isnextcharA
+}
+
+\def\sdef#1{\expandafter\def\csname#1\endcsname}
+
+\def\optdef#1[#2]{%
+   \def#1{\def\opt{#2}\isnextchar[{\csname oA:\string#1\endcsname}{\csname oB:\string#1\endcsname}}%
+   \sdef{oA:\string#1}[##1]{\def\opt{##1}\csname oB:\string#1\nospaceafter\endcsname}%
+   \sdef{oB:\string#1\nospaceafter}%
+}
+\def\nospaceafter#1{\expandafter#1\romannumeral-`\.}
+
+
 % library newifs for testing during processing CSV table
 \newif\ifissetheader%
 \newif\ifnotsetheader%
@@ -671,10 +823,13 @@ local string2print=[[%
 \let\resetsep\unsetsep % -- for compatibility
 %\def\setfiletoscan#1{\ctxlua{thirddata.handlecsvcells.setfiletoscan('#1');thirddata.handlecsvcells.opencsvfile()}}
 
+% ctnum - convert to number: if parametr is not number, then return -1
+\def\ctnum#1{\ctxlua{if type(tonumber('#1'))=='number' then context('#1') else context(-1) end}}%
 
 
 
-\def\numrows{%
+
+\def\xnumrows{%
     \dosingleempty\donumrows%
 }%
 
@@ -686,12 +841,22 @@ local string2print=[[%
     \iffirstargument%
     \ctxlua{context(thirddata.handlecsvcells.numrows('#1'))}%
    \else%
-	\ctxlua{context(thirddata.handlecsvcells.numrows(''))}%
+	\ctxlua{context(thirddata.handlecsvcells.gNumRows)}%
    \fi%
 }%
 
 %\def\numrows[#1]{\ctxlua{context(thirddata.handlecsvcells.numrows('#1'))}}
 
+\def\numrows{\ctxlua{context(thirddata.handlecsvcells.numrows())}}
+\def\numrowsof[#1]{\ctxlua{context(thirddata.handlecsvcells.numrows('#1'))}}
+
+
+%\optdef\numrows[\ctxlua{context(thirddata.handlecsvcells.numrows(''))}]{\ctxlua{if type(tonumber('\opt'))=='number' then context(\ctxlua{context(thirddata.handlecsvcells.numrows(''))}) else context(thirddata.handlecsvcells.numrows('\opt')) end}}%
+
+%\def\numrows{\futurelet\commandtoken\donumrows}
+%\def\donumrows{\ifx\commandtoken[\expandafter\numrowspar\else\numrowsnopar\fi}
+%\def\numrowspar[#1]{\ctxlua{context(thirddata.handlecsvcells.numrows('#1'))}}
+%\def\numrowsnopar{\ctxlua{context(thirddata.handlecsvcells.numrows(''))}}
 
 
 

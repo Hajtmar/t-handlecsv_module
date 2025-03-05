@@ -7,7 +7,7 @@
 -- %D         date=\currentdate,
 -- %D    copyright=Jaroslav Hajtmar,
 -- %D      license=GNU General Public License]
--- 
+--
 -- %C Copyright (C) 2015  Jaroslav Hajtmar
 -- %C
 -- %C This program is free software: you can redistribute it and/or modify
@@ -48,7 +48,8 @@ function thirddata.handlecsv.csvreport(anyfilename) -- Listing report informatio
 	local currcoldelim = thirddata.handlecsv.gCSVSeparator or ""
 	local currquot = thirddata.handlecsv.gCSVQuoter or ""
 	infomakra=[[\crlf ]]
-	for i = 1, thirddata.handlecsv.gNumCols do 	-- for all fields in header
+--	for i = 1, thirddata.handlecsv.gNumCols do 	-- for all fields in header
+    for i = 1, thirddata.handlecsv.gNumCols[actualopenfile] do
 		local makroname=[[{\bf\backslash ]]..thirddata.handlecsv.tmn(thirddata.handlecsv.gColumnNames[i])..[[}]]
 		  headercolnames = [[{\bf\backslash c]]..thirddata.handlecsv.ar2colnum(i)..[[}=]]..makroname..[[, ]]
 			infomakra=infomakra..headercolnames -- list generating
@@ -169,7 +170,7 @@ local string2print=[[%
 % \csvreport,  \csvreport{<filename>}
 % \printline
 % \printall
- 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ]]
 

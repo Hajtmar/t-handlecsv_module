@@ -1,0 +1,6 @@
+Id;Trida;Prijmeni;Jmeno;QRURL
+1;2.A;Novák;Jan;https://gyza.cz/iapp/hlasovani_template/volba_predmetu.php?hash_klic=a5f87c6c3e1d4fba682df86d9e6347
+2;2.A;Nováková;Jana;https://gyza.cz/iapp/hlasovani_template/volba_predmetu.php?hash_klic=0bfc8b788f48555a69c146b2d0a77
+3;učitel;Novotný;Petr;mailto:hajtmar@gyza.cz?subject=Dotaz na technickou podporu&body=Dobrý den. Prosím o podrobnosti k projektu na adrese https://gyza.cz/dum.
+4;učitel;Novotná;Petra;mailto:hajtmar@gyza.cz?subject=Dotaz%20na%20technickou%20podporu&body=Dobr%C3%BD%20den.%20Pros%C3%ADm%20o%20podrobnosti%20k%20projektu%20na%20adrese%20https%3A%2F%2Fgyza.cz%2Fdum.
+6;učitel;Testovací;účet;mailto:zimmermann.zdenek@gyza.cz?subject=Odkaz%20na%20administraci%20seminářů&body=Administrace%20volby%20seminářů%20viz%20https://gyza.cz/iapp/volba_seminaru/administrace_obecna.php

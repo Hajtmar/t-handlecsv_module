@@ -1,0 +1,176 @@
+
+
+\usepath[{/Users/hajtmar/OneDrive/Dokumenty/1da/GitHub-projekty/t-handlecsv_module,qrkody,qrc-shell,qrc-shell/qrkody}]
+\setupexternalfigures[directory={qrkody,qrc-shell,qrc-shell/qrkody}] % POZOR! Nesmí být mezera na konci.
+
+
+
+%\usemodule[/Users/hajtmar/OneDrive/Dokumenty/1da/ConTeXt/ConTeXt-Tests/my_way/ScanCSV/t-handlecsv_module/t-handlecsv] % poslední verze
+%\usemodule[/Users/hajtmar/OneDrive/Dokumenty/1da/ConTeXt/ConTeXt-Tests/my_way/ScanCSV/t-handlecsv_module 2/t-handlecsv (kopie 2)]
+%\usemodule[/Users/hajtmar/OneDrive/Dokumenty/1da/GitHub-projekty/t-handlecsv_module/t-handlecsv-optbyai] % poslední verze
+
+%\usemodule[t-handlecsv] % poslední verze
+\usemodule[t-handlecsv-optbyai] % poslední verze
+
+
+
+\setheader
+% \setsep{;}
+
+\newdimen\QRSize
+\QRSize=2.5cm % Výchozí velikost QR kódu, lze změnit
+
+%
+% TATO MAKRA JSOU NYNÍ PLNĚ FUNKČNÍ! DALŠÍ ZPŮSOB GENEROVÁNÍ QR KÓDŮ JE NÁSLEDUJÍCÍ:
+% v terminálu spustit zsh skript:
+% qrfromcsv.sh ../test-cstex.csv --ccol=QRURL  (je na cestě v SUPPORT/BASH/)
+% v CSV souboru jsou mj i data pro generování QR kódů. Výstupem jsou soubory test-cstex_qr<Id>.png, kde <Id> je záhlaví sloupce v CSV souboru
+% přičemž data pro vytváření QR kódu jsou ve defaultně ve sloupci QRcontent, nicméně přepínačem --ccol=QQRUL je možné vybrat jakýkoliv sloupec,
+% který bude sloužit jako obsah pro vygenerování QR kódu. Název obrázku s QR kódem tj. test-cstex_qr<Id>.png je odvozen od názvu CSV souboru s daty
+% tj. v tomto případě test-cstex.csv.
+% zobrazení obrázků s QR kódy by již neměl být problém, protože ke všem by měl mít ConTeXt cestu viz \usepath a \setupexternalfigures výše (lze dodat cesty..)
+% stačí se na obrázek odvolat v handlecsv modulu takto     \externalfigure[test-cstex_qr\Id.png][width=\QRSize] nebo
+% pomocí makra \viewqr{test-cstex_qr\Id.png}.
+%
+
+
+
+
+% Specializované makro pro použití s handlecsv (bez handlecsv nedává použití smysl)
+\def\genqr#1{%
+    \directlua{os.execute([[qrencode -o qrkody/qrcode\Id.png -s 10 "#1"]])}
+    \externalfigure[qrcode\Id.png][width=\QRSize]%
+}
+
+
+% Jednoúčelové zcela obecné makro, které  vezme obsah z #1 udělá z něj QR kód
+% a ten uloží do obrázku s názvem a cestou v #2
+\def\GENQR#1#2{%
+    \directlua{os.execute("qrencode -o #2 -s 10 #1")}%'
+    \externalfigure[#2][width=\QRSize]%
+}
+
+
+
+% Funguje tak, že v případě existence parametru #2 načte QRkod obrázku v #2
+% pokus je  #2={} pak vygeneruje a zobrazí QR kód.
+\def\Genqr#1#2{%
+  % Nejprve ověříme, zda je první parametr (#1) neprázdný
+  \if:#1:
+    % Pokud #1 je prázdný, rozhodujeme se podle #2
+    \if:#2:
+      % Oba parametry jsou prázdné → prázdný rámeček
+      \framed[width=\QRSize, height=\QRSize, frame=on, align=middle]{}
+    \else
+      % Pokud #1 je prázdné, ale #2 obsahuje soubor, načteme obrázek
+       \externalfigure[#2][width=\QRSize]
+    \fi
+  \else
+    % #1 není prázdné → pokud #2 obsahuje soubor, načteme ho místo generování QR
+    \if:#2:
+      % #1 obsahuje hodnotu, ale #2 je prázdné → generujeme QR kód
+        % \directlua{os.execute("qrencode -o qrkody/qrcode\Id.png -s 10 #1")}%
+        % \externalfigure[qrkody/qrcode\Id.png][width=\QRSize]
+        \directlua{os.execute("qrencode -o qrkody/qrcode_by_GenQr.png -s 10 #1")}%
+        \externalfigure[qrkody/qrcode_by_GenQr.png][width=\QRSize]
+    \else
+      % #1 i #2 jsou neprázdné →  vytvoříme QR kód s obsahem a uložíme jej do souboru s daným názvem v #2
+    %  \externalfigure[#2][width=\QRSize]
+     \GENQR{#1}{#2}
+    \fi
+  \fi
+}
+
+
+% Pouze pro nalezení souboru s obrázkem na cestě + zobrazení QR kódu
+\define[1]\viewqr{%
+  \doiffileelse{#1}{%
+    \externalfigure[#1][width=\QRSize]%
+  }{%
+    \framed[width=\QRSize, height=\QRSize, frame=on, align=middle]{}
+  }%
+}
+
+
+
+% Zobrazení QR kódu:
+% \viewqr{qrc_by_shell_qrfromcsv_sh1.png}\page
+% \viewqr{qrc_by_shell_qrfromcsv_sh5.png}\page
+
+
+%% Funkční kód:
+% 1 \Genqr{}{ahoj123.png}\page         % načte QR kód z obrázku ahoj123.png
+% 2 \Genqr{AAA}{qrkody/xyz.png}\page   % vytvoří QR kód z AAA a uloží jej do qrkody/xyz.png
+% 3 \Genqr{}{}\page                    % Prázdný rámeček - není co řešit
+% 4 \Genqr{BBB}{}\page                 % Vytvoří kód z BBB a uloží jej do defaultního QR kódu "qrcode_by_GenQr.png" a ten načte
+%
+%
+%% Vytváření kódů, jejich ukládání a  načítání (zobrazování)
+% 5 \GENQR{AAA}{qrkody/ahoj.png}\page
+% 6 \GENQR{BBB}{qrkody/ahoj.png}\page
+% 7 \GENQR{CCC}{ahoj123.png}\page
+% 8 \GENQR{DDD}{qrkody/alibaba.png}\page
+%
+
+
+% Zadávané hodnoty:
+\newcount\countofhor\countofhor=3
+\newcount\countofvert\countofvert=6
+
+\showframe[edge]
+
+
+% Zbytek se už vypočítává
+\definepapersize[BC][width=\dimexpr(\printpaperwidth/\countofhor),height=\dimexpr(\printpaperheight/\countofvert)]
+
+\setuppapersize [BC][A4]
+
+\setuppaper [topspace=0pt,backspace=0pt,bottomspace=0pt,cutspace=0pt, dx=0pt,dy=0pt,nx=\countofhor,ny=\countofvert]
+
+\setuplayout [page] [topspace=0pt,backspace=0pt,bottomspace=0pt,cutspace=0pt, location=fit]
+\setuplayout [topspace=0pt, backspace=0pt, height=fit, width=fit, location=middle, marking=on, leftmargin=0pt, rightmargin=0pt, header=0pt, footer=0pt]
+\setuparranging [XY]
+
+
+\setuppagenumbering [alternative=doublesided,location=, state=stop]
+
+
+
+
+\startbuffer[test-cstex]
+\vbox to \vsize{
+  \vfil
+  \hbox{}
+  \hbox to \hsize{\hfil\ssa\bf Test CsTeX - \Id \hfil}
+  \hbox to \hsize{\hfil {\genqr{\QRURL}}\hfil}
+  \blank[-3mm]
+  \hbox to \hsize{\hfil\ssx\bf\Prijmeni\ \Jmeno\ (\Trida)\hfil}
+  \hbox to \hsize{\hfil\ssxx Uchovejte tento privátní QR kód v bezpečí!\hfil}
+  \vfil
+}
+\nextrow
+\stopbuffer
+
+
+
+
+
+
+\starttext
+
+\enablemode[test-cstex]
+
+
+\startmode[test-cstex]
+\catcode`\%=12
+    \opencsvfile{test-cstex.csv}
+    \dorecurse{\numrows}{\getbuffer[test-cstex]}
+\stopmode
+
+
+
+\stoptext
+
+
+
+

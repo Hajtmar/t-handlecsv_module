@@ -1,6 +1,6 @@
 -- %D \module
 -- %D   [     file=t-handlecsv.lua,
--- %D      version=2017.07.13,
+-- %D      version=2019.03.30,
 -- %D        title=HandleCSV module,
 -- %D     subtitle=CSV file handling,
 -- %D       author=Jaroslav Hajtmar,
@@ -9,7 +9,7 @@
 -- %D        email=hajtmar@gyza.cz,
 -- %D      license=GNU General Public License]
 --
--- %C Copyright (C) 2011  Jaroslav Hajtmar
+-- %C Copyright (C) 2019 Jaroslav Hajtmar
 -- %C
 -- %C This program is free software: you can redistribute it and/or modify
 -- %C it under the terms of the GNU General Public License as published by
@@ -35,27 +35,28 @@ thirddata.handlecsv = { -- Global variables
 --  gCSVQuoter
     gUserCSVQuoter='"', --
 --	 gCSVHeader
-	 gUserCSVHeader=false, -- CSV file is by default considered as a CSV file without the header (in header are treated as column names of macros
-	 gUserUseHooks=false, -- In default setting is not use "hooks" when process CSV file
+	gUserCSVHeader=false, -- CSV file is by default considered as a CSV file without the header (in header are treated as column names of macros
+	gUserUseHooks=false, -- In default setting is not use "hooks" when process CSV file
     gUserColumnNumbering='XLS',  -- Something other than the XLS or undefined variable value (eg commenting that line) to set the Roman numbering ...
     gCurrentlyProcessedCSVFile=nil,
---  gMarkingEmptyLines
-     gUserMarkingEmptyLines=false, -- if true, then module mark empty rows in CSV file else module accept empty lines as regular lines
-	 gTableEmptyRows={}, -- array of indexes of empty lines of CSV table -> gTableEmptyRows[1]= 3 etc
-	 gTableNotEmptyRows={}, -- array of indexes of nonempty lines of CSV table -> gTableNotEmptyRows[1]= 3 etc
-	 gNumEmptyRows=0, -- number of empty rows
-	 gCSVHandleBuffer={}, -- temporary buffer
+  	gMarkingEmptyLines=false,
+    gUserMarkingEmptyLines=false, -- if true, then module mark empty rows in CSV file else module accept empty lines as regular lines
+	gTableEmptyRows={}, -- array of indexes of empty lines of CSV table -> gTableEmptyRows['csvfilename'][1]= 3 etc
+	gTableNotEmptyRows={}, -- array of indexes of nonempty lines of CSV table -> gTableNotEmptyRows['csvfilename'][1]= 3 etc
+	gCSVHandleBuffer={}, -- temporary buffer
 -- NEW variables
-     gOpenFiles={}, -- array of all opened files
-	 gTableRows={}, -- array of contents of cells of CSV table -> gTableRows[csvfilename][row][column]
-     gNumLine={}, -- global variable -      gNumLine['csvfilename.csv']=0
-     gNumRows={}, -- global variable  - save number of rows of csv table: gNumRows['csvfilename']=0
-     gNumCols={}, -- global variable  - save number of columns of csv table: gNumCols['csvfilename']=0
-     gCurrentLinePointer={}, -- ie. CSV line number ie. number of the currently processed row: gCurrentLinePointer['csvfilename']=0
-     gColumnNames={}, -- array with column names (readings from header of CSV file): gColumnNames['csvfilename']
-     gColNames={}, -- associative array with column names for indexing use f.e. gColNames['csvfilename']['Firstname']=1, etc...
-	 gTableRows={}, -- array of contents of cells of CSV table -> gTableRows['csvfilename'][row][column]
-	 gTableRowsIndex={}, -- array of flags of lines of CSV table -> gTableEmptyRowsIndex['csvfilename'][i]= true or false
+    gOpenFiles={}, -- array of all opened files
+    gNumLine={}, -- global variable -      gNumLine['csvfilename.csv']=0
+    gNumRows={}, -- global variable  - save number of rows of csv table: gNumRows['csvfilename']=0
+	gNumEmptyRows={},  -- global variable  - save number of empty rows of csv table: gNumEmptyRows['csvfilename']=0
+	gNumNotEmptyRows={},  -- global variable  - save number of empty rows of csv table: gNumNotEmptyRows['csvfilename']=0
+    gNumCols={}, -- global variable  - save number of columns of csv table: gNumCols['csvfilename']=0
+    gCurrentLinePointer={}, -- ie. CSV line number ie. number of the currently processed row: gCurrentLinePointer['csvfilename']=0
+    gColumnNames={}, -- array with column names (readings from header of CSV file): gColumnNames['csvfilename']
+    gColNames={}, -- associative array with column names for indexing use f.e. gColNames['csvfilename']['Firstname']=1, etc...
+	gTableRows={}, -- array of contents of cells of CSV table -> gTableRows['csvfilename'][row][column]
+	gTableRowsIndex={}, -- array of flags of lines of CSV table -> gTableEmptyRowsIndex['csvfilename'][i]= true or false
+	gSavedLinePointerNo=1, -- global variable to keep the line number
 }
 
 local setmacro = interfaces.setmacro or ""
@@ -82,9 +83,8 @@ function thirddata.handlecsv.texmacroisdefined(macroname) -- check whether macro
   return token.get_cmdname(token.create(macroname)) ~= "undefined_cs"
 end
 
-
--- tool function ParseCSVLine is defined for compatibility. Parsing string (or line).
 function thirddata.handlecsv.ParseCSVLine(line,sep)
+-- tool function ParseCSVLine is defined for compatibility. Parsing string (or line).
 	local mycsvsplitter = utilities.parsers.rfc4180splitter{
 	    separator = sep,
 	    quote = '"',
@@ -167,6 +167,36 @@ function thirddata.handlecsv.ar2colnum(arnum) -- According to the settings glob.
    end
 end
 
+function thirddata.handlecsv.substitutecontentofcellof(csvfile,column,row,whattoreplace,substitution)
+-- Substitute text in cell content of specified CSV file with other text
+  local csvfile=thirddata.handlecsv.handlecsvfile(csvfile)
+  local column=thirddata.handlecsv.gColNames[csvfile][column]
+  local whattoreplace=tostring(whattoreplace)
+  local substitution=tostring(substitution)
+  return thirddata.handlecsv.getcellcontentof(csvfile,column,row):gsub(whattoreplace,substitution)
+end
+
+function thirddata.handlecsv.substitutecontentofcell(column,row,whattoreplace,substitution)
+-- Substitute text in cell content of current CSV file with other text
+  local csvfile=thirddata.handlecsv.getcurrentcsvfilename()
+  local column=thirddata.handlecsv.gColNames[csvfile][column]
+  return thirddata.handlecsv.substitutecontentofcellof(csvfile,column,row,whattoreplace,substitution)
+end
+
+function thirddata.handlecsv.substitutecontentofcellofcurrentrow(column,whattoreplace,substitution)
+-- Substitute text in cell content of current row of current CSV file with other text
+  local row=thirddata.handlecsv.linepointer()
+  return thirddata.handlecsv.substitutecontentofcell(column,row,whattoreplace,substitution)
+end
+
+function thirddata.handlecsv.processinputvalue(inputparameter,replacingnumber)
+-- when inputparameter is not correct, then return replacingnumber
+local returnparameter=inputparameter
+	if type(inputparameter)~= 'number' then
+		returnparameter=replacingnumber
+	end --
+return returnparameter
+end
 
 
 -- Main functions and macros:
@@ -187,15 +217,15 @@ end
 
 function thirddata.handlecsv.setheader()
  thirddata.handlecsv.gCSVHeader=true
- context([[\global\issetheadertrue%]])
- context([[\global\notsetheaderfalse%]])
+ tex.sprint([[\global\issetheadertrue]])
+ tex.sprint([[\global\notsetheaderfalse]])
 end
 
 
 function thirddata.handlecsv.unsetheader()
  thirddata.handlecsv.gCSVHeader=false
- context([[\global\issetheaderfalse%]])
- context([[\global\notsetheadertrue%]])
+ tex.sprint([[\global\issetheaderfalse]])
+ tex.sprint([[\global\notsetheadertrue]])
 end
 
 function thirddata.handlecsv.setsep(sep)
@@ -207,46 +237,56 @@ function thirddata.handlecsv.unsetsep()
 end
 
 function thirddata.handlecsv.indexofnotemptyline(sernumline)
-	context(thirddata.handlecsv.gTableNotEmptyRows[sernumline])
-	return thirddata.handlecsv.gTableNotEmptyRows[sernumline]
+local csvfilename=thirddata.handlecsv.getcurrentcsvfilename()
+	return thirddata.handlecsv.gTableNotEmptyRows[csvfilename][sernumline]
 end
 
 function thirddata.handlecsv.indexofemptyline(sernumline)
-	context(thirddata.handlecsv.gTableEmptyRows[sernumline])
-	return thirddata.handlecsv.gTableEmptyRows[sernumline]
+local csvfilename=thirddata.handlecsv.getcurrentcsvfilename()
+	return thirddata.handlecsv.gTableEmptyRows[csvfilename][sernumline]
 end
 
 function thirddata.handlecsv.notmarkemptylines()
- thirddata.handlecsv.gMarkingEmptyLines=false
-   for row=1,thirddata.handlecsv.gNumRows[thirddata.handlecsv.getcurrentcsvfilename()] do
-		thirddata.handlecsv.gTableNotEmptyRows[row]=row
+local csvfilename=thirddata.handlecsv.getcurrentcsvfilename()
+   thirddata.handlecsv.gMarkingEmptyLines=false
+   for row=1,thirddata.handlecsv.gNumRows[csvfilename] do
+		thirddata.handlecsv.gTableNotEmptyRows[csvfilename][row]=row
      end
-	 context([[\global\emptylinefalse%]])
-	 context([[\global\notemptylinetrue%]])
-	 context([[\global\emptylinesmarkingfalse%]])
-	 context([[\global\emptylinesnotmarkingtrue%]])
+ 	 thirddata.handlecsv.gTableEmptyRows[csvfilename]={}
+ 	 thirddata.handlecsv.gNumEmptyRows[csvfilename]=0
+	 thirddata.handlecsv.gNumNotEmptyRows[csvfilename]=thirddata.handlecsv.gNumRows[csvfilename]
+	 tex.sprint([[\global\emptylinefalse]])
+	 tex.sprint([[\global\notemptylinetrue]])
+	 tex.sprint([[\global\emptylinesmarkingfalse]])
+	 tex.sprint([[\global\emptylinesnotmarkingtrue]])
 end
 
 function thirddata.handlecsv.markemptylines()
- thirddata.handlecsv.gMarkingEmptyLines=true
+local csvfilename=thirddata.handlecsv.getcurrentcsvfilename()
+ 	thirddata.handlecsv.gTableEmptyRows[csvfilename]={}
+ 	thirddata.handlecsv.gTableNotEmptyRows[csvfilename]={}
+	thirddata.handlecsv.gMarkingEmptyLines=true
  	 local counteremptylines=0
 	 local counternotemptylines=0
-	  for row=1,thirddata.handlecsv.gNumRows[thirddata.handlecsv.getcurrentcsvfilename()] do
+	  for row=1,thirddata.handlecsv.gNumRows[csvfilename] do
 			if thirddata.handlecsv.testemptyrow(row) then
 				counteremptylines=counteremptylines+1
-				thirddata.handlecsv.gTableEmptyRows[counteremptylines]=row
+				thirddata.handlecsv.gTableEmptyRows[csvfilename][counteremptylines]=row
 			else
 				counternotemptylines=counternotemptylines+1
-				thirddata.handlecsv.gTableNotEmptyRows[counternotemptylines]=row
+				thirddata.handlecsv.gTableNotEmptyRows[csvfilename][counternotemptylines]=row
 			end
 	  end -- for
-	  context([[\global\emptylinesmarkingtrue%]])
-	  context([[\global\emptylinesnotmarkingfalse%]])
+	  thirddata.handlecsv.gNumEmptyRows[csvfilename]=counteremptylines
+	  thirddata.handlecsv.gNumNotEmptyRows[csvfilename]=counternotemptylines
+	  tex.sprint([[\global\emptylinesmarkingtrue]])
+	  tex.sprint([[\global\emptylinesnotmarkingfalse]])
 end
 
 
 function thirddata.handlecsv.resetmarkemptylines()
 -- do following lines only when file contain completely empty rows and is requiring testing empty lines
+local csvfilename=thirddata.handlecsv.getcurrentcsvfilename()
 	thirddata.handlecsv.gMarkingEmptyLines = thirddata.handlecsv.gUserMarkingEmptyLines
 	 if thirddata.handlecsv.gMarkingEmptyLines then
 	    thirddata.handlecsv.markemptylines()
@@ -256,45 +296,72 @@ end
 
 
 function thirddata.handlecsv.testemptyrow(lineindex)
+local csvfilename=thirddata.handlecsv.getcurrentcsvfilename()
 local linecontent=""
 local isemptyline=false
-	for column=1,thirddata.handlecsv.gNumCols[thirddata.handlecsv.getcurrentcsvfilename()] do
-		linecontent=linecontent..thirddata.handlecsv.gTableRows[thirddata.handlecsv.getcurrentcsvfilename()][lineindex][column]
+	for column=1,thirddata.handlecsv.gNumCols[csvfilename] do
+		linecontent=linecontent..thirddata.handlecsv.gTableRows[csvfilename][lineindex][column]
 	end
 	if linecontent=="" or linecontent==nil then
 		isemptyline=true
-		thirddata.handlecsv.gNumEmptyRows=thirddata.handlecsv.gNumEmptyRows+1
+--		thirddata.handlecsv.gNumEmptyRows[csvfilename]=thirddata.handlecsv.gNumEmptyRows[csvfilename]+1
 	end
-	thirddata.handlecsv.gTableRowsIndex[thirddata.handlecsv.getcurrentcsvfilename()][lineindex]=isemptyline
+	thirddata.handlecsv.gTableRowsIndex[csvfilename][lineindex]=isemptyline
  return isemptyline
 end
 
 
 function thirddata.handlecsv.emptylineevaluation(lineindex)
 	if thirddata.handlecsv.gTableRowsIndex[thirddata.handlecsv.getcurrentcsvfilename()][lineindex] then
-	  context([[\global\emptylinetrue%]])
-	  context([[\global\notemptylinefalse%]])
+	  tex.sprint([[\global\emptylinetrue]])
+	  tex.sprint([[\global\notemptylinefalse]])
 	else
-	 context([[\global\emptylinefalse%]])
-	 context([[\global\notemptylinetrue%]])
+	 tex.sprint([[\global\emptylinefalse]])
+	 tex.sprint([[\global\notemptylinetrue]])
 	end
 	return thirddata.handlecsv.gTableRowsIndex[thirddata.handlecsv.getcurrentcsvfilename()][lineindex]
+end
+
+
+function thirddata.handlecsv.removeemptylines()
+-- This function remove empty rows only from field of variables thirddata.handlecsv.gTableRows!
+-- The field is only re-indexed and function does not affect onto the physical input CSV file!
+-- When the physical CSV file is reopened by using \open macro, the global field variable
+-- thirddata.handlecsv.gTableRows[csvfile] is reset into original state!
+	thirddata.handlecsv.markemptylines()
+	local csvfilename=thirddata.handlecsv.getcurrentcsvfilename()
+
+	for i=1,thirddata.handlecsv.gNumNotEmptyRows[csvfilename] do
+		local indexofnotemptyrow=thirddata.handlecsv.gTableNotEmptyRows[csvfilename][i]
+		-- i<--indexofnotemptyrow
+		thirddata.handlecsv.gTableRows[csvfilename][i]=thirddata.handlecsv.gTableRows[csvfilename][indexofnotemptyrow]
+	end
+
+	for i=thirddata.handlecsv.gNumNotEmptyRows[csvfilename]+1,thirddata.handlecsv.gNumRows[csvfilename] do
+		thirddata.handlecsv.gTableRows[csvfilename][i]=nil
+	end
+
+	thirddata.handlecsv.gNumRows[csvfilename]=thirddata.handlecsv.gNumNotEmptyRows[csvfilename]
+	thirddata.handlecsv.markemptylines()
+	thirddata.handlecsv.gTableEmptyRows[csvfilename]={}
+	thirddata.handlecsv.gTableNotEmptyRows[csvfilename]={}
 end
 
 
 function thirddata.handlecsv.hooksevaluation()
 	for i=1,#thirddata.handlecsv.gColumnNames[thirddata.handlecsv.getcurrentcsvfilename()] do
 	 if not thirddata.handlecsv.texmacroisdefined('bch'..thirddata.handlecsv.gColumnNames[thirddata.handlecsv.getcurrentcsvfilename()][i]) then
-	  context.setgvalue('bch'..thirddata.handlecsv.gColumnNames[thirddata.handlecsv.getcurrentcsvfilename()][i],'\\relax')
+	  context.setgvalue('bch'..thirddata.handlecsv.gColumnNames[thirddata.handlecsv.getcurrentcsvfilename()][i],'')
 	 end
 	 if not thirddata.handlecsv.texmacroisdefined('ech'..thirddata.handlecsv.gColumnNames[thirddata.handlecsv.getcurrentcsvfilename()][i]) then
-	  context.setgvalue('ech'..thirddata.handlecsv.gColumnNames[thirddata.handlecsv.getcurrentcsvfilename()][i],'\\relax')
+	  context.setgvalue('ech'..thirddata.handlecsv.gColumnNames[thirddata.handlecsv.getcurrentcsvfilename()][i],'')
 	 end
 	end
 end
 
 
-function thirddata.handlecsv.setgetcurrentcsvfile(filename) -- In the absence of the file name to use the global variable
+function thirddata.handlecsv.setgetcurrentcsvfile(filename)
+-- In the absence of the file name to use the global variable
 	 thirddata.handlecsv.gCurrentlyProcessedCSVFile = (filename ~= nil) and filename or thirddata.handlecsv.gCurrentlyProcessedCSVFile
 	 thirddata.handlecsv.gCurrentlyProcessedCSVFile = (thirddata.handlecsv.gCurrentlyProcessedCSVFile == nil) and filename or thirddata.handlecsv.gCurrentlyProcessedCSVFile
    local filename = filename ~= nil and filename or thirddata.handlecsv.gCurrentlyProcessedCSVFile
@@ -302,21 +369,40 @@ function thirddata.handlecsv.setgetcurrentcsvfile(filename) -- In the absence of
    return tostring(filename)
 end
 
-function thirddata.handlecsv.handlecsvfile(filename) -- not used yet
-   return tostring(filename)
+function thirddata.handlecsv.handlecsvfile(filename)
+-- not used yet
+local filename  =  tostring(filename)
+  filename = string.gsub(filename, '"', '')
+  filename = string.gsub(filename, "'", "")
+if not (thirddata.handlecsv.isopenfile(filename)) then
+ filename = (filename ~= nil) and filename or thirddata.handlecsv.gCurrentlyProcessedCSVFile
+ filename = (thirddata.handlecsv.gCurrentlyProcessedCSVFile == nil) and filename or thirddata.handlecsv.gCurrentlyProcessedCSVFile
+ filename = filename ~= nil and filename or thirddata.handlecsv.gCurrentlyProcessedCSVFile
+ filename = filename ~= '' and filename or thirddata.handlecsv.gCurrentlyProcessedCSVFile
+end
+  return filename
 end
 
-function thirddata.handlecsv.getcurrentcsvfilename() -- return current (actual) CSV file
+function thirddata.handlecsv.getcurrentcsvfilename()
+-- return current (actual) CSV file
    return tostring(thirddata.handlecsv.gCurrentlyProcessedCSVFile)
 end
 
 
-function thirddata.handlecsv.isopenfile(csvfilename) -- testing of opening CSV files
+function thirddata.handlecsv.isopenfile(csvfilename)
+-- testing of opening CSV files
   local retval=(thirddata.handlecsv.gOpenFiles[csvfilename] ~= nil)
    return retval
 end
 
-function thirddata.handlecsv.getnumberofopencsvfiles() -- get the number of open files
+function thirddata.handlecsv.closecsvfile(csvfilename)
+-- manual closing of CSV files
+  thirddata.handlecsv.gOpenFiles[csvfilename] = nil
+end
+
+
+function thirddata.handlecsv.getnumberofopencsvfiles()
+-- get the number of open files
 local count = 0
 for k, v in pairs(thirddata.handlecsv.gOpenFiles) do
      count = count + 1
@@ -331,13 +417,13 @@ function thirddata.handlecsv.setpointersofopeningcsvfile(inpcsvfile)
  thirddata.handlecsv.gNumLine[inpcsvfile]=1 -- set numline counter of file inpcsvfile
  thirddata.handlecsv.resetlinepointerof(inpcsvfile)	-- set pointer to begin table (first row)
  thirddata.handlecsv.setnumlineof(inpcsvfile,1)
- context([[\global\EOFfalse%]])
- context([[\global\notEOFtrue%]])
--- Nyní vyřešit tohleto:
---  	 thirddata.handlecsv.resetmarkemptylines()
+ tex.sprint([[\global\EOFfalse]])
+ tex.sprint([[\global\notEOFtrue]])
+ thirddata.handlecsv.resetmarkemptylines()
 end
 
-function thirddata.handlecsv.opencsvfile(filetoscan) -- Open CSV tabule, inicialize variables
+function thirddata.handlecsv.opencsvfile(filetoscan)
+-- Open CSV tabule, inicialize variables
 	-- open the table and load it into the global variable thirddata.handlecsv.gTableRows[filetoscan]
 	-- if the option thirddata.handlecsv.gCSVHeader==true is enabled, then into glob variable thirddata.handlecsv.gColumnNames[filetoscan]
 	-- sets the column names from the title, if not then sets XLS notation, ie. cA, cB, cC, ...
@@ -353,12 +439,12 @@ function thirddata.handlecsv.opencsvfile(filetoscan) -- Open CSV tabule, inicial
 
 		local inpcsvfile=thirddata.handlecsv.setgetcurrentcsvfile(inpcsvfile)
 		thirddata.handlecsv.gOpenFiles[inpcsvfile]=inpcsvfile -- memory opening file
-		thirddata.handlecsv.gNumEmptyRows=0
-
 		thirddata.handlecsv.gColNames[inpcsvfile]={}
 		thirddata.handlecsv.gColumnNames[inpcsvfile]={}
 		thirddata.handlecsv.gTableRowsIndex[inpcsvfile]={}
 		thirddata.handlecsv.gTableRows[inpcsvfile]={}
+ 		thirddata.handlecsv.gTableEmptyRows[inpcsvfile]={}
+ 		thirddata.handlecsv.gTableNotEmptyRows[inpcsvfile]={}
 
 
 		local currentlyprocessedcsvfile = io.loaddata(inpcsvfile)
@@ -407,7 +493,8 @@ function thirddata.handlecsv.opencsvfile(filetoscan) -- Open CSV tabule, inicial
 
 		thirddata.handlecsv.gNumRows[inpcsvfile]=#thirddata.handlecsv.gTableRows[inpcsvfile] -- Getting number of rows
 		thirddata.handlecsv.gNumCols[inpcsvfile]=#thirddata.handlecsv.gTableRows[inpcsvfile][1] -- Getting number of columns
-
+		thirddata.handlecsv.gNumEmptyRows[inpcsvfile]=0
+		thirddata.handlecsv.gNumNotEmptyRows[inpcsvfile]=#thirddata.handlecsv.gTableRows[inpcsvfile]
 		thirddata.handlecsv.setpointersofopeningcsvfile(inpcsvfile) 		-- set pointers
 
 		if thirddata.handlecsv.gUseHooks then  thirddata.handlecsv.hooksevaluation() end
@@ -417,12 +504,8 @@ return
 end -- of thirddata.handlecsv.opencsvfile(file)
 
 
-
-
-
-
--- Main function. Read data from specific line of specific file, parse them etc.
 function thirddata.handlecsv.readlineof(inpcsvfile,numberofline) --
+-- Main function. Read data from specific line of specific file, parse them etc.
     local inpcsvfile=thirddata.handlecsv.handlecsvfile(inpcsvfile)
 	local numberofline=numberofline
 	local returnpar=false
@@ -438,11 +521,11 @@ function thirddata.handlecsv.readlineof(inpcsvfile,numberofline) --
 	  	 thirddata.handlecsv.gCurrentLinePointer[inpcsvfile]=numberofline
 		 returnpar=true
 		 thirddata.handlecsv.assigncontentsof(inpcsvfile,thirddata.handlecsv.gTableRows[inpcsvfile][numberofline])
-		 context([[\global\EOFfalse\global\notEOFtrue%]])
+		 tex.sprint([[\global\EOFfalse\global\notEOFtrue]])
 	 else
 		 thirddata.handlecsv.assigncontentsof(inpcsvfile,'nil_line')
 			if numberofline > thirddata.handlecsv.gNumRows[inpcsvfile] then
-			   context([[\global\EOFtrue\global\notEOFfalse%]])
+			   tex.sprint([[\global\EOFtrue\global\notEOFfalse]])
 	   	end
 	 end  -- if (numberofline > 0
 --řešit	 	thirddata.handlecsv.emptylineevaluation(numberofline)
@@ -450,8 +533,8 @@ function thirddata.handlecsv.readlineof(inpcsvfile,numberofline) --
 end -- function thirddata.handlecsv.readlineof(inpcsvfile,numberofline) --
 
 
--- Main function. Read data from specific line of specific file, parse them etc.
 function thirddata.handlecsv.readline(numberofline) --
+-- Main function. Read data from specific line of specific file, parse them etc.
  local csvfile=thirddata.handlecsv.getcurrentcsvfilename()
   if type(numberofline) == 'number' then
 	thirddata.handlecsv.readlineof(csvfile,numberofline) --
@@ -461,23 +544,21 @@ function thirddata.handlecsv.readline(numberofline) --
 end
 
 
-
-
 function thirddata.handlecsv.createxlscommandof(xlsname,csvfile)
 local inpcsvfile=thirddata.handlecsv.handlecsvfile(csvfile)
 local cxlsname=tostring('col'..xlsname)
 local docxlsname=tostring('docol'..xlsname)
 local xlsname=tostring(''..xlsname)
 
--- context([[\def\definice]]..xlsname..[[#1{\ctxlua{context(thirddata.handlecsv.getcellcontentof(']]..inpcsvfile..[[',']]..xlsname..[[','#1'))}}]])
+-- tex.sprint([[\def\definice]]..xlsname..[[#1{\ctxlua{tex.sprint(thirddata.handlecsv.getcellcontentof(']]..inpcsvfile..[[',']]..xlsname..[[','#1'))}}]])
 
 		interfaces.definecommand (docxlsname, {
 		    arguments = { { "option", "string" }  },
 		    macro = function (opt_1)
 		       if #opt_1>0 then
-				context(thirddata.handlecsv.getcellcontentof(inpcsvfile,xlsname,tonumber(opt_1)))
+				tex.sprint(thirddata.handlecsv.getcellcontentof(inpcsvfile,xlsname,tonumber(opt_1)))
 				else
-				context(thirddata.handlecsv.getcellcontentof(inpcsvfile,xlsname,thirddata.handlecsv.gCurrentLinePointer[inpcsvfile]))
+				tex.sprint(thirddata.handlecsv.getcellcontentof(inpcsvfile,xlsname,thirddata.handlecsv.gCurrentLinePointer[inpcsvfile]))
 				end
 		    end
 			})
@@ -506,9 +587,8 @@ thirddata.handlecsv.createxlscommandof(xlsname,inpcsvfile)
 end
 
 
-
--- after read of line this function put content of columns into specific TeX macros...
 function thirddata.handlecsv.assigncontentsof(inpcsvfile,line) -- put data into columns macros
+-- after read of line this function put content of columns into specific TeX macros...
 --if tex.modes['XXL'] then context("XXL mode") else context("not XXL mode") end
 	local inpcsvfile=thirddata.handlecsv.handlecsvfile(inpcsvfile)
 	local cutoffinpcsvfile=thirddata.handlecsv.ParseCSVLine(inpcsvfile,".")[1] -- cut filename extension
@@ -516,7 +596,8 @@ function thirddata.handlecsv.assigncontentsof(inpcsvfile,line) -- put data into 
  		content='nil' -- 1.10.2015
  		if line ~= 'nil_line' then content = line[i] end
 		local puremacroname=thirddata.handlecsv.gColumnNames[inpcsvfile][i]
-		local macroname=cutoffinpcsvfile..thirddata.handlecsv.gColumnNames[inpcsvfile][i]
+--		local macroname=cutoffinpcsvfile..thirddata.handlecsv.gColumnNames[inpcsvfile][i]
+		local macroname=thirddata.handlecsv.gColumnNames[inpcsvfile][i]
 --		context("macroname: "..macroname.."\\crlf")
 		local purexlsname=thirddata.handlecsv.ar2colnum(i)
 --		context("purexlsname: "..purexlsname.."\\crlf")
@@ -539,18 +620,20 @@ function thirddata.handlecsv.assigncontentsof(inpcsvfile,line) -- put data into 
 	-- experimental version in next two lines:
 	-- this define variants of macros \colA, \colA[8], ... and \colFirstname, \colFirstname[11] etc.
 		thirddata.handlecsv.createxlscommandof(''..purexlsname,inpcsvfile) -- create macros \colA, \colB, etc. and their variants \colA[row], ...
---context('col'..macroname.."+ěščřžý")
---		context.setgvalue('col'..macroname,'\\col'..purexlsname) -- and create fullname macros \colFirstname, \colFirstname[5], etc...
+--if tex.modes['XXX'] then
+--context("XXX-"..macroname.."-XXX")
+--end
+		context.setgvalue('col'..macroname,'\\col'..purexlsname) -- and create fullname macros \colFirstname, \colFirstname[5], etc...
 --		context.setgvalue(''..macroname,'\\col'..purexlsname) -- and create fullname macros \colFirstname, \colFirstname[5], etc...
-		context.setgvalue(''..macroname,'\\col'..purexlsname) -- and create fullname macros \colFirstname, \colFirstname[5], etc...
+--		context.setgvalue(''..macroname,'\\col'..purexlsname) -- and create fullname macros \colFirstname, \colFirstname[5], etc...
 		--
 			interfaces.definecommand ("column"..purexlsname, {
 		    arguments = { { "string"}  },
 		    macro = function (opt_1)
 		    if opt_1~="" then
-			context(thirddata.handlecsv.getcellcontentof(inpcsvfile,xlsname,tonumber(opt_1)))
+			tex.sprint(thirddata.handlecsv.getcellcontentof(inpcsvfile,xlsname,tonumber(opt_1)))
 			else
-			context(thirddata.handlecsv.getcellcontentof(inpcsvfile,xlsname,thirddata.handlecsv.gCurrentLinePointer[inpcsvfile]))
+			tex.sprint(thirddata.handlecsv.getcellcontentof(inpcsvfile,xlsname,thirddata.handlecsv.gCurrentLinePointer[inpcsvfile]))
 			end
 		    end
 			})
@@ -569,8 +652,8 @@ thirddata.handlecsv.assigncontentsof(thirddata.handlecsv.getcurrentcsvfilename()
 end
 
 
--- Read data from specific cell of specific the csv table
 function thirddata.handlecsv.getcellcontentof(csvfile,column,row)
+-- Read data from specific cell of specific the csv table
 	-- local returnparametr='nil'  -- 1.10.2015
 	local csvfile=thirddata.handlecsv.handlecsvfile(csvfile)
 	local returnparametr=''  -- 9.1.2016
@@ -583,7 +666,16 @@ function thirddata.handlecsv.getcellcontentof(csvfile,column,row)
 		else
 		   column=testcolumn
 		end
+	else
+		testcolumn=tonumber(column)
+		if testcolumn==nil then
+		  column=0
+		else
+		   column=testcolumn
+		end
 	end
+	if column<=0 then column=1 end
+	if column>thirddata.handlecsv.gNumCols[csvfile] then column=thirddata.handlecsv.gNumCols[csvfile] end
 	if type(row)=='string' then
 		local testrow=tonumber(row)
 		if testrow==nil then
@@ -603,39 +695,63 @@ function thirddata.handlecsv.getcellcontentof(csvfile,column,row)
 end
 
 
--- Read data from specific cell of current open csv table
 function thirddata.handlecsv.getcellcontent(column,row)
+-- Read data from specific cell of current open csv table
  local csvfile=thirddata.handlecsv.getcurrentcsvfilename()
  local returnparametr=thirddata.handlecsv.getcellcontentof(csvfile,column,row)
  return returnparametr
 end
 
 
--- Move line pointer to next line.
 function thirddata.handlecsv.nextlineof(csvfile)
+-- Move line pointer to next line.
   local csvfile=thirddata.handlecsv.handlecsvfile(csvfile)
   if thirddata.handlecsv.gCurrentLinePointer[csvfile] > thirddata.handlecsv.gNumRows[csvfile] then
   	 thirddata.handlecsv.gCurrentLinePointer[csvfile]=thirddata.handlecsv.gNumRows[csvfile]
-     context([[\global\EOFtrue%]])
-     context([[\global\notEOFfalse%]])
+     tex.sprint([[\global\EOFtrue]])
+     tex.sprint([[\global\notEOFfalse]])
   else
     thirddata.handlecsv.gCurrentLinePointer[csvfile]=thirddata.handlecsv.gCurrentLinePointer[csvfile]+1
-     context([[\global\EOFfalse%]])
-     context([[\global\notEOFtrue%]])
+     tex.sprint([[\global\EOFfalse]])
+     tex.sprint([[\global\notEOFtrue]])
   end
 end
 
--- Move line pointer to next line.
+
 function thirddata.handlecsv.nextline()
+-- Move line pointer to next line.
  local csvfile=thirddata.handlecsv.getcurrentcsvfilename()
  thirddata.handlecsv.nextlineof(csvfile)
 end
 
 
+function thirddata.handlecsv.previouslineof(csvfile)
+-- Move line pointer to previous line.
+  local csvfile=thirddata.handlecsv.handlecsvfile(csvfile)
+  if thirddata.handlecsv.gCurrentLinePointer[csvfile] < 2 then
+  	 thirddata.handlecsv.gCurrentLinePointer[csvfile] = 1
+  else
+    thirddata.handlecsv.gCurrentLinePointer[csvfile]=thirddata.handlecsv.gCurrentLinePointer[csvfile] - 1
+  end
+     tex.sprint([[\global\EOFfalse]])
+     tex.sprint([[\global\notEOFtrue]])
+end
+
+
+function thirddata.handlecsv.previousline()
+-- Move line pointer to previous line.
+ local csvfile=thirddata.handlecsv.getcurrentcsvfilename()
+ thirddata.handlecsv.previouslineof(csvfile)
+end
 
 
 function thirddata.handlecsv.setlinepointerof(csvfile,numberofline)
   local csvfile=thirddata.handlecsv.handlecsvfile(csvfile)
+  local numberofline = thirddata.handlecsv.processinputvalue(numberofline,thirddata.handlecsv.gCurrentLinePointer[csvfile])
+   	if numberofline < 1 then numberofline = 1 end
+   	if numberofline > thirddata.handlecsv.gNumRows[csvfile] then
+  	 numberofline=thirddata.handlecsv.gNumRows[csvfile]
+	end
   thirddata.handlecsv.gCurrentLinePointer[csvfile]=numberofline
   thirddata.handlecsv.readlineof(csvfile,numberofline)
 end
@@ -643,20 +759,30 @@ end
 
 function thirddata.handlecsv.setlinepointer(numberofline)
  local csvfile=thirddata.handlecsv.getcurrentcsvfilename()
- thirddata.handlecsv.gCurrentLinePointer[csvfile]=numberofline
  thirddata.handlecsv.setlinepointerof(csvfile,numberofline)
 end
 
 
--- Take pointer to first row of table
+function thirddata.handlecsv.savelinepointer()
+  local csvfile=thirddata.handlecsv.getcurrentcsvfilename()
+  thirddata.handlecsv.gSavedLinePointerNo = thirddata.handlecsv.gCurrentLinePointer[csvfile]
+end
+
+
+function thirddata.handlecsv.setsavedlinepointer()
+  thirddata.handlecsv.setlinepointer(thirddata.handlecsv.gSavedLinePointerNo)
+end
+
+
 function thirddata.handlecsv.resetlinepointerof(csvfile)
+-- Take pointer to first row of table
  local csvfile=thirddata.handlecsv.handlecsvfile(csvfile)
   thirddata.handlecsv.setlinepointerof(csvfile,1)
 end
 
 
--- Take pointer to first row of table
 function thirddata.handlecsv.resetlinepointer()
+-- Take pointer to first row of table
  local csvfile=thirddata.handlecsv.getcurrentcsvfilename()
   thirddata.handlecsv.setlinepointerof(csvfile,1)
 end
@@ -670,7 +796,19 @@ end
 
 function thirddata.handlecsv.linepointer()
  local csvfile=thirddata.handlecsv.getcurrentcsvfilename()
-  return thirddata.handlecsv.gCurrentLinePointer[csvfile]
+ -- return thirddata.handlecsv.gCurrentLinePointer[csvfile] -- cause problem with decimal point for higher versions of Lua
+ -- return math.tointeger(thirddata.handlecsv.gCurrentLinePointer[csvfile]) -- cause incompatibility for lower version of Lua
+ return math.floor(tonumber(thirddata.handlecsv.gCurrentLinePointer[csvfile])) -- compatible with lower and higher versions of Lua
+end
+
+
+function thirddata.handlecsv.getcurrentlinepointer() -- for compatibility
+  return thirddata.handlecsv.linepointer()
+end
+
+
+function thirddata.handlecsv.getlinepointer() -- for compatibility
+  return thirddata.handlecsv.linepointer()
 end
 
 
@@ -718,15 +856,15 @@ local csvfile=thirddata.handlecsv.getcurrentcsvfilename()
 end
 
 
--- Move numline pointer to next number.
 function thirddata.handlecsv.nextnumlineof(csvfile)
+-- Move numline pointer to next number.
 local csvfile=thirddata.handlecsv.handlecsvfile(csvfile)
   thirddata.handlecsv.gNumLine[csvfile]=thirddata.handlecsv.gNumLine[csvfile]+1
 end
 
 
--- Move numline pointer to next number.
 function thirddata.handlecsv.nextnumline()
+-- Move numline pointer to next number.
 local csvfile=thirddata.handlecsv.getcurrentcsvfilename()
   thirddata.handlecsv.gNumLine[csvfile]=thirddata.handlecsv.gNumLine[csvfile]+1
 end
@@ -734,56 +872,54 @@ end
 
 function thirddata.handlecsv.numrowsof(csvfile)
 local csvfile=thirddata.handlecsv.handlecsvfile(csvfile)
-  context(thirddata.handlecsv.gNumRows[csvfile])
+--  context(thirddata.handlecsv.gNumRows[csvfile])
+  return thirddata.handlecsv.gNumRows[csvfile]
 end
 
 function thirddata.handlecsv.numrows()
 local csvfile=thirddata.handlecsv.getcurrentcsvfilename()
-  context(thirddata.handlecsv.gNumRows[csvfile])
+--  context(thirddata.handlecsv.gNumRows[csvfile])
+   return thirddata.handlecsv.gNumRows[csvfile]
 end
 
 
 function thirddata.handlecsv.numemptyrows()
-  context(thirddata.handlecsv.gNumEmptyRows)
+ return thirddata.handlecsv.gNumEmptyRows[thirddata.handlecsv.getcurrentcsvfilename()]
 end
 
 
 function thirddata.handlecsv.numnotemptyrows()
-  context(thirddata.handlecsv.gNumRows[thirddata.handlecsv.getcurrentcsvfilename()]-thirddata.handlecsv.gNumEmptyRows)
+return thirddata.handlecsv.gNumRows[thirddata.handlecsv.getcurrentcsvfilename()]-thirddata.handlecsv.gNumEmptyRows[thirddata.handlecsv.getcurrentcsvfilename()]
 end
-
 
 
 function thirddata.handlecsv.numcolsof(csvfile)
 local csvfile=thirddata.handlecsv.handlecsvfile(csvfile)
-  context(thirddata.handlecsv.gNumCols[csvfile])
+  tex.sprint(thirddata.handlecsv.gNumCols[csvfile])
 end
 
 function thirddata.handlecsv.numcols()
 local csvfile=thirddata.handlecsv.getcurrentcsvfilename()
-  context(thirddata.handlecsv.gNumCols[csvfile])
+  tex.sprint(thirddata.handlecsv.gNumCols[csvfile])
 -- thirddata.handlecsv.numcolsof(csvfile)
 end
 
 
-
-
--- initialize ConTeXt hooks
 function thirddata.handlecsv.resethooks()
- context([[%
- 	\letvalue{blinehook}=\relax%
-   \letvalue{elinehook}=\relax%
-   \letvalue{bfilehook}=\relax%
-   \letvalue{efilehook}=\relax%
-   \letvalue{bch}=\relax%
-   \letvalue{ech}=\relax%
-	]])
+-- initialize ConTeXt hooks
+ tex.sprint([[
+\def\blinehook{}
+\def\elinehook{}
+\def\bfilehook{}
+\def\efilehook{}
+\def\bch{}
+\def\ech{}
+]])
 end
 
 
-
--- for safety writen
 function thirddata.handlecsv.string2context(str2ctx)
+-- for safety writen
   local s=str2ctx
   s=string.gsub(s, "%%(.-)\n", "\n")  -- remove TeX comments from string. From % character to the end of line
   -- s=string.gsub(s, '\n', "")
@@ -793,11 +929,11 @@ end
 
 
 function thirddata.handlecsv.doloopfromto(from, to, action)
- context[[\opencsvfile]]
- context[[\edef\tempnumline{\numline}]] -- 23.6.2017
- context[[\resetnumline]] -- uncommented 23.6.2017
- context[[\bfilehook]]
- context[[\removeunwantedspaces]]
+ tex.sprint([[\opencsvfile]])
+ tex.sprint([[\edef\tempnumline{\numline}]]) -- 23.6.2017
+ tex.sprint([[\resetnumline]]) -- uncommented 23.6.2017
+ if thirddata.handlecsv.gUseHooks then tex.sprint([[\bfilehook]]) end
+ tex.sprint([[\removeunwantedspaces]])
  local csvfile=thirddata.handlecsv.getcurrentcsvfilename()
  local gnumrows=thirddata.handlecsv.gNumRows[csvfile]+0
  local from=from+0
@@ -815,21 +951,20 @@ function thirddata.handlecsv.doloopfromto(from, to, action)
  		if from<0 then from=1 end
   end
   for i=from, to, step do
-   context[[\blinehook]]
-   context([[\readline{]]..i..[[}]]) -- context(thirddata.handlecsv.readline(i))
-   context(action)
-   context[[\elinehook]]
+  if thirddata.handlecsv.gUseHooks then tex.sprint([[\blinehook]]) end
+   tex.sprint([[\readline{]]..i..[[}]]) --
+   tex.sprint(action)
+  if thirddata.handlecsv.gUseHooks then tex.sprint([[\elinehook]]) end
   end
  end -- docycle
-context[[\removeunwantedspaces]]
-context[[\efilehook]]
-context[[\setnumline{\tempnumline}]]  -- 23.6.2017
+-- tex.sprint([[\removeunwantedspaces]])
+if thirddata.handlecsv.gUseHooks then tex.sprint([[\efilehook]]) end
+tex.sprint([[\setnumline{\tempnumline}]])  -- 23.6.2017
 end -- function thirddata.handlecsv.doloopfromto
 
-
 function thirddata.handlecsv.doloopfornext(numberofrows, action)
- context[[\bfilehook]]
- context[[\removeunwantedspaces]]
+ if thirddata.handlecsv.gUseHooks then tex.sprint([[\bfilehook]]) end
+ tex.sprint([[\removeunwantedspaces]])
  local csvfile=thirddata.handlecsv.getcurrentcsvfilename()
  local gnumrows=thirddata.handlecsv.gNumRows[csvfile]+0
  local from=thirddata.handlecsv.gCurrentLinePointer[csvfile]+0
@@ -845,14 +980,15 @@ function thirddata.handlecsv.doloopfornext(numberofrows, action)
  		if from<0 then from=1 end
   end
   for i=from, to-step, step do
-   context[[\blinehook]]
-   context([[\readline{]]..i..[[}]]) -- context(thirddata.handlecsv.readline(i))
-   context(action)
-   context[[\elinehook]]
+   if thirddata.handlecsv.gUseHooks then tex.sprint([[\blinehook]]) end
+   tex.sprint([[\readline{]]..i..[[}]]) -- tex.sprint(thirddata.handlecsv.readline(i))
+   tex.sprint(action)
+   if thirddata.handlecsv.gUseHooks then tex.sprint([[\elinehook]]) end
   end
   thirddata.handlecsv.addtonumline(-1)
-context[[\removeunwantedspaces]]
-context[[\efilehook\nextrow]]
+tex.sprint([[\removeunwantedspaces]])
+if thirddata.handlecsv.gUseHooks then tex.sprint([[\efilehook]]) end
+tex.sprint([[\nextrow]])
 end -- function thirddata.handlecsv.doloopfornext
 
 
@@ -860,43 +996,43 @@ end -- function thirddata.handlecsv.doloopfornext
 -- ConTeXt source:
 local string2print=[[%
 % library newifs for testing during processing CSV table
-\newif\ifissetheader%
-\newif\ifnotsetheader%
-\newif\ifEOF%
-\newif\ifnotEOF%
-\newif\ifemptyline%
-\newif\ifnotemptyline%
+\newif\ifissetheader
+\newif\ifnotsetheader
+\newif\ifEOF
+\newif\ifnotEOF
+\newif\ifemptyline
+\newif\ifnotemptyline
 \newif\ifemptylinesmarking% setting by macros \markemptylines and \notmarkemptylines
 \newif\ifemptylinesnotmarking% setting by \markemptylines and \notmarkemptylines
 
 
 % Macros defining above in source text:
 \let\lineaction\empty% set user define macro into default value
-\def\resethooks{\ctxlua{context(thirddata.handlecsv.resethooks())}}
-\resethooks % -- DO IT NOW !!!
+\def\resethooks{\ctxlua{tex.sprint(thirddata.handlecsv.resethooks())}}
+\resethooks% -- DO IT NOW !!!
 \def\hookson{\ctxlua{thirddata.handlecsv.hookson()}}
-\let\usehooks\hookson % -- synonym only
+\let\usehooks\hookson% -- synonym only
 \def\hooksoff{\ctxlua{thirddata.handlecsv.hooksoff()}}
 \def\setheader{\ctxlua{thirddata.handlecsv.setheader()}}
 \def\unsetheader{\ctxlua{thirddata.handlecsv.unsetheader()}}
 \let\resetheader\unsetheader % -- for compatibility
 \def\setsep#1{\ctxlua{thirddata.handlecsv.setsep('#1')}}
 \def\unsetsep{\ctxlua{thirddata.handlecsv.unsetsep()}}
-\let\resetsep\unsetsep % -- for compatibility
+\let\resetsep\unsetsep% -- for compatibility
 \def\setfiletoscan#1{\ctxlua{thirddata.handlecsv.setfiletoscan('#1');thirddata.handlecsv.opencsvfile()}}
 \def\setcurrentcsvfile[#1]{\ctxlua{thirddata.handlecsv.setgetcurrentcsvfile('#1')}}
 
 
-\def\numrows{\ctxlua{context(thirddata.handlecsv.numrows())}}
-\def\numrowsof[#1]{\ctxlua{context(thirddata.handlecsv.numrowsof('#1'))}}
-\def\numcols{\ctxlua{context(thirddata.handlecsv.gNumCols[thirddata.handlecsv.gCurrentlyProcessedCSVFile])}}
-\def\numcolsof[#1]{\ctxlua{context(thirddata.handlecsv.gNumCols['#1'])}}
-\def\currentcsvfile{\ctxlua{context(thirddata.handlecsv.getcurrentcsvfilename())}}
+\def\numrows{\ctxlua{tex.sprint(thirddata.handlecsv.numrows())}}
+\def\numrowsof[#1]{\ctxlua{tex.sprint(thirddata.handlecsv.numrowsof('#1'))}}
+\def\numcols{\ctxlua{tex.sprint(thirddata.handlecsv.gNumCols[thirddata.handlecsv.gCurrentlyProcessedCSVFile])}}
+\def\numcolsof[#1]{\ctxlua{tex.sprint(thirddata.handlecsv.gNumCols['#1'])}}
+\def\currentcsvfile{\ctxlua{tex.sprint(thirddata.handlecsv.getcurrentcsvfilename())}}
 \let\csvfilename\currentcsvfile % for compatibility using
 
 
-\def\numemptyrows{\ctxlua{context(thirddata.handlecsv.numemptyrows())}}
-\def\numnotemptyrows{\ctxlua{context(thirddata.handlecsv.numnotemptyrows())}}
+\def\numemptyrows{\ctxlua{tex.sprint(thirddata.handlecsv.numemptyrows())}}
+\def\numnotemptyrows{\ctxlua{tex.sprint(thirddata.handlecsv.numnotemptyrows())}}
 
 
 % usefull tool macros :
@@ -911,11 +1047,11 @@ local string2print=[[%
 
 
 % Get content of specific cell of CSV table. Calling: \csvcell[column number,row number] OR \csvcell['ColumnName',row number]
-\def\getcsvcell[#1,#2]{\ctxlua{context(thirddata.handlecsv.getcellcontent(#1,#2))}}%
-%%%%%\def\getcsvcell[#1,#2]{\if!#2!\ctxlua{context(thirddata.handlecsv.getcellcontent(#1,thirddata.handlecsv.gCurrentLinePointer[thirddata.handlecsv.getcurrentcsvfilename()]))}\else\ctxlua{context(thirddata.handlecsv.getcellcontent(#1,#2))}\fi}%
+\def\getcsvcell[#1,#2]{\ctxlua{tex.sprint(thirddata.handlecsv.getcellcontent(#1,#2))}}%
+%%%%%\def\getcsvcell[#1,#2]{\if!#2!\ctxlua{tex.sprint(thirddata.handlecsv.getcellcontent(#1,thirddata.handlecsv.gCurrentLinePointer[thirddata.handlecsv.getcurrentcsvfilename()]))}\else\ctxlua{tex.sprint(thirddata.handlecsv.getcellcontent(#1,#2))}\fi}%
 
 % Get content of specific cell of CSV table. Calling: \csvcell[column number,row number] OR \csvcell['ColumnName',row number]
-\def\getcsvcellof[#1][#2,#3]{\ctxlua{context(thirddata.handlecsv.getcellcontentof('#1',#2,#3))}}%
+\def\getcsvcellof[#1][#2,#3]{\ctxlua{tex.sprint(thirddata.handlecsv.getcellcontentof("#1",#2,#3))}}%
 
 
 % Get content of specific cell of CSV table. Calling: \csvcell[column number,row number or row number getting from macro] OR \csvcell['ColumnName',row number or row number getting from macro]
@@ -937,66 +1073,77 @@ local string2print=[[%
 
 
 % Get column name of n-th column of CSV table. When is set header, then get headername else get XLSname
-\def\colnameof[#1][#2]{\ctxlua{context(thirddata.handlecsv.gColumnNames['#1'][#2])}}%
-\def\colname[#1]{\ctxlua{context(thirddata.handlecsv.gColumnNames[thirddata.handlecsv.getcurrentcsvfilename()][#1])}}%
+\def\colnameof[#1][#2]{\ctxlua{tex.sprint(thirddata.handlecsv.gColumnNames['#1'][#2])}}%
+\def\colname[#1]{\ctxlua{tex.sprint(thirddata.handlecsv.gColumnNames[thirddata.handlecsv.getcurrentcsvfilename()][#1])}}%
 
 % Get index (ie serrial number) of strings columns names (own name or XLS name)
-\def\indexcolnameof[#1][#2]{\ctxlua{context(thirddata.handlecsv.gColNames['#1'][#2])}}%
-\def\indexcolname[#1]{\ctxlua{context(thirddata.handlecsv.gColNames[thirddata.handlecsv.getcurrentcsvfilename()][#1])}}%
+\def\indexcolnameof[#1][#2]{\ctxlua{tex.sprint(thirddata.handlecsv.gColNames['#1'][#2])}}%
+\def\indexcolname[#1]{\ctxlua{tex.sprint(thirddata.handlecsv.gColNames[thirddata.handlecsv.getcurrentcsvfilename()][#1])}}%
 
 % Get (alternative) XLS column name (of n-th column)
-\def\xlscolname[#1]{\ctxlua{context(thirddata.handlecsv.ar2colnum(#1))}}%
+\def\xlscolname[#1]{\ctxlua{tex.sprint(thirddata.handlecsv.ar2colnum(#1))}}%
 
 % Get (alternative) XLS column name (of n-th column)
-\def\cxlscolname[#1]{\ctxlua{context('c'..thirddata.handlecsv.ar2colnum(#1))}}%
+\def\cxlscolname[#1]{\ctxlua{tex.sprint('c'..thirddata.handlecsv.ar2colnum(#1))}}%
 
 % Get column TeX name of n-th column of CSV table. When is set header, then get headername else get XLSname
-\def\texcolname[#1]{\ctxlua{context(thirddata.handlecsv.tmn(thirddata.handlecsv.gColumnNames[thirddata.handlecsv.getcurrentcsvfilename()][#1]))}}%
+\def\texcolname[#1]{\ctxlua{tex.sprint(thirddata.handlecsv.tmn(thirddata.handlecsv.gColumnNames[thirddata.handlecsv.getcurrentcsvfilename()][#1]))}}%
 
 
 % Get content of n-th column of current row
 \def\columncontent[#1]{%
-\getcsvcell[#1,\ctxlua{context(thirddata.handlecsv.linepointer())}] %
+\getcsvcell[#1,\ctxlua{tex.sprint(thirddata.handlecsv.linepointer())}] %
 %\getcsvcell[#1,\linepointer]%
-%\getcsvcell[#1,\ctxlua{context(thirddata.handlecsv.linepointer())}]%
-%\ctxlua{context(tostring(thirddata.handlecsv.getcellcontent(#1,8)))}
+%\getcsvcell[#1,\ctxlua{tex.sprint(thirddata.handlecsv.linepointer())}]%
+%\ctxlua{tex.sprint(tostring(thirddata.handlecsv.getcellcontent(#1,8)))}
 }%
 
+% Substitution of text #2 in cell content by text #3. Substitution is done in the current column of column #1 (number, XLS name or cX name)
+\def\replacecontentin#1#2#3{\ctxlua{tex.sprint(thirddata.handlecsv.substitutecontentofcellofcurrentrow('#1','#2','#3'))}}%
 
 % Get number from XLS column name (ie n-th column)
-\def\numberxlscolname[#1]{\ctxlua{context(thirddata.handlecsv.xls2ar(#1))}}%
-%%%\def\columncontent[#1]{\ctxlua{context(thirddata.handlecsv.getcellcontent(#1,thirddata.handlecsv.linepointer()))}}
-%%%\def\columncontent[#1]{\ctxlua{context(thirddata.handlecsv.getcellcontent(thirddata.handlecsv.gColNames[#1],thirddata.handlecsv.linepointer()))}}
-\def\columncontentof[#1][#2]{\ctxlua{context(thirddata.handlecsv.getcellcontentof('#1',thirddata.handlecsv.gColNames['#1'][#2],thirddata.handlecsv.linepointerof('#1')))}}
-\def\columncontent[#1]{\ctxlua{context(thirddata.handlecsv.getcellcontent(thirddata.handlecsv.gColNames[thirddata.handlecsv.getcurrentcsvfilename()][#1],thirddata.handlecsv.linepointerof(thirddata.handlecsv.getcurrentcsvfilename())))}}
-\def\resetlinepointer{\ctxlua{context(thirddata.handlecsv.resetlinepointer())}}
-\def\resetlinepointerof[#1]{\ctxlua{context(thirddata.handlecsv.resetlinepointerof('#1'))}}
+\def\numberxlscolname[#1]{\ctxlua{tex.sprint(thirddata.handlecsv.xls2ar(#1))}}%
+%%%\def\columncontent[#1]{\ctxlua{tex.sprint(thirddata.handlecsv.getcellcontent(#1,thirddata.handlecsv.linepointer()))}}
+%%%\def\columncontent[#1]{\ctxlua{tex.sprint(thirddata.handlecsv.getcellcontent(thirddata.handlecsv.gColNames[#1],thirddata.handlecsv.linepointer()))}}
+\def\columncontentof[#1][#2]{\ctxlua{tex.sprint(thirddata.handlecsv.getcellcontentof('#1',thirddata.handlecsv.gColNames['#1'][#2],thirddata.handlecsv.linepointerof('#1')))}}
+\def\columncontent[#1]{\ctxlua{tex.sprint(thirddata.handlecsv.getcellcontent(thirddata.handlecsv.gColNames[thirddata.handlecsv.getcurrentcsvfilename()][#1],thirddata.handlecsv.linepointerof(thirddata.handlecsv.getcurrentcsvfilename())))}}
+\def\resetlinepointer{\ctxlua{tex.sprint(thirddata.handlecsv.resetlinepointer())}}
+\def\resetlinepointerof[#1]{\ctxlua{tex.sprint(thirddata.handlecsv.resetlinepointerof('#1'))}}
 \let\resetlineno\resetlinepointer
 \let\resetsernumline\resetlinepointer
 \def\setnumline#1{\ctxlua{thirddata.handlecsv.setnumline(#1)}}
-\def\resetnumline{\ctxlua{context(thirddata.handlecsv.resetnumline())}}
+\def\resetnumline{\ctxlua{tex.sprint(thirddata.handlecsv.resetnumline())}}
 \resetnumline % DO IT NOW
-\def\linepointer{\ctxlua{context(thirddata.handlecsv.linepointer())}}
-\def\linepointerof[#1]{\ctxlua{context(thirddata.handlecsv.linepointerof('#1'))}}
+\def\linepointer{\ctxlua{tex.sprint(thirddata.handlecsv.linepointer())}}
+\def\linepointerof[#1]{\ctxlua{tex.sprint(thirddata.handlecsv.linepointerof('#1'))}}
 \let\lineno\linepointer
 \let\sernumline\linepointer
-\def\numline{\ctxlua{context(thirddata.handlecsv.numline())}}
+\def\numline{\ctxlua{tex.sprint(thirddata.handlecsv.numline())}}
 \def\addtonumline#1{\ctxlua{thirddata.handlecsv.addtonumline(#1)}}
 %\def\setlinepointer#1{\ctxlua{thirddata.handlecsv.setlinepointer(#1);thirddata.handlecsv.readline(#1)}}
 \def\setlinepointerof[#1]#2{\ctxlua{thirddata.handlecsv.setlinepointerof('#1',#2)}}
 \def\setlinepointer#1{\ctxlua{thirddata.handlecsv.setlinepointer(#1)}}
-\def\indexofnotemptyline#1{\ctxlua{thirddata.handlecsv.indexofnotemptyline(#1)}}
-\def\indexofemptyline#1{\ctxlua{thirddata.handlecsv.indexofemptyline(#1)}}
+\def\savelinepointer{\ctxlua{thirddata.handlecsv.savelinepointer()}}
+\let\savelineno\savelinepointer % synonym
+\def\setsavedlinepointer{\ctxlua{thirddata.handlecsv.setsavedlinepointer()}}
+\let\setsavedlineno\setsavedlinepointer % synonym
+\def\indexofnotemptyline#1{\ctxlua{tex.sprint(thirddata.handlecsv.indexofnotemptyline(#1))}}
+\def\indexofemptyline#1{\ctxlua{tex.sprint(thirddata.handlecsv.indexofemptyline(#1))}}
 \def\notmarkemptylines{\ctxlua{thirddata.handlecsv.notmarkemptylines()}}
 \def\markemptylines{\ctxlua{thirddata.handlecsv.markemptylines()}}
 \def\resetmarkemptylines{\ctxlua{thirddata.handlecsv.resetmarkemptylines()}}%
-\def\nextlineof[#1]{\ctxlua{thirddata.handlecsv.nextlineof('#1')}} % -- macro for skip to next line. \nextline no read data from current line unlike \nextrow macro.
-\def\nextline{\ctxlua{context(thirddata.handlecsv.nextline())}} % -- macro for skip to next line. \nextline no read data from current line unlike \nextrow macro.
-\def\nextnumline{\ctxlua{context(thirddata.handlecsv.nextnumline())}} % -- macro for add  numline counter.
+\def\removeemptylines{\ctxlua{thirddata.handlecsv.removeemptylines()}}%
+\def\nextlineof[#1]{\ctxlua{thirddata.handlecsv.nextlineof('#1')}} % -- macro for skip to next line. \nextlineof no read data from current line unlike \nextrow macro.
+\def\nextline{\ctxlua{thirddata.handlecsv.nextline()}} % -- macro for skip to next line. \nextline no read data from current line unlike \nextrow macro.
+\def\prevlineof[#1]{\ctxlua{thirddata.handlecsv.previouslineof('#1')}} % -- macro for skip to previous line. \prevlineof no read data from current line unlike \prevrowof macro.
+\def\prevline{\ctxlua{thirddata.handlecsv.previousline()}} % -- macro for skip to previous line. \prevline no read data from current line unlike \prevrow macro.
+\def\nextnumline{\ctxlua{thirddata.handlecsv.nextnumline()}} % -- macro for add  numline counter.
 %\def\nextrow{\readline\nextline} % -- For compatibility
 \def\nextrow{\nextline\readline} % -- For compatibility (changed 2015-09-22)
-\def\nextrowof[#1]{\nextlineof[#1]\readlineof[#1]{\ctxlua{context(thirddata.handlecsv.linepointerof('#1'))}}} % -- For compatibility (changed 2015-09-22)
-%\def\nextrowof[#1]{\nextlineof[#1]\readlineof[#1]{\ctxlua{context(thirddata.handlecsv.gCurrentLinePointer['#1'])}}} % -- For compatibility (changed 2015-09-22)
+\def\nextrowof[#1]{\nextlineof[#1]\readlineof[#1]{\ctxlua{tex.sprint(thirddata.handlecsv.linepointerof('#1'))}}} % -- For compatibility (changed 2015-09-22)
+%\def\nextrowof[#1]{\nextlineof[#1]\readlineof[#1]{\ctxlua{tex.sprint(thirddata.handlecsv.gCurrentLinePointer['#1'])}}} % -- For compatibility (changed 2015-09-22)
+\def\prevrow{\prevline\readline}
+\def\prevrowof[#1]{\prevlineof[#1]\readlineof[#1]{\ctxlua{tex.sprint(thirddata.handlecsv.linepointerof('#1'))}}}
 \def\exitlooptest{\ifEOF\exitloop\else\nextrow\fi}
 
 
@@ -1016,32 +1163,40 @@ local string2print=[[%
 \def\dodoopencsvfile#1{%
     \iffirstargument%
     \ctxlua{thirddata.handlecsv.opencsvfile("#1")}%
+     \doifnot{\env{MainLinePointer}}{}{\setlinepointer{\env{MainLinePointer}}}% added by Pablo
    \else%
 	 \ctxlua{thirddata.handlecsv.opencsvfile()}%
    \fi%
 }%
 
 
+% manual closing of CSV file
+\def\closecsvfile#1{\ctxlua{thirddata.handlecsv.closecsvfile("#1")}}
+
 % Read data from n-th line of CSV table. Calling without parameter read current line (pointered by global variable)
 \def\readline{\dosingleempty\doreadline}%
 
 \def\doreadline[#1]{\dosinglegroupempty\dodoreadline}%
+
 % They must remain in such a compact form, otherwise it returns unwanted gaps !!!!
 \def\dodoreadline#1{\iffirstargument\ctxlua{thirddata.handlecsv.readline(#1)}\else\ctxlua{thirddata.handlecsv.readline(thirddata.handlecsv.gCurrentLinePointer[thirddata.handlecsv.gCurrentlyProcessedCSVFile])}\fi}%
 
 
 \def\readlineof[#1]#2{\ctxlua{thirddata.handlecsv.readlineof('#1',#2)}}
 
+%\def\readline{\ctxlua{thirddata.handlecsv.readline(thirddata.handlecsv.gCurrentLinePointer[thirddata.handlecsv.gCurrentlyProcessedCSVFile])}}%
+
+
 \def\readandprocessparameters#1#2#3#4{%
 	\edef\firstparam{#1}%
 	\edef\secondparam{#2}%
  	\edef\thirdparam{#3}%
- 	\def\fourthparam{#4}%
+ 	\def\fourthparam{\removeunwantedspaces #4}%
  	\edef\paroperator{#2}%
-%  operator '==' is for strings comparing converted to 'eq' operator
-   \ctxlua{if '#2'=="==" and not(type(tonumber('#1'))=='number' and type(tonumber('#3'))=='number') then context('\\def\\paroperator{eq}') end}%
-%  operator '~=' is for strings comparing converted to 'neq' operator
-   \ctxlua{if '#2'=="~=" and not(type(tonumber('#1'))=='number' and type(tonumber('#3'))=='number') then context('\\def\\paroperator{neq}') end}%
+ %  operator '==' is for strings comparing converted to 'eq' operator; a blank space before the percent sign is strictly required!!!
+   \ctxlua{if '#2'=="==" and not(type(tonumber('#1'))=='number' and type(tonumber('#3'))=='number') then tex.sprint('\\def\\paroperator{eq}') end}%
+ %  operator '~=' is for strings comparing converted to 'neq' operator; a blank space before the percent sign is strictly required !!!
+   \ctxlua{if '#2'=="~=" and not(type(tonumber('#1'))=='number' and type(tonumber('#3'))=='number') then tex.sprint('\\def\\paroperator{neq}') end}%
 }%
 
 % MACROS FOR CYCLES PROCESSING. DO ACTIONS IN CYCLES
@@ -1105,37 +1260,38 @@ local string2print=[[%
 % 4. \doloopif{value1}{[compare_operator]}{value2}{macro_for_doing} % [compareoperators] <, >, ==(eq), ~=(neq), >=, <=, in, ~in, until, while
 % actions for rows of open CSV file which are responded of condition
 \def\doloopif#1#2#3#4{%
-	\edef\tempnumline{\numline} % 23.6.2017
+	\edef\tempnumline{\numline}% 23.6.2017
     \readandprocessparameters{#1}{#2}{#3}{#4}%
+    \removeunwantedspaces% 25.3.2019
     % \resetnumline % 22.6.2017
     \bfilehook%
     % and now process actual operator
     \processaction[\paroperator][%
      <=>{% {number1}{<}{number2} ... Less
-     \doloopfromto{1}{\numrows}{\ctxlua{if #1<#3 then context('\\blinehook\\fourthparam\\elinehook') else thirddata.handlecsv.addtonumline(-1) end}}%
+     \doloopfromto{1}{\numrows}{\ctxlua{if #1<#3 then tex.sprint('\\blinehook\\fourthparam\\elinehook') else thirddata.handlecsv.addtonumline(-1) end}}%
      },% end < ... Less
      >=>{% {number1}{>}{number2} ... Greater
-     \doloopfromto{1}{\numrows}{\ctxlua{if #1>#3 then context('\\blinehook\\fourthparam\\elinehook') else thirddata.handlecsv.addtonumline(-1) end}}%
+     \doloopfromto{1}{\numrows}{\ctxlua{if #1>#3 then tex.sprint('\\blinehook\\fourthparam\\elinehook') else thirddata.handlecsv.addtonumline(-1) end}}%
      },% end > ... Greater
      ===>{% {number1}{==}{number2} ... Equal
-     \doloopfromto{1}{\numrows}{\ctxlua{if #1==#3 then context('\\blinehook\\fourthparam\\elinehook') else thirddata.handlecsv.addtonumline(-1) end}}%
+     \doloopfromto{1}{\numrows}{\ctxlua{if #1==#3 then tex.sprint('\\blinehook\\fourthparam\\elinehook') else thirddata.handlecsv.addtonumline(-1) end}}%
      },% end == ... Equal
      ~==>{% {number1}{~=}{number2} ... Not Equal
-     \doloopfromto{1}{\numrows}{\ctxlua{if #1~=#3 then context('\\blinehook\\fourthparam\\elinehook') else thirddata.handlecsv.addtonumline(-1) end}}%
+     \doloopfromto{1}{\numrows}{\ctxlua{if #1~=#3 then tex.sprint('\\blinehook\\fourthparam\\elinehook') else thirddata.handlecsv.addtonumline(-1) end}}%
      },% end ~= ... Not Equal
      >==>{% {number1}{>=}{number2} ... GreaterOrEqual
-     \doloopfromto{1}{\numrows}{\ctxlua{if #1>=#3 then context('\\blinehook\\fourthparam\\elinehook') else thirddata.handlecsv.addtonumline(-1) end}}%
+     \doloopfromto{1}{\numrows}{\ctxlua{if #1>=#3 then tex.sprint('\\blinehook\\fourthparam\\elinehook') else thirddata.handlecsv.addtonumline(-1) end}}%
      },% end >=  ... GreaterOrEqual
      <==>{% {number1}{<=}{number2} ... LessOrEqual
-     \doloopfromto{1}{\numrows}{\ctxlua{if #1<=#3 then context('\\blinehook\\fourthparam\\elinehook') else thirddata.handlecsv.addtonumline(-1) end}}%
+     \doloopfromto{1}{\numrows}{\ctxlua{if #1<=#3 then tex.sprint('\\blinehook\\fourthparam\\elinehook') else thirddata.handlecsv.addtonumline(-1) end}}%
      },% end <= ... LessOrEqual
      eq=>{%  command {string1}{==}{string2} is converted to command command {string1}{eq}{string2} ... string1 is equal string2
 	 \doloopfromto{1}{\numrows}{\doifelse{#1}{#3}{\blinehook\fourthparam\elinehook}{\addtonumline{-1}}}% 23.06.2017
-	 %%%%%\doloopfromto{1}{\numrows}{\ctxlua{if '#1'=='#3' then context('\\blinehook\\fourthparam\\elinehook') else thirddata.handlecsv.addtonumline(-1) end}}%
+	 %%%%%\doloopfromto{1}{\numrows}{\ctxlua{if '#1'=='#3' then tex.sprint('\\blinehook\\fourthparam\\elinehook') else thirddata.handlecsv.addtonumline(-1) end}}%
      },%  end eq
      neq=>{%  command {string1}{~=}{string2} is converted to command command {string1}{neq}{string2} ... string1 is not equal string2
 	 \doloopfromto{1}{\numrows}{\doifelse{#1}{#3}{\ctxlua{thirddata.handlecsv.addtonumline(-1)}}{\blinehook\fourthparam\elinehook}}% 23.06.2017
-     %%%%%\doloopfromto{1}{\numrows}{\ctxlua{if '#1'~='#3' then context('\\blinehook\\fourthparam\\elinehook') else thirddata.handlecsv.addtonumline(-1) end}}%
+     %%%%%\doloopfromto{1}{\numrows}{\ctxlua{if '#1'~='#3' then tex.sprint('\\blinehook\\fourthparam\\elinehook') else thirddata.handlecsv.addtonumline(-1) end}}%
      },% end neq
      in=>{% {substring}{in}{string} ... substring is contained inside string
      \doloopfromto{1}{\numrows}{\doifinstringelse{#1}{#3}{\blinehook\fourthparam\elinehook}{\addtonumline{-1}}}% \doifincsnameelse
@@ -1144,14 +1300,15 @@ local string2print=[[%
      \doloopfromto{1}{\numrows}{\doifinstringelse{#1}{#3}{\addtonumline{-1}}{\blinehook\fourthparam\elinehook}}% \doifincsnameelse
      },% end notin
      repeatuntil=>{% {substring}{until}{string} ... % Repeats the action until the condition is met. If it is not never met, will list all record
-	 \doloop{\ctxlua{if '#1'=='#3' then context('\\exitloop') else context('\\ifEOF\\exitloop\\else\\blinehook\\fourthparam\\elinehook\\nextrow\\fi') end}}%
+	 \doloop{\ctxlua{if '#1'=='#3' then tex.sprint('\\exitloop') else tex.sprint('\\ifEOF\\exitloop\\else\\blinehook\\fourthparam\\elinehook\\nextrow\\fi') end}}%
      },% end until % the comma , is very important here!!!
      whiledo=>{% {substring}{untilneq}{string} ... % Repeat action when the condition is met. When the condition is not met for the first line, the action will NOT BE performed!
-	 \doloop{\ctxlua{if '#1'~='#3' then context('\\exitloop') else context('\\blinehook\\fourthparam\\elinehook\\ifEOF\\exitloop\\else\\nextrow\\fi') end}}%
+	 \doloop{\ctxlua{if '#1'~='#3' then tex.sprint('\\exitloop') else tex.sprint('\\removeunwantedspaces\\blinehook\\fourthparam\\elinehook\\ifEOF\\exitloop\\else\\nextrow\\fi') end}}%
      },% end untilneq % the comma , is very important here!!!
-    ] % end of \processaction%
+    ]% end of \processaction%
   \efilehook%
-  \setnumline{\tempnumline}
+  \setnumline{\tempnumline}%
+  \removeunwantedspaces% 30.3.2019
 } % end of \doloopif
 
 
@@ -1212,16 +1369,19 @@ local string2print=[[%
 % \columncontent[<numberofcolumn> or <'columnname'> or <'xlsname'>]
 % \numberxlscolname[<'xlsname'>]
 % \linepointer, (\lineno, \sernumline are synonyms), \resetlinepointer, \resetlinepointerof[<csvfile>], (\resetlineno, \resetsernumline are synonyms), \setlinepointer{<numberofline>}
+% \savelineno=\savelinepointer, \setsavedlineno=\setsavedlinepointer
 % \numline, \setnumline{<numberofline>}, \resetnumline
 % \addtonumline{<number>}
 % \indexofnotemptyline{}, \indexofemptyline{}
-% \nextline
+% \markemptylines, \notmarkemptylines, \resetmarkemptylines, \removeemptylines
+% \nextlineof[csvfile], \prevlineof[csvfile], \nextline, \prevline
 % \nextnumline
-% \nextrow
+% \nextrowof[csvfile], \prevrowof[csvfile], \nextrow, \prevrow
 % \exitlooptest
-% \opencsvfile, \opencsvfile{<filename>}
+% \opencsvfile, \opencsvfile{<filename>}, \closecsvfile{<filename>}
 % \readline, \readline{<numberofline>}
 % \readandprocessparameters#1#2#3#4 -- for internal use only
+% \replacecontentin{<colname/colnumber>}{<substitutefrom>}{<substituteto>}
 %
 %  Module predefined cycles for processing of lines CSV table:
 % \doloopfromto{<fromnumblerline>}{<tonumblerline}{<\actionmacro>}
