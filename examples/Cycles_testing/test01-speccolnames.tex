@@ -1,4 +1,4 @@
-\usemodule[handlecsv]
+\input ../incl_handlecsv_file.tex
 %\usemodule[handlecsv-tools]
 
 \def\lastname{\dosingleempty\dolastname}
@@ -52,7 +52,7 @@
 \starttext
 
 %\csvreport%{lide.csv}
- 
+
 For ConTeXt testing of header settings are defined two newifs:
 
 \backslash ifissetheader --> \ifissetheader TRUE \else FALSE\fi
@@ -76,8 +76,8 @@ For ConTeXt testing of header settings are defined two newifs:
 
 \type{\indexcolname['cC']}: \indexcolname['cC']
 
- 
- 
+
+
 \type{\columncontent[2]}: \columncontent[2]
 
 \type{\columncontent['Firstname']}: \columncontent['Firstname']
@@ -103,11 +103,11 @@ For ConTeXt testing of header settings are defined two newifs:
 
 
 \type{\numberxlscolname['F']}: \numberxlscolname['F']
- 
- 
 
-\dorecurse{\numrows}{\recurselevel: \readline{\recurselevel} \columncontent['Příjmení'] -- \columncontent['Jméno'] -- \columncontent['!?*']\crlf } 
- 
+
+
+\dorecurse{\numrows}{\recurselevel: \readline{\recurselevel} \columncontent['Příjmení'] -- \columncontent['Jméno'] -- \columncontent['!?*']\crlf }
+
 % \dorecurse{9}{\edef\actualcolname{\colname[\recurselevel]}\recurselevel: \colname[\recurselevel] -- \indexcolname[\actualcolname]\crlf
 % }
 
@@ -152,7 +152,7 @@ Column names macros: (\backslash colname[i]\ and\ \backslash xlscolname[i])
 \blank[big]
 
 Table cells:
- 
+
 \startluacode
 context(thirddata.handlecsv.gTableRows[thirddata.handlecsv.getcurrentcsvfilename()][1][1]..' [first row, first column]\\crlf')
 context(thirddata.handlecsv.gTableRows[thirddata.handlecsv.getcurrentcsvfilename()][1][2]..' [first row, second column]\\crlf')
@@ -172,9 +172,9 @@ row 5, column 9 \csvcell[9,5]
 
 
 'Lastname' column (ie first column) and first row: \backslash csvcell['Lastname',1] --> \csvcell['Lastname',1]
- 
+
 'Firstname' column (ie second column) and first row: \backslash csvcell['Firstname',1] --> \csvcell['Firstname',1]
- 
+
 'Email' column (ie nineth column) and fifth row: \backslash csvcell['Email',5] --> \csvcell['Email',5]
 
 \backslash csvcell['A',1] --> \csvcell['A',1]
@@ -200,13 +200,13 @@ List of ten rows of 'Firstname' column (\backslash dorecurse loop using):
  {Firstname[\recurselevel] : \csvcell['Firstname',\recurselevel] \crlf}
 
 
-Undefined and defined cells: 
+Undefined and defined cells:
 
 \backslash csvcell['Is',5] --> \csvcell['Is',5]
 
 \backslash csvcell['I',51] --> \csvcell['I',51]
 
-\backslash csvcell['I',0]  --> \csvcell['I',0] 
+\backslash csvcell['I',0]  --> \csvcell['I',0]
 
 \backslash csvcell['I',50] --> \csvcell['I',50]
 
@@ -243,7 +243,7 @@ OR:
         \dorecurse{\numcols}{\bTD \csvcell[\currentTABLEcolumn,\currentTABLErow] \eTD}
     \eTR}
 \eTABLE
-   
+
 
 
 
@@ -269,54 +269,54 @@ OR:
 %DOLOOP FROM - TO:
 %
 % OK: \doloopfromto{3}{10}{\Vypisobsah}
-% 
+%
 % OK: \doloopfromto{5}{8}{\lineaction}
-% 
+%
 % DOLOOP FOR ALL:
-% 
+%
 % do Lineaction
-% 
+%
 % OK: \doloopforall
-% 
+%
 % do specific action
-% 
+%
 % OK: \doloopforall{\Vypisobsah}
-% 
-% 
+%
+%
 % DOLOOPACTION:
-% 
+%
 % DO LINEACTION (for all lines):
-% 
+%
 % OK: \doloopaction % implicit use \lineaction macro
-% 
+%
 % DO SPECIFIC ACTION (for all lines):
-% 
+%
 % OK: \doloopaction{\action} % use \action macro for all lines of open CSV file
-% 
+%
 % DO SPECIFIC ACTION (for first lines):
-% 
+%
 % OK: \doloopaction{\action}{4} % use \action macro for first 4 lines
-% 
+%
 % DO SPECIFIC ACTION (for lines from - to specific lines):
-% 
+%
 % OK: \doloopaction{\action}{2}{5} % use \action macro for lines from 2 to 5
-% 
-% 
+%
+%
 % FILELINEACTION:
-% 
+%
 % Do for all lines of opening table
-% 
+%
 % OK: \filelineaction
-% 
-% 
-% Do for all lines of specific table name 
-% 
+%
+%
+% Do for all lines of specific table name
+%
 % OK: \filelineaction{lide2.csv}
 
 
 DOLOOPIF CYCLES:
 
-%\doloopif{value1}{[compare_operator]}{value2}{macro_for_doing} % [compareoperators] <, >, ==(eq), ~=(neq), >=, <=, in, until, while 
+%\doloopif{value1}{[compare_operator]}{value2}{macro_for_doing} % [compareoperators] <, >, ==(eq), ~=(neq), >=, <=, in, until, while
 
 
 
@@ -376,55 +376,55 @@ SSSSSSSSSSS
 
 DOLOOP CYCLE:
 % \resetlinepointer
-% \doloop{ 
-%  \linepointer: 
+% \doloop{
+%  \linepointer:
 %  \readline
 %  \lineaction\nextline
 %  \ifnum\linepointer>20\exitloop\fi
 % }
 
 \resetlinepointer
-\doloop{ 
- \linepointer: 
+\doloop{
+ \linepointer:
  \readline
  \lineaction\nextline
  \ifEOF\exitloop\fi
 }
- 
- 
- 
+
+
+
  XXX
 \setlinepointer{7}
 \doloop{%
 \ifnum\linepointer<9
- \linepointer: 
+ \linepointer:
  \readline
  \lineaction
  \nextline
  \else
- \exitloop 
+ \exitloop
 \fi
-} 
+}
 
 
  XXX
 \resetlinepointer
 \doloop{%
 \ifnum\linepointer<9
- \linepointer: 
+ \linepointer:
  \readline
  \lineaction
  \nextline
  \else
- \exitloop 
+ \exitloop
 \fi
-} 
+}
 
 
 % \doloop
 %   {Some kind of typesetting punishment \par
 %    \ifnum\pageno>5 \exitloop \fi}
-   
+
 DOLOOP CYCLE:DOLOOP CYCLE:DOLOOP CYCLE:DOLOOP CYCLE:DOLOOP CYCLE:
 
 
@@ -456,9 +456,9 @@ a \readline{a}
 
 \startluacode
 function test(opt)
---  if (interfaces.tolist(opt) > 0) 
---%  	then context('kladne') 
---% 	else context('zaporne') 
+--  if (interfaces.tolist(opt) > 0)
+--%  	then context('kladne')
+--% 	else context('zaporne')
 --%  end
     context("%s",interfaces.tolist(opt))
 end
@@ -480,7 +480,7 @@ test \test .....
 
 \opencsvfile{lide.csv}
 
-And now \backslash filelineaction 
+And now \backslash filelineaction
 
 %\doloopfromto{1}{5}{\lineaction}
 
@@ -566,7 +566,7 @@ And now \backslash filelineaction
 
 
 \startluacode
-for i=1,200 do 
+for i=1,200 do
  context(i..' - '..thirddata.handlecsv.ar2xls(i)..' - '..thirddata.handlecsv.xls2ar(thirddata.handlecsv.ar2xls(i))..'\\crlf')
 end
 \stopluacode

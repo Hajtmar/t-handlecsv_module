@@ -1,34 +1,48 @@
-\usemodule[handlecsv]
-%\usemodule[../t-scancsv_ConTeXt_module/last_versions/scancsv-2015-06-02]
-%\usemodule[scancsv-2015-06-02]
+\input ../incl_handlecsv_file.tex
 
 
 
-\def\bfilehook{BF}%
-\def\efilehook{EF}%
-\def\blinehook{BL}%
-\def\elinehook{EL}%
-\def\bch{BC}
-\def\ech{EC}
+\def\bfilehook{}%
+\def\efilehook{}%
+\def\blinehook{}%
+\def\elinehook{}%
+\def\bch{BC\bgroup\bf\red }
+\def\ech{\egroup EC}
+
+
 
 % Transaction_date,Product,Price,Payment_Type,Name,City,State,Country,Account_Created,Last_Login,Latitude,Longitude
 \unexpanded\def\clineaction{%
-% \let\Product=\cB%
-% \let\Price=\cC% 
-% \let\City=\cF% 
-% \let\State=\cG% 
-% \let\Country=\cH% 
+ \let\Product=\cB%
+ \let\Price=\cC%
+ \let\City=\cF%
+ \let\State=\cG%
+ \let\Country=\cH%
 {\numline}\ -  \sernumline - \linepointer -- (\lineno): \Product\ -- \Price, \City, \State, \Country% \Latitude - \Longitude \crlf
 }%
-	
-\unexpanded\def\lineaction{\numline-\sernumline-\linepointer--(\lineno):\hProduct\--\hPrice-\hCity-\hState-\hCountry}%	
-\unexpanded\def\action{ACTION: \numline\ -  \sernumline - \linepointer -- (\lineno): \hProduct\ -- \hPrice, \hCity, \hState, \hCountry}%
+
+
+% Když je \usehooks
+\unexpanded\def\lineaction{\numline-\sernumline-\linepointer--(\lineno):\hProduct\--\hPrice-\hCity-\hState-\hCountry \crlf}%
+\unexpanded\def\action{ACTION: \numline\ -  \sernumline - \linepointer -- (\lineno): \hProduct\ -- \hPrice, \hCity, \hState, \hCountry  \crlf}%
+
+% Když je \hooksoff
+%\unexpanded\def\lineaction{\numline-\sernumline-\linepointer--(\lineno) Id=\Id :\Product\--\Price-\City-\State-\Country \crlf}%
+%\unexpanded\def\action{ACTION: \numline\ -  \sernumline - \linepointer -- (\lineno) Id=\Id : \Product\ -- \Price, \City, \State, \Country  \crlf}%
+
+
+% Když je \hooksoff
+%\unexpanded\def\lineaction{\Id: \Product\--\Price-\City-\State-\Country \crlf}%
+%\unexpanded\def\action{ACTION: \Id: \Product\ -- \Price, \City, \State, \Country  \crlf}%
+
 
 \usehooks % it is necessary turn on using hooks while process CSV file
+
+%\hooksoff
 \setheader
 \setsep{;}
 % \unsetsep
-\opencsvfile{SalesJan2009.csv} % 999 lines
+\opencsvfile{SalesJan2010.csv} % 999 lines
 
 
 \starttext
@@ -41,13 +55,13 @@
 %         \dorecurse{\numcols}{\bTD \csvcell[\currentTABLEcolumn,\currentTABLErow] \eTD}
 %     \eTR}
 % \eTABLE
-%    
+
 
 
 
 
 % doloop cycle:
-% 
+%
 % \doloop{%
 % \ifnum\cC=1200\lineaction\ifEOF\exitloop\else\nextrow\fi
 % \else\ifEOF\exitloop\else\nextrow\fi
@@ -59,17 +73,18 @@
 %
 
 
-% List of column names (ie all columns in 'zero row'):\crlf
-% \dostepwiserecurse{1}{\numcols}{1}{\csvcell[\recurselevel,0],\  }
-% 
-% List of first row of table:\crlf
-% \dostepwiserecurse{1}{\numcols}{1}{\csvcell[\recurselevel,1],\  }
+%List of column names (ie all columns in 'zero row'):\crlf
+%\dostepwiserecurse{1}{\numcols}{1}{\csvcell[\recurselevel,0],\  }
+
+
+%List of first row of table:\crlf
+%\dostepwiserecurse{1}{\numcols}{1}{\csvcell[\recurselevel,1],\  }
 
 
 
 % MODULE PREDEFINED LOOPS
 %\filelineaction
-%\doloopfromto{1}{50}{\lineaction}  
+%\doloopfromto{1}{50}{\lineaction}
 %\doloopforall  % implicit do \lineaction for all lines of open CSV table
 %\doloopforall{\action}  % do \action macro for all lines of open CSV table
 
@@ -80,27 +95,42 @@
 % \doloopaction{\action}{2}{5} % use \action macro for lines from 2 to 5
 
 
-\filelineaction
+%\filelineaction
 
-% compare numbers
-%\doloopifnum{\cC}{<}{1200}{\lineaction} % less
-%\doloopifnum{\cC}{>}{1200}{\lineaction} % greather
-%\doloopifnum{\cC}{==}{1200}{\lineaction} % equal
-%\doloopifnum{\cC}{~=}{1200}{\lineaction} % not equal
-%\doloopifnum{\cC}{>=}{1200}{\lineaction} % greather or equal
-%\doloopifnum{\cC}{<=}{1200}{\lineaction} % less or equal
+% Compare numbers
+
+%\setlinepointer{0}
+%\doloopifnum{\Price}{<}{1200}{\cC -- \lineaction} % less OK
+%\doloopifnum{\Price}{>}{1200}{\cC -- \lineaction} % greather OK
+
+%\doloopifnum{\Price}{==}{1200}{\lineaction} % equal OK
+%\doloopifnum{\Price}{~=}{1200}{\lineaction} % not equal OK
+%\doloopifnum{\Price}{>=}{1200}{\lineaction} % greather or equal OK
+%\doloopifnum{\Price}{>}{1200}{\lineaction} % greather or equal OK
+%\doloopifnum{\Price}{<=}{1200}{\lineaction} % less or equal OK
+%\doloopifnum{\Price}{<}{1200}{\lineaction} % less or equal OK
+
+
 
 % compare strings
-% \doloopif{\Product}{==}{Product2}{\lineaction} % compare string
-% \doloopif{\Product}{eq}{Product2}{\lineaction} % == is synonym for 'eq' operator if arguments are not numbers
-% \doloopif{\Product}{~=}{Product2}{\lineaction}
-% \doloopif{\Product}{neq}{Product2}{\lineaction} % ~= is synonym for 'neq' operator  if arguments are not numbers
-% \doloopif{uct3}{in}{\Product}{\lineaction} % testing if substring is contained inside string 
-% \doloopif{Product3}{until}{\Product}{\lineaction} % List all, until the test is not met - then just quit. Repeat until satisfied. If it is not never met, will list all record
-% \doloopif{\Product}{while}{Product1}{\lineaction} % List all, while the test is  met. When first which not met then just quit. If first is not met, will list no record
-%\doloopuntil{Product3}{\Product}{\lineaction}
-%\doloopwhile{\Product}{Product1}{\lineaction}
- 
+
+
+\doloopif{\Product}{==}{Product2}{\lineaction} % compare string
+
+
+%\doloopif{\Product}{eq}{Product2}{\lineaction} % == is synonym for 'eq' operator if arguments are not numbers
+%\doloopif{\Product}{~=}{Product2}{\lineaction}
+%\setlinepointer{0} \doloopif{\Product}{neq}{Product2}{\lineaction} % ~= is synonym for 'neq' operator  if arguments are not numbers
+%\setlinepointer{0} \doloopif{uct3}{in}{\Product}{\lineaction} % testing if substring is contained inside string OK
+%\setlinepointer{0} \doloopif{Product3}{until}{\Product}{\lineaction} % List all, until the test is not met - then just quit. Repeat until satisfied. If it is not never met, will list all record
+%\setlinepointer{0} \doloopif{\Product}{while}{Product1}{\lineaction} % List all, while the test is  met. When first which not met then just quit. If first is not met, will list no record
+
+
+
+
+%\setlinepointer{0} \doloopuntil{Product3}{\Product}{\lineaction} % Funguje OK
+%\setlinepointer{0} \doloopwhile{\Product}{Product1}{\lineaction} % Funguje OK
+
 
 
 \stoptext
@@ -109,28 +139,28 @@
 
 
 
-% 4. \doloopif{value1}{[compare_operator]}{value2}{macro_for_doing} % [compareoperators] <, >, ==(eq), ~=(neq), >=, <=, in, until, while 
-% actions for rows of open CSV file which are responded of condition  
+% 4. \doloopif{value1}{[compare_operator]}{value2}{macro_for_doing} % [compareoperators] <, >, ==(eq), ~=(neq), >=, <=, in, until, while
+% actions for rows of open CSV file which are responded of condition
 \def\doloopif#1#2#3#4{%
     \opencsvfile%
     \readline
     \bfilehook%
     \def\paroperator{#2}
-    %  operator '==' is for strings comparing converted to 'eq' operator 
+    %  operator '==' is for strings comparing converted to 'eq' operator
     \startluacode
-			 if '#2'=="==" and not(type(tonumber('#1'))=='number' and type(tonumber('#3'))=='number') 
-	     then context('\\def\\paroperator{eq}')  
+			 if '#2'=="==" and not(type(tonumber('#1'))=='number' and type(tonumber('#3'))=='number')
+	     then context('\\def\\paroperator{eq}')
 	     end
      \stopluacode
     %  operator '~=' is for strings comparing converted to 'neq' operator
     \startluacode
-		 if '#2'=="~=" and not(type(tonumber('#1'))=='number' and type(tonumber('#3'))=='number') 
-     then context('\\def\\paroperator{neq}')  
+		 if '#2'=="~=" and not(type(tonumber('#1'))=='number' and type(tonumber('#3'))=='number')
+     then context('\\def\\paroperator{neq}')
      end
 		 \stopluacode
-    % and now process actual operator 
+    % and now process actual operator
     \processaction[\paroperator][%
-     <=>{% {number1}{<}{number2} ... Less 
+     <=>{% {number1}{<}{number2} ... Less
      \doloop{%
     	\edef\tempiv{#4}%
       \startluacode
@@ -141,7 +171,7 @@
    	  \ifEOF\exitloop\fi%
      }%
      },% end < ... Less
-     >=>{% {number1}{>}{number2} ... Greater 
+     >=>{% {number1}{>}{number2} ... Greater
      \doloop{%
     	\edef\tempiv{#4}%
     	\startluacode
@@ -168,7 +198,7 @@
 				\readline\nextline\ifEOF\exitloop\fi%
      }%
      },% end ~= ... Not Equal
-     >==>{% {number1}{>=}{number2} ... GreaterOrEqual 
+     >==>{% {number1}{>=}{number2} ... GreaterOrEqual
      \doloop{%
        \edef\tempiv{#4}%
     	 \startluacode
@@ -177,7 +207,7 @@
 				\readline\nextline\ifEOF\exitloop\fi%
      }
      },% end >=  ... GreaterOrEqual
-     <==>{% {number1}{<=}{number2} ... LessOrEqual 
+     <==>{% {number1}{<=}{number2} ... LessOrEqual
      \doloop{%
        \edef\tempiv{#4}%
        \startluacode
@@ -185,8 +215,8 @@
 			 \stopluacode
 			 \readline\nextline\ifEOF\exitloop\fi%
      }%
-     },% end <= ... LessOrEqual 
-     eq=>{%  command {string1}{==}{string2} is converted to command command {string1}{eq}{string2} ... string1 is equal string2 
+     },% end <= ... LessOrEqual
+     eq=>{%  command {string1}{==}{string2} is converted to command command {string1}{eq}{string2} ... string1 is equal string2
      \doloop{%
  		 \edef\tempi{#1}%
  		 \edef\tempii{#3}%
@@ -194,7 +224,7 @@
        \ifx\tempi\tempii\blinehook \tempiii\elinehook\fi\readline\nextline\ifEOF\exitloop\fi%
      }%
      },%  end eq
-     neq=>{%  command {string1}{~=}{string2} is converted to command command {string1}{neq}{string2} ... string1 is not equal string2  
+     neq=>{%  command {string1}{~=}{string2} is converted to command command {string1}{neq}{string2} ... string1 is not equal string2
      \doloop{%
   		\edef\tempi{#1}%
   		\edef\tempii{#3}%
@@ -202,7 +232,7 @@
       \ifx\tempi\tempii\else\blinehook \tempiii\elinehook\fi\readline\nextline\ifEOF\exitloop\fi%
      }%
      },% end neq
-     in=>{% {substring}{in}{string} ... substring is contained inside string 
+     in=>{% {substring}{in}{string} ... substring is contained inside string
      \doloop{%
  		 \edef\tempi{#1}%
  		 \edef\tempii{#3}%

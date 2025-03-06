@@ -1,4 +1,5 @@
-\usemodule[scancsv]
+\input ../incl_handlecsv_file.tex
+
 
 \setupexternalfigures[directory={graphics/}]
 
@@ -22,7 +23,7 @@
 \midaligned{\bf \CSTUG\ --\ \ppscstug}
 \midaligned{c/o FEL ČVUT, Technická~2, \ppsCZ166\,27 \ppspraha~6, \ppsCR}
 \par
-\midaligned{\ppsic: 00536580,} 
+\midaligned{\ppsic: 00536580,}
 \midaligned{\ppsdic: CZ00536580}
 }%\hlavicka{
 
@@ -52,9 +53,9 @@
 \def\ppsprefix{3141}
 \def\ppsCZ{}
    \else
-\mainlanguage[en]  
+\mainlanguage[en]
 \def\datumvyd{Brejlov, September 19, 2010}
-\def\nadpispotvrzeni{Conference participation}   
+\def\nadpispotvrzeni{Conference participation}
 \def\ppscstug{Czechoslovak \TeX\ Users Group}
 \def\ppspraha{Prague}
 \def\ppsCR{The Czech Republic}
@@ -75,12 +76,12 @@
 \defineletterelement[layer][head][cstuglogo]%
    {\framed[background=logohead,height=35mm,frame=off,align=left]%
      {\externalfigure[cstugheader.pdf]}}
-   
+
 \setupletterlayer[head]
    [x=0mm,
     y=15mm,
    alternative=cstuglogo]
-   
+
 
 
 \startletter[
@@ -91,22 +92,22 @@
 
 
 
-\ifnum\Foreigner=0 % _Czech	
-Organizátoři tímto potvrzují, že {\NamePartic} se zúčastnil{\Sex}\  
-čtvrtého \CONTEXT\ mítinku a~třetího ročníku \TeX perience, které probíhaly v~době od 13.~září~2010 
-do 18.~září 2010, respektive 16.~až 19.~září 2010. 
+\ifnum\Foreigner=0 % _Czech
+Organizátoři tímto potvrzují, že {\NamePartic} se zúčastnil{\Sex}\
+čtvrtého \CONTEXT\ mítinku a~třetího ročníku \TeX perience, které probíhaly v~době od 13.~září~2010
+do 18.~září 2010, respektive 16.~až 19.~září 2010.
 
-Místo konferencí: Mlýn 
+Místo konferencí: Mlýn
 Brejlov, Břežany 29, 257\,41, Týnec nad Sázavou, Česká republika.
 
 \else %Eng.
 
-Hereby we confirm that {\NamePartic} from {\ParticFrom} has participated in the 
-fourth \CONTEXT\ meeting and the third \TeX perience conference taken from 
-September 13-18,~2000 and September 16-19,~2010, respectively. 
+Hereby we confirm that {\NamePartic} from {\ParticFrom} has participated in the
+fourth \CONTEXT\ meeting and the third \TeX perience conference taken from
+September 13-18,~2000 and September 16-19,~2010, respectively.
 
-The address of 
-the conference venue is: Mlýn Brejlov, Břežany 29, CZ-257\,41, Týnec nad 
+The address of
+the conference venue is: Mlýn Brejlov, Břežany 29, CZ-257\,41, Týnec nad
 Sázavou, The Czech Republic.
 
 \fi
@@ -117,7 +118,7 @@ Sázavou, The Czech Republic.
 
 \page
 \stopbuffer
- 
+
 
 
 \starttext
@@ -125,7 +126,7 @@ Sázavou, The Czech Republic.
 \setheader
 
 \opencsvfile{badgets.csv}
-\doloop{\ifnotEOF\getbuffer[dopis]\nextrow\else\exitloop\fi} %OK 
+\doloop{\ifnotEOF\getbuffer[dopis]\nextrow\else\exitloop\fi} %OK
 
 \stoptext
 

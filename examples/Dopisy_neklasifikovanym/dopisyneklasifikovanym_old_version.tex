@@ -1,5 +1,5 @@
-\mainlanguage[cz]            % Podle typografických pravidel 
-\setuppapersize[A4][A4]      % Velikost papíru bude A5 a bude na stránce opět o téže velikosti. 
+\mainlanguage[cz]            % Podle typografických pravidel
+\setuppapersize[A4][A4]      % Velikost papíru bude A5 a bude na stránce opět o téže velikosti.
 \setupcolors[state=start]    % Zapne používání barev.
 \setuppagenumbering[state=stop]
 \setuplayout[width=middle, topspace=1cm, header=1cm, footer=1cm]
@@ -21,9 +21,10 @@
 
 \newif\ifneklasifikovanyzak
 
-\usedirectory[c:/1da/ConTeXt/ConTeXt-Tests/my_way/ScanCSV/t-handlecsv_module/]
-\usemodule[handlecsv]
+%\usedirectory[c:/1da/ConTeXt/ConTeXt-Tests/my_way/ScanCSV/t-handlecsv_module/]
+%\usemodule[handlecsv]
 
+\input ../incl_handlecsv_file.tex
 
 \def\predmetzhlavicky#1:#2:#3:#4!{#2}
 \def\vyhodnocenypredmet{\edef\predmet{\csvcell[\recurselevel,0]}\words{\expandafter\predmetzhlavicky\predmet!}}
@@ -72,55 +73,55 @@
 \hrule
 \blank[big]
 
-%\adresnistitek		
-				
+%\adresnistitek
+
 \blank[10mm]
 
 {\tfa Věc: Stanovení náhradního termínu pro hodnocení}
-				
-\blank[big]	
-			
+
+\blank[big]
+
 Vážená paní,\crlf
 Vážený pane,
-			
-\blank[big]	
-			
-Ředitel Gymnázia, Zábřeh, náměstí Osvobození 20 stanovuje náhradní termín pro 
-hodnocení níže jmenovaného žáka, který z~důvodu nedostatku podkladů nemohl být 
+
+\blank[big]
+
+Ředitel Gymnázia, Zábřeh, náměstí Osvobození 20 stanovuje náhradní termín pro
+hodnocení níže jmenovaného žáka, který z~důvodu nedostatku podkladů nemohl být
 hodnocen za {\pololeti} pololetí ke dni {\puvodniterminklasifikace}.
 
 \blank[big]
 
-			
+
 %\let\nahradniterminklasifikace\TerminKlasifikace
 \zak
-						
+
 \blank[big]
-			
+
 Předměty, ze kterých žák nemohl být hodnocen:	{\bf \NeklPredmet}
-			
+
 \blank[big]
-			
+
 Náhradní termín pro hodnocení:	{\bf \nahradniterminklasifikace}
 
 \blank[big]
 
 \doifmodeelse{prvnipololeti}
-{Nebude-li pro nedostatek podkladů možné žáka hodnotit ani v~náhradním termínu, 
+{Nebude-li pro nedostatek podkladů možné žáka hodnotit ani v~náhradním termínu,
 žák nebude za první pololetí hodnocen.}
-{Nebude-li žák hodnocen ani v~náhradním termínu, bude podle § 69 odst.~6 zákona 
-č.~561/2004 Sb., o~předškolním, základním, středním, vyšším odborném a~jiném 
+{Nebude-li žák hodnocen ani v~náhradním termínu, bude podle § 69 odst.~6 zákona
+č.~561/2004 Sb., o~předškolním, základním, středním, vyšším odborném a~jiném
 vzdělávání (školský zákon), v~platném znění, a~§~3 vyhlášky č.~13/2005~Sb.,
-o~středním vzdělávání a~vzdělávání v~konzervatoři, v~platném znění, celkové 
+o~středním vzdělávání a~vzdělávání v~konzervatoři, v~platném znění, celkové
 hodnocení žáka na vysvědčení vyjádřeno stupněm {\bf neprospěl}.}
-			
+
 
 
 
 \blank[3*big]
-			
-V~Zábřehu dne {\dopiszedne} 					
-			
+
+V~Zábřehu dne {\dopiszedne}
+
 \podpisreditele
 
 \vfill
@@ -129,7 +130,7 @@ V~Zábřehu dne {\dopiszedne}
 %\null\hfill Podpis zákonného zástupce\break
 
 \page
-} 
+}
 
 
 

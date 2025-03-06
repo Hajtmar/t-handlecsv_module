@@ -1,34 +1,32 @@
+\input ../incl_handlecsv_file.tex
 
 \starttext
 
 
-\ctxlua{
-xlsname='A'
-content='content when parameter is missing'
-context([[\definecomplexorsimple\]]..xlsname)
+%\ctxlua{
+%xlsname='A'
+%content='content when parameter is missing'
+%context([[\definecomplexorsimple\]]..xlsname)
 %context([[\def\simple]]..xlsname..[[{]]..content..[[}]])
 %context([[\def\complex]]..xlsname..'[#1]'..[[{Neco: #1}]])
-}
+%}
 
 \def\simpleA {content when parameter is missing}
 \def\complexA[#1]{parameter #1}
 
 
- 
-\type{\A}: \A
 
-\type{\A[5]}: \A[5]
+%\type{\A}: \A
+
+%\type{\A[5]}: \A[5]
 
 
-\stoptext
-
-\starttext
 
 \startluacode
 interfaces.definecommand ('dolastname', {
     arguments = { { "option", "string" }  },
     macro = function (opt_1)
-       if #opt_1>0 then context(opt_1) else context('nothing') end 
+       if #opt_1>0 then context(opt_1) else context('nothing') end
     end
 })
 interfaces.definecommand ('lastname', {
@@ -44,13 +42,15 @@ interfaces.definecommand ('lastname', {
 \lastname[5]
 
 
+
+
 \startluacode
 xlsname='A'
 content='content when parameter is missing'
 interfaces.definecommand (xlsname, {
     arguments = { { "option", "string" }  },
     macro = function (opt_1)
-       if #opt_1>0 then context(opt_1) else context(content) end 
+       if #opt_1>0 then context(opt_1) else context(content) end
     end
 })
 interfaces.definecommand (xlscommand, {
@@ -62,24 +62,22 @@ interfaces.definecommand (xlscommand, {
 \stopluacode
 
 
-\A
-
-\A[5]
-
 
 \stoptext
-% 
-% Within the complex problems I need to solve the following case. I want using 
-% lua code to define a macro with one optional parameter in brackets. I tried it 
-% using commands context.setgvalue, or find something on the wiki 
-% (http://wiki.contextgarden.net/System_Macros/Definitions_and_Assignments), but 
+
+
+%
+% Within the complex problems I need to solve the following case. I want using
+% lua code to define a macro with one optional parameter in brackets. I tried it
+% using commands context.setgvalue, or find something on the wiki
+% (http://wiki.contextgarden.net/System_Macros/Definitions_and_Assignments), but
 % each time I broke a tooth on it.
-% 
+%
 % Can you, please, someone advise  how something can be it done?
 % Suffice some reference to solve a similar problem.
-%  
+%
 % Thanks Jaroslav Hajtmar
-% 
+%
 % Here is my minimal example:
 
 %\starttext
@@ -87,9 +85,9 @@ interfaces.definecommand (xlscommand, {
 % OK
 % \def\lastname{\dosingleempty\dolastname}
 % \def\dolastname[#1]{\iffirstargument #1\else nothing\fi}
-% 
+%
 % \lastname
-% 
+%
 % \lastname[Smith]
 
 
@@ -98,19 +96,19 @@ interfaces.definecommand (xlscommand, {
 % context([[\def\firstname{\dosingleempty\dofirstname}]])
 % context([[\def\dofirstname[#1]{\iffirstargument #1\else {nothing}\fi}]])
 % }
-% 
+%
 % \firstname
-% 
+%
 % \firstname['Peter']
 
 
 % \complexorsimple\priklad
-% 
+%
 % \def\simplepriklad{XXX}
-% 
+%
 % \def\complexpriklad[ZZZZZ]
-% 
-% 
+%
+%
 % \priklad
 
 
@@ -122,14 +120,14 @@ interfaces.definecommand (xlscommand, {
 % \definecomplexorsimple\command
 % \def\complexcommand[#1]{parameter #1}
 % \def\simplecommand {without parameter}
-% 
+%
 % \command
-% 
+%
 % \command[123]
 
 
 %\starttext
-% 
+%
 % \ctxlua{
 % xlsname='A'
 % content='content when parameter is missing'
@@ -137,14 +135,14 @@ interfaces.definecommand (xlscommand, {
 % %context([[\def\simple]]..xlsname..[[{]]..content..[[}]])
 % %context([[\def\complex]]..xlsname..'[#1]'..[[{Neco: #1}]])
 % }
-% 
+%
 % \def\simpleA {content when parameter is missing}
 % \def\complexA[#1]{parameter #1}
-% 
-% 
-%  
+%
+%
+%
 % \type{\A}: \A
-% 
+%
 % \type{\A[5]}: \A[5]
 
 
@@ -156,13 +154,13 @@ interfaces.definecommand (xlscommand, {
 % \definecomplexorsimple\priklad
 % \def\complexpriklad[#1]{Neco: #1}
 % \def\simplepriklad{nic}
-% 
-% 
-% 
+%
+%
+%
 % Bez parametru: \priklad
-% 
+%
 % S parametrem 123: \priklad[123]
-% 
+%
 
 
 
@@ -173,19 +171,19 @@ interfaces.definecommand (xlscommand, {
 % context([[\definecomplexorsimple\]]..xlsname)
 % context([[\def\complex]]..xlsname..'[#1]'..[[{Neco: #1}]])
 % %context([[\def\simple]]..xlsname..'{'..content..'}')
-% }		
+% }
 
 
 % \def\complexA[#1]{Neco: #1}
 % \def\simpleA{nic}
-% 
+%
 % AAAAAAAAAAAAAAAAAA
-% 
+%
 % \A
-% 
-% 
+%
+%
 % \A[5]
-% 
+%
 % AAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
 
@@ -199,13 +197,13 @@ interfaces.definecommand (xlscommand, {
 % which becomes:
 % \def\somecommand[#1][#2]\startspecifier#3\stopspecifier%
 %   {do #1 something #2 with #3 arg}
-  
 
 
 
 
 
-		
+
+
 
 
 
@@ -215,4 +213,4 @@ interfaces.definecommand (xlscommand, {
 % context([[def*do]]..xlsname..[[\{[!1]*iffirstargument*csvcell[']]..xlsname..[[',!1]*else ]]..content..[[*fi\}]])
 % context([[\def\]]..xlsname..[[\{\dosingleempty\do]]..xlsname..[[\}]])
 % context([[\def\do]]..xlsname..[[\{[!1]\iffirstargument\csvcell[']]..xlsname..[[',!1]\else ]]..content..[[\fi\}]])
-		
+

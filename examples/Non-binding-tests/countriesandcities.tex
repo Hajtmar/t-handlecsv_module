@@ -1,4 +1,7 @@
-\usemodule[handlecsv]
+\input ../incl_handlecsvcells_file.tex
+\input ../incl_handlecsv_file.tex
+
+
 %
 %\setupTABLE[split=yes,location={middle,lohi}, height=4.5mm]
 %\setupTABLE[row][first][background=color,backgroundcolor=gray,foregroundcolor=black,height=8mm, align={middle,lohi}]
@@ -10,7 +13,7 @@
 %
 %
 %
-%  
+%
 %\startbuffer[tableaction]
 %\expanded{\bTR\bTD\SerNum\eTD\bTD\Name\eTD\bTD\Population\eTD\bTD\Altitude\eTD\eTR}%
 %\stopbuffer
@@ -24,13 +27,13 @@
 %\bTR\bTD-- \eTD\bTD\ssx -- \eTD\bTD -- \eTD\bTD -- \eTD\eTR
 %\eTABLE
 %
-%\page[no]	
+%\page[no]
 %
 %\stopbuffer
 %
 
 
-  
+
 \starttext
 
 \setheader
@@ -38,7 +41,7 @@
 \opencsvfile{countries.csv}
 
 
-  	
+
 \blank[big]
 
 \startitemize[n]
@@ -47,7 +50,7 @@
 \item {\bf \getcsvcellof[countries.csv]['Country',\recurselevel]}
 \startitemize[n]
 \dorecurse{\numrowsof[cities.csv]}%
-{\doifelse{\getcsvcellof[cities.csv]['CountryAbbrev',\recurselevel]}{\abbrevcountry}{\item \getcsvcellof[cities.csv]['Name',\recurselevel] }{}% %\if\abbrevcity\recurselevel: \getcsvcellof[cities.csv]('Name',\recurselevel)\fi	
+{\doifelse{\getcsvcellof[cities.csv]['CountryAbbrev',\recurselevel]}{\abbrevcountry}{\item \getcsvcellof[cities.csv]['Name',\recurselevel] }{}% %\if\abbrevcity\recurselevel: \getcsvcellof[cities.csv]('Name',\recurselevel)\fi
 }%
 \stopitemize
 \blank[big]
@@ -70,7 +73,7 @@
 
 \getcsvcellof[numbers.csv][1,9]
 
-\hairline 
+\hairline
 
 \setsep{,}
 \setheader
@@ -99,11 +102,11 @@ Firstxname: \getcsvcellof[lide.csv]["Firstxname",9]
 
 \dorecurse{\numrows[numbers.csv]}{\getcsvcellof[numbers.csv]["B",\recurselevel]}
 
-xxx 
+xxx
 
 \dorecurse{\numrows[lide.csv]}{\recurselevel. \getcsvcellof[numbers.csv][1,\recurselevel] -- \getcsvcellof[numbers.csv]['B',\recurselevel] -- \getcsvcellof[numbers.csv]['C',\recurselevel] -- \getcsvcellof[numbers.csv][7,\recurselevel]\crlf }
 
-xxx 
+xxx
 
 
 \dorecurse{\numrows[letters.csv]}{\getcsvcellof[letters.csv]["B",\recurselevel]}
@@ -138,7 +141,7 @@ numcols: \numcols
 
 \blank[big]
 
-\setheader 
+\setheader
 \opencsvfile{cities.csv}
 
 \bTABLE
@@ -147,4 +150,4 @@ numcols: \numcols
 \bTR\bTD-- \eTD\bTD\ssx -- \eTD\bTD -- \eTD\bTD -- \eTD\eTR
 \eTABLE
 
-\page[no]	
+\page[no]

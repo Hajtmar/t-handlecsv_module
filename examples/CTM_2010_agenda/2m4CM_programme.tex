@@ -1,4 +1,4 @@
-\usemodule[handlecsv]
+\input ../incl_handlecsv_file.tex
 
 \setheader % Imform library, that in first row is header with information about names of columns
 \opencsvfile{4CM_programme.csv}
@@ -19,7 +19,7 @@
 \def\ctm{\href{http://meeting.contextgarden.net/2010/programme.shtml}{4CM}}
 \def\te{\href{http://pavel.striz.cz/texperience/}{3TE}}
 
- 
+
 
 \setuppagenumbering[state=stop]
 \setuplayout[backspace=1cm, width=middle,height=29cm, topspace=5mm, header=0cm, footer=5mm]
@@ -74,14 +74,14 @@
 \expanded{
 \bTR\bTD - \eTD\bTD\ssx#1 \eTD\bTD - \eTD\bTD - \eTD\bTD - \eTD\bTD - \eTD\eTR
 }}
-	
+
 \def\nadpisdne#1{
 \blank[big]
 \midaligned{{\bf\ssa #1}}
 }
 
 
-	
+
 \unexpanded\def\lineaction{\tableaction}
 
 \starttext
@@ -150,7 +150,7 @@
 
 \vfill
 \midaligned{\ssx This document was created (generated) using first version of \scancsvlua\ module by Jaroslav Hajtmar.}
-\midaligned{\ssx Scancsv.lua presentation to be held on Saturday, 18.~9.~2010 on \ctm+\te\ in Brejlov.} 
+\midaligned{\ssx Scancsv.lua presentation to be held on Saturday, 18.~9.~2010 on \ctm+\te\ in Brejlov.}
 
 
 \page[no]

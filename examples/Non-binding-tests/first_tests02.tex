@@ -1,0 +1,119 @@
+%\usepath[{/Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/,}]
+%\usemodule[t-handlecsv-opt_by_ai.lua] % poslední verze
+
+\input ../incl_handlecsv_file.tex
+\usemodule[/Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/] % poslední verze
+
+
+
+\starttext
+
+
+
+\setsep{;}
+\setheader
+\opencsvfile{countries.csv}
+
+\csvfilename
+\numrows
+
+\numrows[letters.csv]
+
+\csvfilename -- \numrows
+
+
+\opencsvfile{countries.csv}
+
+\csvfilename -- \numrows
+
+
+\opencsvfile{countries.csv}
+
+\csvfilename -- \numrows
+
+
+\csvfilename -- \numrows -- \numrows[] --
+
+
+\opencsvfile{letters.csv}
+
+\csvfilename -- \numrows -- \numrows[]
+
+
+
+
+\dorecurse{\numrows}{\recurselevel \crlf}
+
+
+
+
+
+
+
+Otevírám CSV soubor letters.csv\par
+
+\opencsvfile{letters.csv}\par
+
+Počet řádků načtených ze souboru: \numrows\par
+
+
+
+
+
+LETTERS.CSV
+
+\opencsvfile{letters.csv}
+
+\ctxlua{tex.sprint("Current file: ["..thirddata.handlecsv.getcurrentcsvfilename().."]")}
+
+TEST:
+
+\ctxlua{
+  local f = thirddata.handlecsv.getcurrentcsvfilename() or "nil"
+  local n = thirddata.handlecsv.gNumRows[f] or "nil"
+  tex.sprint("File: ["..f.."], rows: ["..n.."]")
+}
+
+
+
+NUMROWS: \numrows
+
+
+tex.sprint
+
+\ctxlua{tex.sprint("["..thirddata.handlecsv.numrows().."]")}
+
+SSSSSSS
+
+
+dorecurse\{numrows\}\{recurselevel \\crlf\}
+
+\dorecurse{\numrows}{\readline\recurselevel -- yyyyy \cA -- \cB \crlf\nextrow}
+
+
+
+
+%\dorecurse{\numrows}{\recurselevel \crlf}
+
+
+T E S T
+
+Otevírám CSV soubor letters.csv\par
+
+\opencsvfile{letters.csv}\par
+
+\ctxlua{
+  local f = thirddata.handlecsv.getcurrentcsvfilename() or "none"
+  local n = thirddata.handlecsv.gNumRows[f] or "nil"
+  tex.sprint("Aktuální soubor: ["..f.."], počet řádků: ["..n.."]")
+}
+\par
+
+
+
+\csvreport
+
+
+\stoptext
+
+

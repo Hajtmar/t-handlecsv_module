@@ -1,4 +1,5 @@
-\usemodule[handlecsv]
+\input ../incl_handlecsv_file.tex
+
 
 \unexpanded\def\action{ACTION: \numline\  (\lineno): %
 	\ifissetheader\Lastname\ \Firstname\crlf
@@ -105,7 +106,7 @@ ss
 \doloopaction % implicit use \lineaction macro
 
 
-\subsection{do specific \type{\action} macro for all lines of opening csv table} 
+\subsection{do specific \type{\action} macro for all lines of opening csv table}
 \pokec{\doloopaction{\action}}
 
 \resetnumline
@@ -151,12 +152,12 @@ ss
 \section{\type{\doloopif} cycles}
 
 % \doloopif{value1}{[compare_operator]}{value2}{macro_for_doing} % [compareoperators] <, >, ==(eq), ~=(neq), >=, <=, in, until, while
-% and specific variations of previous macro \doloopif 
+% and specific variations of previous macro \doloopif
 % \letvalue{doloopifnum}=\doloopif %\doloopifnum{value1}{[compare_operator]}{value2}{macro_for_doing} % [compareoperators] ==, ~=, >, <, >=, <=
 % \def\doloopuntil#1#2#3{\doloopif{#1}{until}{#2}{#3}}% \doloopuntil{\Trida}{3.A}{\tableaction}  % List all, until the test is not met - then just quit. Repeat until satisfied. If it is not never met, will list all records.
-% \def\doloopwhile#1#2#3{\doloopif{#1}{while}{#2}{#3}}% \doloopwhile{\Trida}{3.A}{\tableaction}  % List when the test is met, other just quit. 
+% \def\doloopwhile#1#2#3{\doloopif{#1}{while}{#2}{#3}}% \doloopwhile{\Trida}{3.A}{\tableaction}  % List when the test is met, other just quit.
 
-\opencsvfile{ctm2.csv} 
+\opencsvfile{ctm2.csv}
 
 \doloopif{\Fri}{==}{0}{\action}
 
@@ -166,5 +167,5 @@ ss
 
 
 % \def\pd#1{\directlua{context([==[\detokenize{#1}]==])}}
-% 
+%
 % \pd{\numrows}

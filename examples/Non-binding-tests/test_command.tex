@@ -1,3 +1,6 @@
+\input ../incl_handlecsv_file.tex
+
+
 \starttext
 
 \startluacode
@@ -53,15 +56,20 @@ XXX\udaj--\UDAJ XXX
 \if\noexpand\a\noexpand\b HURA\else PRD \fi
 
 
-\if\noexpand{\lastname[25]}\noexpand{\lastname} HURA\else  PRD\fi
+
+%\if\noexpand{\lastname[25]}\noexpand{\lastname} HURA\else  PRD\fi
+
+
 
 
 \def\c{\expanded{\lastname[25]}}
 \def\d{\expanded{\lastname}}
 
+
 \c
 
 \d
+
 
 
 CO TOHLE?? \ifx\noexpand\c\noexpand\d HURA\else  PRD\fi
@@ -84,7 +92,7 @@ context('Parameter '..parameter..' has length '..string.len(parameter))
 
 \type{\makrowithAAAAcontent} -- \makrowithAAAAcontent
 
-Test is \testparameter{BBBB} 
+Test is \testparameter{BBBB}
 
 Test is \testparameter{AAAA} % OK
 
@@ -92,6 +100,7 @@ Test is \testparameter{\makrowithAAAAcontent} % OK
 
 
 But what about this?
+
 
 
 
@@ -129,7 +138,7 @@ if parameter2=='AAAA' then context('TRUE. ') else context('FALSE. ') end
 context('Parameter 2 :'..parameter2..' has length '..string.len(parameter2))
 context('\\crlf')
 \stopluacode
-}%  
+}%
 
 
 Test is \readandprocessparameters{AAAA}{BBBB}
@@ -141,7 +150,7 @@ Test is \readandprocessparameters{\\lastname[25]}{\\lastname}
 
 
 
-
+KONEC
 
 
 

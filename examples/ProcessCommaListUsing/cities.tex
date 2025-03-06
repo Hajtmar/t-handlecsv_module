@@ -1,5 +1,5 @@
 % Volání: context --arguments="CountryAbbrev=USA" cities
-\usemodule[handlecsv]
+\input ../incl_handlecsv_file.tex
 
 \setuppagenumbering[state=stop]
 \setupbodyfont[regular, 8pt]
@@ -16,13 +16,13 @@
 \unexpanded\def\tableaction{%
 \expanded{\bTR\bTD\SerNum\eTD\bTD\Name\eTD\bTD\Population\eTD\bTD\Altitude\eTD\eTR}%
 }
-	
+
 \starttext
 \midaligned{\ssb List of biggest cities of (\env{CountryAbbrev})}
 
 \blank[big]
 
-\setheader 
+\setheader
 \opencsvfile{cities.csv}
 
 \bTABLE
@@ -30,7 +30,7 @@
 \doloopif{\CountryAbbrev}{==}{\env{CountryAbbrev}}{\tableaction}
 \bTR\bTD-- \eTD\bTD\ssx -- \eTD\bTD -- \eTD\bTD -- \eTD\eTR
 \eTABLE
- 		
-\page[no]	
+
+\page[no]
 
 \stoptext

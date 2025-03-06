@@ -1,4 +1,5 @@
-\usemodule[scancsv]
+%\usemodule[scancsv]
+\input ../incl_handlecsv_file.tex
 
 \setupinteraction[state=start,color=blue,contrastcolor=blue, style=normal]
 \setupcolors[state=start]
@@ -16,7 +17,7 @@
 \setupTABLE[c][6][align=left, width=1cm]
 \setupbodyfont[regular, 9pt]
 
-	
+
 
 \starttext
 
@@ -48,7 +49,7 @@ Text:
 
 % 1.
 \insl{\doloopfromto{1}{3}{\tableaction}}
-\doloopfromto{1}{3}{\tableaction} %OK 
+\doloopfromto{1}{3}{\tableaction} %OK
 
 \insl{\doloopfromto{5}{3}{\lineaction}}
 \doloopfromto{5}{3}{\lineaction} %OK
@@ -63,7 +64,7 @@ Text:
 
 % 3.
 \insl{\doloopaction}
-\doloopaction %OK % implicit use \lineaction macro for all lines 
+\doloopaction %OK % implicit use \lineaction macro for all lines
 
 \insl{\doloopaction{\tableaction}}
 \doloopaction{\tableaction} %OK % use explicit \tableaction macro for all lines
@@ -98,7 +99,7 @@ Text:
 \doloopif{\DISCOUNTEDxPRICE}{>}{\lineno}{\lineaction} %OK
 
 \insl{\doloopif{\DISCOUNTEDxPRICE}{>}{11.8}{\lineaction}}
-\doloopif{\DISCOUNTEDxPRICE}{>}{11.8}{\lineaction} %OK 
+\doloopif{\DISCOUNTEDxPRICE}{>}{11.8}{\lineaction} %OK
 
 \insl{\doloopif{\DISCOUNTEDxPRICE}{==}{5.95}{\lineaction}}
 \doloopif{\DISCOUNTEDxPRICE}{==}{5.95}{\lineaction} %OK
@@ -122,11 +123,11 @@ Text:
 \doloopuntil{\CATEGORY}{C}{\tableaction} %OK ... alias for \doloopif{\AUTHOR}{until}{Karen Armstrong}{\lineaction} %OK
 
 \insl{\doloopif{\CATEGORY}{while}{A}{\lineaction}}
-\doloopif{\CATEGORY}{while}{A}{\lineaction}% 
+\doloopif{\CATEGORY}{while}{A}{\lineaction}%
 
 \insl{\doloopwhile{\CATEGORY}{A}{\lineaction}}
 \doloopwhile{\CATEGORY}{A}{\lineaction} %OK ... alias for \doloopif{\CATEGORY}{A}{\lineaction}
- 
+
 
 \insl{\filelineaction }
 \filelineaction %OK
@@ -156,7 +157,7 @@ Text:
 % \def\elinehook{\eTR}
 % \def\bfilehook{\bTABLE }
 % \def\efilehook{\eTABLE}
-% 
+%
 
 
 \unexpanded\def\tableaction{\expanded{\hREVIEWxDATE \hAUTHOR \hISBN \hDISCOUNTEDxPRICE}}

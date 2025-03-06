@@ -1,0 +1,29 @@
+\input ../incl_handlecsv_file.tex
+
+
+
+
+\usehooks % it is necessary turn on using hooks while process CSV file
+\setheader
+\setsep{,}
+\opencsvfile{lisajdb1a.csv}
+
+\def\bfilehook{BF}%
+\def\efilehook{EF}%
+\def\blinehook{BL}%
+\def\elinehook{EL}%
+\def\bch{BC\bgroup\bf}
+\def\ech{\egroup EC}
+
+
+
+
+\starttext
+
+\dorecurse{5}{\hId\hJmeno\hPrijmeni\par
+\nextrow}
+
+
+
+
+\stoptext

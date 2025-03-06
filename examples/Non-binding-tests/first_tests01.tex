@@ -1,13 +1,11 @@
-\usemodule[handlecsvcells]
-
-
-
-
+\input ../incl_handlecsv_file.tex
 
 
 
 
 \starttext
+
+Tohle byla trochu slepá větev...
 
 \opencsvfile{numbers.csv}
 
@@ -15,19 +13,22 @@
 \opencsvfile{letters.csv}
 
 
-\getcsvcell[letters.csv](1,5)
 
 
-\getcsvcell[letters.csv]('A',5)
+\getcsvcellof[letters.csv][1,5]
+
+
+\getcsvcellof[letters.csv]['A',5]
 
 
 \csvfilename
 
-\getcsvcell[numbers.csv](1,9)
+
+\getcsvcellof[numbers.csv][1,9]
 
 \csvfilename
 
-\hairline 
+\hairline
 
 \setsep{,}
 \setheader
@@ -37,46 +38,51 @@
 %\numrows
 
 
+
 \setsep{;}
 \setheader
 \opencsvfile{countries.csv}
 
 \csvfilename
-%\numrows
+\numrows
 
 \numrows[letters.csv]
 
-%\csvfilename -- \numrows
+\csvfilename -- \numrows
 
 
 \opencsvfile{countries.csv}
 
-%\csvfilename -- \numrows
+\csvfilename -- \numrows
+
 
 \opencsvfile{countries.csv}
 
-%\csvfilename -- \numrows
+\csvfilename -- \numrows
 
 
-
-%\csvfilename -- \numrows -- \numrows[] --
+\csvfilename -- \numrows -- \numrows[] --
 
 
 \opencsvfile{letters.csv}
 
-%\csvfilename -- \numrows -- \numrows[]
+\csvfilename -- \numrows -- \numrows[]
 
 
 
-1 \numrows -- \numrows[]
+1 \\numrows = \\numrowsof[] \numrows -- \numrowsof[]
 
-2 \numrows[lide.csv]
+2 Numrows of [lide.csv] \numrowsof[lide.csv]
 
-3 \numrows[countries.csv]
+3 \numrowsof[countries.csv]
 
 4 \numrows[letters.csv]
 
+%\dorecurse{\number\numrows\relax}{\recurselevel \crlf}
 
+%\dorecurse{\number\numrows\relax}{\recurselevel \crlf}
+
+%\dorecurse{\numexpr{\numrows}}{\recurselevel \crlf}
 
 %\dorecurse{\number\numrows\relax}{\recurselevel \crlf}
 
@@ -84,48 +90,105 @@
 %\dorecurse{\numrows[lide.csv]}{\recurselevel \crlf}
 
 
-%
-%1: \getcsvcell[lide.csv](1,9)
-%
-%A: \getcsvcell[lide.csv]("A",9)
-%
-%cA: \getcsvcell[lide.csv]("cA",9)
-%
-%Lastname: \getcsvcell[lide.csv]("Lastname",9)
-%
-%Last name: \getcsvcell[lide.csv]("Last name",9)
-%
-%Lastxname: \getcsvcell[lide.csv]("Lastxname",9)
-%
-%
-%Fitstname: \getcsvcell[lide.csv]("Firstname",9)
-%
-%Firstxname: \getcsvcell[lide.csv]("Firstxname",9)
-%
-%
-%numrows lide: \numrows{lide.csv}
-%
-%\opencsvfile{letters.csv}
-%
-%current opened filename: \csvfilename
-%
-%current opened filename numrows: \numrows
+1: \getcsvcellof[lide.csv][1,9]
 
-%\dorecurse{\numrows{lide.csv}}{\getcsvcell[lide.csv]("Lastname",\recurselevel)}
+A: \getcsvcellof[lide.csv]["A",9]
+
+cA: \getcsvcellof[lide.csv]["cA",9]
+
+Lastname: \getcsvcellof[lide.csv]["Lastname",9]
+
+Last name: \getcsvcellof[lide.csv]["Last name",9]
+
+Lastxname: \getcsvcellof[lide.csv]["Lastxname",9]
+
+Firstname: \getcsvcellof[lide.csv]["Firstname",9]
+
+Firstxname: \getcsvcellof[lide.csv]["Firstxname",9]
+
+
+\numrows lide: \numrows{lide.csv}
+
+\opencsvfile{letters.csv}
+
+current opened filename: \csvfilename
+
+current opened filename numrows: \numrows
+
+Dobrá vychytávka:
+
+\dorecurse{\numrowsof[lide.csv]}{\recurselevel -- \getcsvcellof[lide.csv]['Firstname',\recurselevel]\crlf}
+
+
+Otevírám CSV soubor letters.csv\par
+
+\opencsvfile{letters.csv}\par
+
+Počet řádků načtených ze souboru: \numrows\par
+
+
+
+
+
+LETTERS.CSV
+
+\opencsvfile{letters.csv}
+
+\ctxlua{tex.sprint("Current file: ["..thirddata.handlecsv.getcurrentcsvfilename().."]")}
+
+TEST:
+
+\ctxlua{
+  local f = thirddata.handlecsv.getcurrentcsvfilename() or "nil"
+  local n = thirddata.handlecsv.gNumRows[f] or "nil"
+  tex.sprint("File: ["..f.."], rows: ["..n.."]")
+}
+
+
+
+NUMROWS: \numrows
+
+
+tex.sprint
+
+\ctxlua{tex.sprint("["..thirddata.handlecsv.numrows().."]")}
+
+
+
+%\dorecurse{\numrows}{\recurselevel \crlf}
+
+
+T E S T
+
+Otevírám CSV soubor letters.csv\par
+
+\opencsvfile{letters.csv}\par
+
+\ctxlua{
+  local f = thirddata.handlecsv.getcurrentcsvfilename() or "none"
+  local n = thirddata.handlecsv.gNumRows[f] or "nil"
+  tex.sprint("Aktuální soubor: ["..f.."], počet řádků: ["..n.."]")
+}
+\par
+
+
+
+
+%\dorecurse{\numrows{lide.csv}}{\getcsvcellof[lide.csv]["Lastname",\recurselevel]}
+
+
+%\dorecurse{\numrows{numbers.csv}}{\getcsvcellof[numbers.csv]["B",\recurselevel]}
+%
+%xxx
+%
+%\dorecurse{\numrows{lide.csv}}{\recurselevel. \getcsvcellof[numbers.csv][1,\recurselevel] -- \getcsvcellof[numbers.csv]['B',\recurselevel] -- \getcsvcellof[numbers.csv]['C',\recurselevel] -- \getcsvcellof[numbers.csv][7,\recurselevel]\crlf }
+%
+%xxx
 %
 %
-%\dorecurse{\numrows{numbers.csv}}{\getcsvcell[numbers.csv]("B",\recurselevel)}
+%\dorecurse{\numrows{letters.csv}}{\getcsvcellof[letters.csv]["B",\recurselevel]}
 %
-%xxx 
-%
-%\dorecurse{\numrows{lide.csv}}{\recurselevel. \getcsvcell[numbers.csv](1,\recurselevel) -- \getcsvcell[numbers.csv]('B',\recurselevel) -- \getcsvcell[numbers.csv]('C',\recurselevel) -- \getcsvcell[numbers.csv](7,\recurselevel)\crlf }
-%
-%xxx 
-%
-%
-%\dorecurse{\numrows{letters.csv}}{\getcsvcell[letters.csv]("B",\recurselevel)}
-%
-%\dorecurse{\numrows{letters.csv}}{\getcsvcell[letters.csv](2,\recurselevel)}
+%\dorecurse{\numrows{letters.csv}}{\getcsvcellof[letters.csv][2,\recurselevel]}
 %
 %
 %
@@ -178,9 +241,9 @@
 
 \def\Command%
   {\dosingleargument\Docommand}
-  
-  
-  
+
+
+
 \starttext
 
 1. \command[222][333]

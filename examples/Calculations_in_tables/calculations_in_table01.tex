@@ -1,10 +1,6 @@
 % https://mailman.ntg.nl/pipermail/ntg-context/2003/001390.html
 
-
-%\usemodule[handlecsv (kopie 2017-07-31-1826)]
-\usemodule[t-handlecsv (kopie 2018-02-10-2116)]
-%\usemodule[handlecsv]
-
+\input ../incl_handlecsv_file.tex
 
 \def\eval#1{\directlua{context(tonumber(#1))}}
 \def\commatodecimal#1{\directlua{context(string.gsub('#1', "," , "."))}}
@@ -69,7 +65,7 @@
 \catcode`\#=12 %CSV file contains # characters (i.e. TeX problematic character)
 
 
-\opencsvfile{\env{pathtocsv}superstore_sales_smalltable.csv}
+\opencsvfile{superstore_sales_smalltable.csv}
 
 
 \title{Using \type{\dorecurse} cycle}
@@ -83,6 +79,7 @@
 \dorecurse{\numrows}{
 	\setlinepointer{\recurselevel}
 	\lineaction
+	\nextrow
 }
 \lasttableline
 \eTABLE
@@ -93,7 +90,7 @@
 
 \bTABLE[split=yes]
 \firsttableline
-\dorecurse{\numrows}{
+\dorecurse{\numrows}{%
 	\getbuffer[tablerows]
 }
 \lasttableline

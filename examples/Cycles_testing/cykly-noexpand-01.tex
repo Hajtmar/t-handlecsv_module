@@ -1,10 +1,11 @@
-\usemodule[handlecsv]
+\input ../incl_handlecsv_file.tex
+
 
 %http://wiki.contextgarden.net/System_Macros/Loops_and_Recursion
 
 
 
-% Při použití \doloopuntil, \doloopwhile 
+% Při použití \doloopuntil, \doloopwhile
 \def\tableactionexp{\expanded{\bTR\bTD\cA\eTD\bTD\Jmeno\eTD\bTD\Prijmeni\eTD\eTR}}
 \def\tabactionexp{\expanded{\bTR \bTD \cA \eTD \bTD \Jmeno \eTD \bTD \Prijmeni \eTD \eTR}}
 \def\tableaction{\bTR\bTD\cA\eTD\bTD\Jmeno\eTD\bTD\Prijmeni\eTD\eTR}
@@ -44,24 +45,24 @@ TEST 1
 %\let\elinehook\relax%
 %\let\bfilehook\relax%
 %\let\efilehook\relax%
-    
+
 TEST 2
 %\def\lineaction{\expanded{\bTR\bTD\cA\eTD\bTD\Jmeno\eTD\bTD\Prijmeni\eTD\eTR}}
 \def\lineaction{\expanded{\bTD\cA\eTD\bTD\Jmeno\eTD\bTD\Prijmeni\eTD}}
 
 %\bTABLE
 %\doloopaction
-\doloopaction{\tabactionexp} 
+\doloopaction{\tabactionexp}
 %\eTABLE
 
 \stoptext
 %\def\lineaction{\tabactionexp}
 %\bTABLE
-%\doloopaction 
+%\doloopaction
 %\eTABLE
 
 
-\page 
+\page
 
 TEST 3
 
@@ -69,7 +70,7 @@ TEST 3
 \opencsvfile{lisajdb.csv}
 
 \bTABLE
-\doloopfromto{18}{25}{\tableactionexpa} %%% OK 
+\doloopfromto{18}{25}{\tableactionexpa} %%% OK
 \eTABLE
 
 %\doloopaction{18}{29}{tableactionexpa} %%% OK
@@ -141,7 +142,7 @@ TEST 7
 \def\lineaction{\tableactionexp}
 
 \type{\filelineaction}
-	
+
 \bTABLE
 %\filelineaction % OK pro \def\lineaction{\tableaction}
 \eTABLE
@@ -151,10 +152,10 @@ TEST 7
 \opencsvfile{lisajdb2.csv}
 \def\lineaction{\tableaction}
 
-\type{\filelineaction{lisajdb1.csv}}	
+\type{\filelineaction{lisajdb1.csv}}
 
 \bTABLE
-%\filelineaction{lisajdb1.csv} % OK pro \def\lineaction{\tableaction} 
+%\filelineaction{lisajdb1.csv} % OK pro \def\lineaction{\tableaction}
 \eTABLE
 
 \type{\filelineaction{lisajdb1.csv}{3}}
@@ -168,12 +169,12 @@ TEST 7
 \type{\filelineaction{lisajdb2.csv}{3}{5}}
 
 \bTABLE
-%\filelineaction{lisajdb2.csv}{3}{5} 
+%\filelineaction{lisajdb2.csv}{3}{5}
 \eTABLE
 
 
 
-\page 
+\page
 
 TEST 8
 
@@ -204,7 +205,7 @@ TEST 8
 
 \bTABLE
 %  process \lineaction for all rows OK
-\doloopforall{\XX} % OK 
+\doloopforall{\XX} % OK
 \eTABLE
 
 
@@ -247,16 +248,16 @@ TEST 8
 
 \type{\filelineaction{lisajdb1.csv}}
 
-\def\lineaction{\tableaction} 
+\def\lineaction{\tableaction}
 \bTABLE
 \filelineaction{lisajdb1.csv}
 \eTABLE
 
 
- 
+
 \type{\filelineaction{lisajdb1.csv}{3}}
- 
-\def\lineaction{\tableaction} 
+
+\def\lineaction{\tableaction}
 \bTABLE
 %\opencsvfile{lisajdb1.csv}
 %\doloopaction{\YY}{3}%
@@ -291,8 +292,8 @@ TEST 8
 
 
 \page
- 
-\def\lineaction{AAAA} 
+
+\def\lineaction{AAAA}
 \doloopaction
 \doloopaction{XXX}
 \doloopaction{\notableaction}{5}
@@ -300,7 +301,7 @@ TEST 8
 
 \page
 \def\lineaction{\notableaction}
-\doloopaction{\YY}{5} 
+\doloopaction{\YY}{5}
 
 \setfiletoscan{lisajdb1.csv}
 \opencsvfile
@@ -420,4 +421,4 @@ Podminka A OR B
 \opencsvfile{lisajdb1.csv}
 \doloopforall{aaa\par}
 
-\stoptext 
+\stoptext

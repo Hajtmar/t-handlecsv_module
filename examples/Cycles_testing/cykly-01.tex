@@ -1,8 +1,9 @@
-\usemodule[handlecsv]
+\input ../incl_handlecsv_file.tex
+
 
 %http://wiki.contextgarden.net/System_Macros/Loops_and_Recursion
 
-% Při použití \doloopuntil, \doloopwhile 
+% Při použití \doloopuntil, \doloopwhile
 \unexpanded\def\tableactionexp{\expanded{\bTR\bTD\cA\eTD\bTD\Jmeno\eTD\bTD\Prijmeni\eTD\eTR}}
 \unexpanded\def\tableaction{\expanded{\bTR\bTD\cA\eTD\bTD\Jmeno\eTD\bTD\Prijmeni\eTD\eTR}}
 \unexpanded\def\tabaction{\expanded{\bTD\cA\eTD\bTD\Jmeno\eTD\bTD\Prijmeni\eTD}}
@@ -39,7 +40,7 @@ TEST 1
 TEST 2
 \def\lineaction{\expanded{\bTD\cA\eTD\bTD\Jmeno\eTD\bTD\Prijmeni\eTD}}
 
-\doloopaction % provádí pro všechny záznamy \lineaction 
+\doloopaction % provádí pro všechny záznamy \lineaction
 
 
 \def\lineaction{\tabaction}
@@ -101,7 +102,7 @@ TEST 7
 \def\lineaction{\tableaction}
 
 \type{\filelineaction}
-	
+
 \bTABLE
 \filelineaction % OK pro \def\lineaction{\tableaction}
 \eTABLE
@@ -111,10 +112,10 @@ TEST 7
 \opencsvfile{lisajdb2.csv}
 \def\lineaction{\tableaction}
 
-\type{\filelineaction{lisajdb1.csv}}	
+\type{\filelineaction{lisajdb1.csv}}
 
 \bTABLE
-\filelineaction{lisajdb1.csv} % OK pro \def\lineaction{\tableaction} 
+\filelineaction{lisajdb1.csv} % OK pro \def\lineaction{\tableaction}
 \eTABLE
 
 \type{\filelineaction{lisajdb1.csv}{3}}
@@ -128,12 +129,12 @@ TEST 7
 \type{\filelineaction{lisajdb2.csv}{3}{5}}
 
 \bTABLE
-\filelineaction{lisajdb2.csv}{3}{5} 
+\filelineaction{lisajdb2.csv}{3}{5}
 \eTABLE
 
 
 
-\page 
+\page
 
 TEST 8
 
@@ -164,7 +165,7 @@ TEST 8
 
 \bTABLE
 %  process \lineaction for all rows OK
-\doloopforall{\XX} % OK 
+\doloopforall{\XX} % OK
 \eTABLE
 
 
@@ -207,16 +208,16 @@ TEST 8
 
 \type{\filelineaction{lisajdb1.csv}}
 
-\def\lineaction{\tableaction} 
+\def\lineaction{\tableaction}
 \bTABLE
 \filelineaction{lisajdb1.csv}
 \eTABLE
 
 
- 
+
 \type{\filelineaction{lisajdb1.csv}{3}}
- 
-\def\lineaction{\tableaction} 
+
+\def\lineaction{\tableaction}
 \bTABLE
 %\opencsvfile{lisajdb1.csv}
 %\doloopaction{\YY}{3}%
@@ -251,8 +252,8 @@ TEST 8
 
 
 \page
- 
-\def\lineaction{AAAA} 
+
+\def\lineaction{AAAA}
 \doloopaction
 \doloopaction{XXX}
 \doloopaction{\notableaction}{5}
@@ -260,7 +261,7 @@ TEST 8
 
 \page
 \def\lineaction{\notableaction}
-\doloopaction{\YY}{5} 
+\doloopaction{\YY}{5}
 
 \setfiletoscan{lisajdb1.csv}
 \opencsvfile
@@ -381,15 +382,15 @@ Podminka A OR B
 \doloopforall{aaa\par}
 
 
-\stoptext 
+\stoptext
 
 
 Pokusy 9.7.2015
 \def\CPrijmeni{\dosingleempty\doCPrijmeni}
-\edef\doCPrijmeni[#1]{\iffirstargument\csvcell['E',#1]\else\columncontent['Prijmeni']\fi} 
+\edef\doCPrijmeni[#1]{\iffirstargument\csvcell['E',#1]\else\columncontent['Prijmeni']\fi}
 
 \def\CJmeno{\dosingleempty\doCJmeno}
-\edef\doCJmeno[#1]{\iffirstargument\csvcell['D',#1]\else\columncontent['Jmeno']\fi} 
+\edef\doCJmeno[#1]{\iffirstargument\csvcell['D',#1]\else\columncontent['Jmeno']\fi}
 
 
 \CJmeno\ \CPrijmeni
@@ -407,5 +408,5 @@ U doloopfromto je třeba dávat \expanded{}!!!!!
 TEST 2
 \def\lineaction{\bTD\cA\eTD\bTD\CJmeno\eTD\bTD\CPrijmeni\eTD}
 
-\doloopaction % provádí pro všechny záznamy \lineaction 
+\doloopaction % provádí pro všechny záznamy \lineaction
 

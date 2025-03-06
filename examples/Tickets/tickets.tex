@@ -1,14 +1,14 @@
-\setuppapersize[A4][A4]    
+\setuppapersize[A4][A4]
 
 \setuppagenumbering[state=stop]% , alternative=doublesided]
 \setuplayout[
-	backspace=0mm,  
+	backspace=0mm,
 	leftmargin=0mm, % Nenastavovat!!!
 	width=middle, % Nenastavovat!!!
 	rightmargin=0mm, % Nenastavovat!!!
 	cutspace=0mm,
-	topspace=0mm, 
-	headerdistance=0mm, % Nenastavovat!!! 
+	topspace=0mm,
+	headerdistance=0mm, % Nenastavovat!!!
 	header=0mm, % Nenastavovat!!!
 	height=middle, % Nenastavovat!!!
 	footerdistance=0mm, % Nenastavovat!!!
@@ -38,14 +38,36 @@
 \setupcolors[state=start]    % Zapne používání barev.
 
 % Kompilace - minimals
-\usemodule[handlecsv] % Kompilace pomocí ConTeXtu ala TeXLive 2011
+%\usemodule[handlecsv] % Kompilace pomocí ConTeXtu ala TeXLive 2011
+
+%\input /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/incl2allfiles.tex
+
+%\usepath[{/Users/hajtmar/OneDrive/Dokumenty/1da/GitHub-projekty/t-handlecsv_module,qrkody,qrc-shell,qrc-shell/qrkody}]
+%\setupexternalfigures[directory={qrkody,qrc-shell,qrc-shell/qrkody}] % POZOR! Nesmí být mezera na konci.
+%\usemodule[/Users/hajtmar/OneDrive/Dokumenty/1da/ConTeXt/ConTeXt-Tests/my_way/ScanCSV/t-handlecsv_module/t-handlecsv] % poslední verze
+%\usemodule[/Users/hajtmar/OneDrive/Dokumenty/1da/ConTeXt/ConTeXt-Tests/my_way/ScanCSV/t-handlecsv_module 2/t-handlecsv (kopie 2)]
+%\usemodule[/Users/hajtmar/OneDrive/Dokumenty/1da/GitHub-projekty/t-handlecsv_module/t-handlecsv-optbyai] % poslední verze
+
+%\usemodule[t-handlecsv] % poslední verze
+%\usemodule[t-handlecsv-optbyai] % poslední verze
+
+
+%\doifmodeelse{davka}
+%	{\opencsvfile{\env{pathtocsv}tickets.csv}}
+%	{\opencsvfile{tickets.csv}}
+
+
+
+\input ../incl_handlecsv_file.tex
+
+%\input /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/incl2allfiles.tex
 \setheader
 \opencsvfile{tickets.csv}
 
-\defineoverlay[pozadifront][{\externalfigure[empty_ticket.pdf][width=\cardwidth,height=\cardheight, frame=off]}]
+\defineoverlay[pozadifront][\externalfigure[empty_ticket.png][width=\cardwidth,height=\cardheight, frame=off]]
 
 \unexpanded\def\lineaction{%
-\framed[height=\cardheight, width=\cardwidth,background={pozadifront}, frame=off]{%
+\framed[height=\cardheight, width=\cardwidth,background={overlay, pozadifront}, frame=off]{%
 \setuppositioning[unit=mm, xoffset=-5mm, yoffset=13mm]
 \startpositioning
 {\position(0,0){\framed[width=1.5cm, frame=off, align=middle]{\ss\bf\Rada.}}}
@@ -53,7 +75,7 @@
 {\position(0,8){\framed[width=1.5cm, frame=off, align=middle]{\ss\bf\Sedadlo}}}
 {\position(140,8){\framed[width=1.5cm, frame=off, align=middle]{\ss\bf\Sedadlo}}}
 \stoppositioning}
-} 
+}
 
 
 

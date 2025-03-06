@@ -1,4 +1,5 @@
-\usemodule[handlecsv]
+\input ../incl_handlecsv_file.tex
+
 \usemodule[handlecsv-tools]
 
 
@@ -11,7 +12,7 @@
 %\opencsvfile{myfirstcsvexamplefilewithoutheader.csv}
 
 \catcode`\#=12 %CSV file contains # characters (i.e. TeX problematic character)
-
+\catcode`\@=12 %CSV file contains # characters (i.e. TeX problematic character)
 
 
 % tyto nepodstatnÈ lua funkce (resp. jejich n·slednÈ TeXovÈ definice) byly umÌstÏny do samostatnÈho modulu "t-handlecsv-tools.lua"
@@ -30,7 +31,7 @@
 
 \printall
 
-\csvreport
+%\csvreport
 
 
 \stoptext

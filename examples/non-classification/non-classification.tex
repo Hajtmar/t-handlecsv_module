@@ -26,15 +26,16 @@
 % Minimal example: The cycle goes through all the marks of students and lists students who have difficulty learning.
 % In our school we use this script to generate letters to inform parents about the need for students with lack of evaluation to completing their marks on particular subjects.
 
-\usedirectory[/Users/Hajtmar/Onedrive/Dokumenty/1da/ConTeXt/ConTeXt-Tests/my_way/ScanCSV/t-handlecsv_module/]
-\usemodule[handlecsv]
+%\usedirectory[/Users/Hajtmar/Onedrive/Dokumenty/1da/ConTeXt/ConTeXt-Tests/my_way/ScanCSV/t-handlecsv_module/]
+%\usemodule[handlecsv]
+\input ../incl_handlecsv_file.tex
 
 \unexpanded\def\subjectabbreviation#1{\ctxlua{context(thirddata.handlecsv.ParseCSVLine('#1',':')[1])}}%
 
 
 \def\subjectstesting#1{%
  \def\listofsubjects{}%
- \dostepwiserecurse{3}{11}{1}{\if\csvcell[\recurselevel,\linepointer]#1 \eaddto\listofsubjects{\subjectabbreviation{\csvcell[\recurselevel,0]}, }\fi}% 
+ \dostepwiserecurse{3}{11}{1}{\if\csvcell[\recurselevel,\linepointer]#1 \eaddto\listofsubjects{\subjectabbreviation{\csvcell[\recurselevel,0]}, }\fi}%
 }
 
 \unexpanded\def\tableaction#1{
@@ -50,7 +51,7 @@
 \setheader
 \opencsvfile{data.csv}
 
-\subject{The list of pupils with a lack of evaluation (N):} 
+\subject{The list of pupils with a lack of evaluation (N):}
 
 \bTABLE
 \doloopfromto{1}{\numrows}{\tableaction{N}}

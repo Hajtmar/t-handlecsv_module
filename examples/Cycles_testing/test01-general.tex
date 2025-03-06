@@ -1,4 +1,5 @@
-\usemodule[handlecsv]
+\input ../incl_handlecsv_file.tex
+
 %\usemodule[handlecsv-tools]
 
 
@@ -6,7 +7,7 @@
 \def\typeexample[#1]#2#3{% buffname, title, description
 \subject{#2}
 #3\par
-The following source code: 
+The following source code:
 
 \blank[big]
 
@@ -73,7 +74,7 @@ produces the following output result:
 % 	\else \cA, \cB, \cC, \cD, \cE, \cF, \cG, \cH, \cI. \crlf
 % 	\fi
 }
- 
+
 \unexpanded\def\lineaction{LINEACTION: \dumpcontents}
 \unexpanded\def\action{ACTION: \dumpcontents}
 
@@ -114,7 +115,7 @@ XXXXXXXXXX
 
 \cA -- \colA -- \colA[7]
 
-\colA[8]  
+\colA[8]
 
 zzzzzzzzzzzzzzzz
 
@@ -160,7 +161,7 @@ context('\\crlf')
 for i=1,#thirddata.handlecsv.gColumnNames[thirddata.handlecsv.getcurrentcsvfilename()] do
 context('\\backslash '..thirddata.handlecsv.gColumnNames[thirddata.handlecsv.getcurrentcsvfilename()][i]..', ')
 end
-    
+
 \stopluacode
 
 
@@ -196,9 +197,9 @@ Predefined macros are:
 \columncontent
 \numberxlscolname
 \stoptyping
- 
+
 \blank[big]
- 
+
 \startbuffer[macro.columns.example1]
 1. \type{\colname[2]}: \colname[2]
 2. \type{\xlscolname[5]}: \xlscolname[5]
@@ -220,32 +221,32 @@ Predefined macros are:
 \typeexample[macro.columns.example1]{Examples of using predefined columns macros}{}
 
 % \type{\columncontent['š23cv']}: \columncontent['š23cv']  % not exist this column
-% 
+%
 % \type{\columncontent['Příjmení']}: \columncontent['Příjmení']  % not exist this column
-% 
+%
 % \type{\columncontent['Prijmeni']}: \columncontent['Prijmeni']  % not exist this column
-% 
+%
 % \type{\columncontent['Jméno']}: \columncontent['Jméno']  % not exist this column
 
 % \type{\columncontent['Jmeno']}: \columncontent['Jmeno']  % not exist this column
 
 
- 
+
 Dorecurse example 1:
- 
+
 \starttyping
 \dorecurse{\numrows}{
-\recurselevel: 
-\readline{\recurselevel} 
-%\columncontent['Firstname'] -- \columncontent['Lastname'] -- \columncontent[3] 
+\recurselevel:
+\readline{\recurselevel}
+%\columncontent['Firstname'] -- \columncontent['Lastname'] -- \columncontent[3]
 \crlf}
-\stoptyping 
- 
+\stoptyping
+
 
 \blank[big]
- 
-\dorecurse{\numrows}{\recurselevel: \readline{\recurselevel} \columncontent['Firstname'] -- \columncontent['Lastname'] -- \columncontent[3] \crlf } 
- 
+
+\dorecurse{\numrows}{\recurselevel: \readline{\recurselevel} \columncontent['Firstname'] -- \columncontent['Lastname'] -- \columncontent[3] \crlf }
+
 % Dorecurse example 2:
 
 %%% \dorecurse{9}{\edef\actualcolname{\colname[\recurselevel]} \recurselevel. column: \colname[\recurselevel] -- \indexcolname[\actualcolname]\crlf}
@@ -295,12 +296,12 @@ Content of \type{\temporary} macro is now: <\temporary>
 
 \dorecurse{\numrows}{%
 	\readline{\recurselevel}
-	\eaddto\temporary{\cA, }% 
-} 
+	\eaddto\temporary{\cA, }%
+}
 
 Content of \type{\temporary} macro is now (all names): <\temporary>
- 
-  
+
+
 \title{Working with misc macros: }
 
 
@@ -325,7 +326,7 @@ Macros:
 
 
 Table cells:
- 
+
 \directlua{
 context(thirddata.handlecsv.gTableRows[thirddata.handlecsv.getcurrentcsvfilename()][1][1]..' [first row, first column]\\crlf')
 context(thirddata.handlecsv.gTableRows[thirddata.handlecsv.getcurrentcsvfilename()][1][2]..' [first row, second column]\\crlf')
@@ -350,9 +351,9 @@ column 9, row 5  ie column \colname[9], row 5 :  \csvcell[9,5]
 
 
 'Lastname' column (ie first column) and first row: \backslash csvcell['Lastname',1] --> \csvcell['Lastname',1]
- 
+
 'Firstname' column (ie second column) and first row: \backslash csvcell['Firstname',1] --> \csvcell['Firstname',1]
- 
+
 'Email' column (ie nineth column) and fifth row: \backslash csvcell['Email',5] --> \csvcell['Email',5]
 
 
@@ -388,13 +389,13 @@ List of ten rows of 'Firstname' column (\backslash dorecurse loop using):
 Undefined and defined cells:
 
 \blank[big]
- 
+
 
 \backslash csvcell['Is',5] --> \csvcell['Is',5]
 
 \backslash csvcell['I',51] --> \csvcell['I',51]
 
-\backslash csvcell['I',0]  --> \csvcell['I',0] 
+\backslash csvcell['I',0]  --> \csvcell['I',0]
 
 \backslash csvcell['I',50] --> \csvcell['I',50]
 
@@ -434,7 +435,7 @@ List of all CSV table by use cycle:
 \eTABLE
 
 
-\page 
+\page
 
 List of all CSV table by use cycle (other version):
 
@@ -443,7 +444,7 @@ List of all CSV table by use cycle (other version):
         \dorecurse{\numcols}{\bTD \csvcell[\currentTABLEcolumn,\currentTABLErow] \eTD}
     \eTR}
 \eTABLE
-   
+
 
 
 
@@ -484,7 +485,7 @@ Write all header names:
 \stopbuffer
 \typeexample[example2]{DOLOOP FOR ALL cycles}{Do lineaction macro for all lines}
 
- 
+
 
 \startbuffer[example3]
 \doloopforall{\dumpcontents}
@@ -548,27 +549,27 @@ Write all header names:
 
 
 ]
- 
- 
-% 
+
+
+%
 % OK: \doloopaction{\action}{2}{5} % use \action macro for lines from 2 to 5
-% 
-% 
+%
+%
 % FILELINEACTION:
-% 
+%
 % Do for all lines of opening table
-% 
+%
 % OK: \filelineaction
-% 
-% 
-% Do for all lines of specific table name 
-% 
+%
+%
+% Do for all lines of specific table name
+%
 % OK: \filelineaction{lide2.csv}
 
 
 DOLOOPIF CYCLES:
 
-%\doloopif{value1}{[compare_operator]}{value2}{macro_for_doing} % [compareoperators] <, >, ==(eq), ~=(neq), >=, <=, in, until, while 
+%\doloopif{value1}{[compare_operator]}{value2}{macro_for_doing} % [compareoperators] <, >, ==(eq), ~=(neq), >=, <=, in, until, while
 
 
 
@@ -618,55 +619,55 @@ SSSSSSSSSSS
 
 DOLOOP CYCLE:
 % \resetlinepointer
-% \doloop{ 
-%  \linepointer: 
+% \doloop{
+%  \linepointer:
 %  \readline
 %  \lineaction\nextline
 %  \ifnum\linepointer>20\exitloop\fi
 % }
 
 \resetlinepointer
-\doloop{ 
- \linepointer: 
+\doloop{
+ \linepointer:
  \readline
  \lineaction\nextline
  \ifEOF\exitloop\fi
 }
- 
- 
- 
+
+
+
  XXX
 \setlinepointer{7}
 \doloop{%
 \ifnum\linepointer<9
- \linepointer: 
+ \linepointer:
  \readline
  \lineaction
  \nextline
  \else
- \exitloop 
+ \exitloop
 \fi
-} 
+}
 
 
  XXX
 \resetlinepointer
 \doloop{%
 \ifnum\linepointer<9
- \linepointer: 
+ \linepointer:
  \readline
  \lineaction
  \nextline
  \else
- \exitloop 
+ \exitloop
 \fi
-} 
+}
 
 
 % \doloop
 %   {Some kind of typesetting punishment \par
 %    \ifnum\pageno>5 \exitloop \fi}
-   
+
 DOLOOP CYCLE:DOLOOP CYCLE:DOLOOP CYCLE:DOLOOP CYCLE:DOLOOP CYCLE:
 
 
@@ -698,9 +699,9 @@ a \readline{a}
 
 \directlua{
 function test(opt)
---  if (interfaces.tolist(opt) > 0) 
---%  	then context('kladne') 
---% 	else context('zaporne') 
+--  if (interfaces.tolist(opt) > 0)
+--%  	then context('kladne')
+--% 	else context('zaporne')
 --%  end
     context("%s",interfaces.tolist(opt))
 end
@@ -722,7 +723,7 @@ test \test .....
 
 \opencsvfile{lide.csv}
 
-And now \backslash filelineaction 
+And now \backslash filelineaction
 
 %\doloopfromto{1}{5}{\lineaction}
 
@@ -806,14 +807,14 @@ And now \backslash filelineaction
 
 
 \startluacode
-for i=1,200 do 
+for i=1,200 do
  context(i..' - '..thirddata.handlecsv.ar2xls(i)..' - '..thirddata.handlecsv.xls2ar(thirddata.handlecsv.ar2xls(i))..'\\crlf')
 end
 \stopluacode
 
 
 
-function thirddata.handlecsv.texmacroisdefined(macroname) -- check whether macroname macro is defined  in ConTeXt 
+function thirddata.handlecsv.texmacroisdefined(macroname) -- check whether macroname macro is defined  in ConTeXt
 -- function is used to test whether the user has defined the macro \macroname. If not, it needs to define any default value
 	if token.csname_name(token.create(macroname)) == macroname then
 		return true
@@ -834,14 +835,14 @@ end
 
 function thirddata.handlecsv.xopencsvfile(filetoscan) -- Open CSV tabule, inicialize variables
 	-- otevře tabulku načte ji do globální proměnné thirddata.handlecsv.gTableRows
-	-- pokud je zapnuta volba thirddata.handlecsv.gCSVHeader==true, pak do gl. proměnné thirddata.handlecsv.gColumnNames 
-	-- nastaví názvy sloupců ze záhlaví, pokud ne, tak se nastaví XLS notace, tj. cA, cB, cC, ...  
+	-- pokud je zapnuta volba thirddata.handlecsv.gCSVHeader==true, pak do gl. proměnné thirddata.handlecsv.gColumnNames
+	-- nastaví názvy sloupců ze záhlaví, pokud ne, tak se nastaví XLS notace, tj. cA, cB, cC, ...
 	-- do proměnných  thirddata.handlecsv.gNumRows a  thirddata.handlecsv.gNumCols se uloží počty řádků a sloupců tabulky
 	-- pokud je soubor s hlavičkou, tak se hlavičkový řádek nepočítá do počtu řádků tabulky
 	-- Navíc se nadefinují ConTeXová makra  \csvfilename, \numrows a \numcols
 	 thirddata.handlecsv.gNumEmptyRows=0
 	 thirddata.handlecsv.gColNames={}
-	 thirddata.handlecsv.gColumnNames={} 
+	 thirddata.handlecsv.gColumnNames={}
 	 thirddata.handlecsv.resetlinepointer()	-- set pointer to begin table (first row)
 	 thirddata.handlecsv.resetnumline()
 	 local inpcsvfile=thirddata.handlecsv.handlecsvfilename(filetoscan)
@@ -852,8 +853,8 @@ function thirddata.handlecsv.xopencsvfile(filetoscan) -- Open CSV tabule, inicia
     	strict = true,
 		}
 	if thirddata.handlecsv.gCSVHeader then
-	 thirddata.handlecsv.gTableRows, thirddata.handlecsv.gColumnNames = mycsvsplitter(currentlyprocessedcsvfile,true)   
-	 inspect(thirddata.handlecsv.gTableRows) 
+	 thirddata.handlecsv.gTableRows, thirddata.handlecsv.gColumnNames = mycsvsplitter(currentlyprocessedcsvfile,true)
+	 inspect(thirddata.handlecsv.gTableRows)
 	 inspect(thirddata.handlecsv.gColumnNames)
 	 	for i=1,#thirddata.handlecsv.gTableRows[1] do
 			thirddata.handlecsv.gColNames[tostring(thirddata.handlecsv.gColumnNames[i])] = i -- for indexing use (register names of macros ie 'Firstname' etc...)
@@ -861,7 +862,7 @@ function thirddata.handlecsv.xopencsvfile(filetoscan) -- Open CSV tabule, inicia
 			thirddata.handlecsv.gColNames[tostring('c'..thirddata.handlecsv.ar2xls(i))] = i -- for indexcolname macro (register names of macros ie 'cA', 'cB', etc...)
 		end
 	else -- if thirddata.handlecsv.gCSVHeader
-	  thirddata.handlecsv.gTableRows, thirddata.handlecsv.gColumnNames = mycsvsplitter(currentlyprocessedcsvfile)   
+	  thirddata.handlecsv.gTableRows, thirddata.handlecsv.gColumnNames = mycsvsplitter(currentlyprocessedcsvfile)
 	  inspect(thirddata.handlecsv.gTableRows)
 	  thirddata.handlecsv.gColumnNames={}
 	  -- ad now set column names for withoutheader situation:
@@ -873,13 +874,13 @@ function thirddata.handlecsv.xopencsvfile(filetoscan) -- Open CSV tabule, inicia
 		 thirddata.handlecsv.gColNames[tostring('c'..thirddata.handlecsv.ar2xls(i))] = i -- for indexcolname macro (register names of macros ie 'cA', 'cB', etc...)
 		end
 	end -- if thirddata.handlecsv.gCSVHeader
-	
+
  	 thirddata.handlecsv.gNumRows=#thirddata.handlecsv.gTableRows -- Getting number of rows
   	 thirddata.handlecsv.gNumCols=#thirddata.handlecsv.gTableRows[1] -- Getting number of columns
     context([[\global\EOFfalse%]])
   	 context([[\global\notEOFtrue%]])
   	 context([[\readline%]])
-  	 thirddata.handlecsv.resetmarkemptylines()  
+  	 thirddata.handlecsv.resetmarkemptylines()
   	 thirddata.handlecsv.hooksevaluation()
 end -- of thirddata.handlecsv.opencsvfile(file)
 
@@ -895,7 +896,7 @@ content='content when parameter is missing'
 interfaces.definecommand (xlsname, {
     arguments = { { "option", "string" }  },
     macro = function (opt_1)
-       if #opt_1>0 then context('\\csvcell["'..XLSname..'",'..opt_1..']') else context('\\csvcell["'..XLSname..'",\\linepointer]') end 
+       if #opt_1>0 then context('\\csvcell["'..XLSname..'",'..opt_1..']') else context('\\csvcell["'..XLSname..'",\\linepointer]') end
     end
 })
 interfaces.definecommand (xlscommand, {
@@ -923,7 +924,7 @@ content='content when parameter is missing'
 interfaces.definecommand (xlsname, {
     arguments = { { "option", "string" }  },
     macro = function (opt_1)
-       if #opt_1>0 then context(content) else context('\\csvcell["'..XLSname..'",\\linepointer]') end 
+       if #opt_1>0 then context(content) else context('\\csvcell["'..XLSname..'",\\linepointer]') end
     end
 })
 interfaces.definecommand (xlscommand, {
@@ -948,11 +949,11 @@ function thirddata.handlecsv.createxlscommand(xlsname)
 		interfaces.definecommand ('do'..xlsname, {
 		    arguments = { { "option", "string" }  },
 		    macro = function (opt_1)
-		       if #opt_1>0 then 
+		       if #opt_1>0 then
 				  context('\\csvcell['..xlsname..','..opt_1..']')
-				 else 
+				 else
 				  context('\\csvcell['..xlsname..',\\linepointer]')
-				 end 
+				 end
 		    end
 			})
 		interfaces.definecommand (xlsname, {
@@ -961,5 +962,5 @@ function thirddata.handlecsv.createxlscommand(xlsname)
 		      context['do'..xlsname]()
 		    end
 			})
-end 
+end
 

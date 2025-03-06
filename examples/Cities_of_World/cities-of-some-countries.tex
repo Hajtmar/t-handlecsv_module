@@ -1,4 +1,5 @@
-\usemodule[handlecsv]
+\input ../incl_handlecsv_file.tex
+
 
 \setuppagenumbering[state=stop]
 %\setupbodyfont[regular, 8pt]
@@ -16,7 +17,7 @@
 \startbuffer[rowoftable]
 \expanded{\bTR\bTD\numline\eTD\bTD\Name\eTD\bTD\Population\eTD\bTD\Altitude\eTD\eTR}%
 \stopbuffer
-	
+
 
 \def\ListEntry#1{
 \setcurrentcsvfile[selectedcountries.csv]
@@ -42,9 +43,9 @@
 
 
 
-	
+
 \starttext
-\setheader 
+\setheader
 \opencsvfile{cities.csv}
 \opencsvfile{selectedcountries.csv}
 

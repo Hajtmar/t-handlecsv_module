@@ -1,8 +1,5 @@
-\usemodule[handlecsv]
-% \usedirectory[c:/1da/ConTeXt/ConTeXt-Tests/my_way/ScanCSV/t-handlecsv_module/zalohy/]
-% \usemodule[handlecsv-2015-07-11-05-25]
-% \usemodule[handlecsv-2015-07-08-16-43]
-% \usemodule[handlecsv-2015-07-05-04-50]
+\input ../incl_handlecsv_file.tex
+
 
 \setupexternalfigures[directory={graphics/}]
 
@@ -21,7 +18,7 @@
 \def\ctm{\href{http://meeting.contextgarden.net/2010/programme.shtml}{4CM}}
 \def\te{\href{http://pavel.striz.cz/texperience/}{3TE}}
 
-\catcode`\_=12 
+\catcode`\_=12
 
 \def\todate{(to date 7.~9.~2010)}
 
@@ -44,17 +41,17 @@
 \def\flagpicture{\externalfigure[\Flag.png][height=3.5mm, frame=on, framecolor=black]}
 \def\mejl{\mailto{\Email}}
 %\def\mejl{\MailTo{\Email}{e-mail}}
-	
+
 % Header of CSV file: Lastname,Firstname,MonThu,ThuPM,Fri,Sat,Sun
 %\unexpanded\def\tableaction{\expanded{\bTR\bTD\mcol\numline\eTD\bTD\fcol~\Lastname\ \Firstname~ \eTD\bTD\ \flagpicture\eTD\bTD\fcol\ttx\mejl\eTD\eTR}}
-%\def\lineaction{\externalfigure[\Flag.png][height=3.5mm, frame=on, framecolor=black] -  \Firstname\par}	
+%\def\lineaction{\externalfigure[\Flag.png][height=3.5mm, frame=on, framecolor=black] -  \Firstname\par}
 
 
 \unexpanded\def\tableaction{%
 \expanded{
 \bTR\bTD\mcol\numline\eTD\bTD\fcol~\Lastname\ \Firstname~ \eTD\bTD\ \flagpicture\eTD\bTD\fcol\ttx\mejl\eTD\eTR
 }}
-	
+
 \unexpanded\def\lineaction{\tableaction}
 
 
@@ -84,13 +81,13 @@
 %\doloopif{\Flag}{~=}{anl}{\tableaction} % repeat \lineaction macro for all rows of CSV file
 %\filelineaction % repeat \lineaction macro for all rows of CSV file
 \doloopif{\Flag}{~=}{anl}{\lineaction}
-%\doloopaction{\tableaction} 
+%\doloopaction{\tableaction}
 %\bTR\bTD -- \eTD\bTD -- \eTD\bTD -- \eTD\bTD-- \eTD\eTR
 \eTABLE
 }
 \vfill
 \midaligned{\ssx This document was created (generated) using first version of \scancsvlua\ library by Jaroslav Hajtmar.}
-\midaligned{\ssx Scancsv.lua presentation to be held on Saturday, 18.~9.~2010 on \ctm+\te\ in Brejlov.} 
+\midaligned{\ssx Scancsv.lua presentation to be held on Saturday, 18.~9.~2010 on \ctm+\te\ in Brejlov.}
 
 
 \page[no]

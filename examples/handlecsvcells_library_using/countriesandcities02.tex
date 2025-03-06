@@ -1,4 +1,8 @@
-\usemodule[handlecsvcells] % use new module
+\input ../incl_handlecsvcells_file.tex
+\input ../incl_handlecsv_file.tex
+
+
+% \usemodule[handlecsvcells] % use new module
 
 \setupTABLE[split=yes,location={middle,lohi}, style=\ssx]
 \setupTABLE[row][first][background=color,backgroundcolor=gray,foregroundcolor=black,height=8mm, align={middle,lohi}]
@@ -9,19 +13,19 @@
 \setupTABLE[c][4][width=7cm,style=\ssxx]
 
 
-\def\Name{\getcsvcell[cities.csv]('Name',\recurselevel)} 
+\def\Name{\getcsvcell[cities.csv]('Name',\recurselevel)}
 \def\SerNum{\getcsvcell[cities.csv]('SerNum',\recurselevel)}
 \def\Population{\getcsvcell[cities.csv]('Population',\recurselevel)}
 \def\Altitude{\getcsvcell[cities.csv]('Altitude',\recurselevel)}
-\def\numcountries{\numrows[selectedcountries.csv]}
-\def\numcities{\numrows[cities.csv]}
+\def\numcountries{\numrowsof[selectedcountries.csv]}
+\def\numcities{\numrowsof[cities.csv]}
 
-  
+
 \startbuffer[tableaction]
 \expanded{\bTR\bTD\SerNum \eTD\bTD\Name \eTD\bTD\Population\eTD\bTD\Altitude\eTD\eTR}%
 \stopbuffer
 
-  
+
 \starttext
 
 \title{Example of together using of two opened CSV files at the same time}
@@ -36,7 +40,7 @@ Relation is mediated through the country abbreviation field \type{Abbrev}  (in \
 \opencsvfile{cities.csv}
 \opencsvfile{selectedcountries.csv}
 
- 
+
 \dorecurse{\numcountries}{ % For all countries from selectedcountries.csv file DO:
    \edef\abbrevcountry{\getcsvcell[selectedcountries.csv]('Abbrev',\recurselevel)}
 
@@ -56,3 +60,5 @@ Relation is mediated through the country abbreviation field \type{Abbrev}  (in \
 }
 
 \stoptext
+
+

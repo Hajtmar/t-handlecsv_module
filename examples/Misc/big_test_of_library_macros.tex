@@ -1,9 +1,9 @@
-\usemodule[handlecsv]
+\input ../incl_handlecsv_file.tex
 
 \def\typeexample[#1]#2#3{% buffname, title, description
 \subject{#2}
 #3\par
-The following source code: 
+The following source code:
 
 \blank[big]
 
@@ -61,7 +61,7 @@ produces the following output result:
 % 	\else \cA, \cB, \cC, \cD, \cE, \cF, \cG, \cH, \cI. \crlf
 % 	\fi
 }
- 
+
 \unexpanded\def\lineaction{LINEACTION: \dumpcontents}
 \unexpanded\def\action{ACTION: \dumpcontents}
 
@@ -98,9 +98,9 @@ Predefined macros are:
 \columncontent
 \numberxlscolname
 \stoptyping
- 
+
 \blank[big]
- 
+
 Notice: Last open CSV file is so called current CSV file. Specific macros are used to work with the current file (as see bellow).
 
 \blank[big]
@@ -113,7 +113,7 @@ Notice: Last open CSV file is so called current CSV file. Specific macros are us
  4. \type{\indexcolname['Firstname']}: \indexcolname['Firstname']
  5. \type{\indexcolname['B']}: \indexcolname['B']
  6. \type{\indexcolname['cC']}: \indexcolname['cC']
- 7. \type{\indexcolname['2']}: \indexcolname['2'] 
+ 7. \type{\indexcolname['2']}: \indexcolname['2']
  8. \type{\indexcolname[5]}: \indexcolname[5]
  9. \type{\columncontent[2]}: \columncontent[2]
 10. \type{\columncontent['2']}: \columncontent['2']
@@ -135,36 +135,36 @@ Notice: Last open CSV file is so called current CSV file. Specific macros are us
 \typeexample[macro.columns.example1]{Examples of using predefined columns macros}{}
 
 \type{\columncontent['š23cv']}: \columncontent['š23cv']  \% not exist this column
- 
+
 \type{\columncontent['Příjmení']}: \columncontent['Příjmení']  \% not exist this column
- 
+
 \type{\columncontent['Prijmeni']}: \columncontent['Prijmeni']  \% not exist this column
- 
+
 \type{\columncontent['Jméno']}: \columncontent['Jméno']  \% not exist this column
 
 \type{\columncontent['Jmeno']}: \columncontent['Jmeno']  \% not exist this column
 
 
- 
+
 
 \blank
 
 \hairline
 
 Dorecurse example 1:
- 
+
 \starttyping
 \dorecurse{\numrows}{
-\recurselevel: 
-\readline{\recurselevel} 
-\columncontent['Firstname'] -- \columncontent['Lastname'] -- \columncontent[3] 
+\recurselevel:
+\readline{\recurselevel}
+\columncontent['Firstname'] -- \columncontent['Lastname'] -- \columncontent[3]
 \crlf}
-\stoptyping 
- 
+\stoptyping
+
 \blank[big]
- 
-\dorecurse{\numrows}{\recurselevel: \readline{\recurselevel} \columncontent['Firstname'] -- \columncontent['Lastname'] -- \columncontent[3] \crlf } 
- 
+
+\dorecurse{\numrows}{\recurselevel: \readline{\recurselevel} \columncontent['Firstname'] -- \columncontent['Lastname'] -- \columncontent[3] \crlf }
+
  \blank
 
 \hairline
@@ -216,8 +216,8 @@ Content of \type{\temporary} macro is now: <\temporary>
 
 \dorecurse{\numrows}{%
 	\readline{\recurselevel}
-	\eaddto\temporary{\Firstname, }% 
-} 
+	\eaddto\temporary{\Firstname, }%
+}
 
 \blank[big]
 
@@ -229,8 +229,8 @@ Content of \type{\temporary} macro is now (all names): <\temporary>
 
 
 
- 
-  
+
+
 \title{Working with misc macros: }
 
 
@@ -261,7 +261,7 @@ Macros:
 
 
 Table cells:
- 
+
 \startluacode
 context(thirddata.handlecsv.gTableRows['lide.csv'][1][1]..' [first row, first column]\\crlf')
 context(thirddata.handlecsv.gTableRows['cities.csv'][1][2]..' [first row, second column]\\crlf')
@@ -288,12 +288,12 @@ column 9, row 5  ie column \colname[9], row 5 :  \csvcell[9,5]
 'Lastname' column (ie first column) and first row:
 
  \type{\csvcell['Lastname',1] -->} \csvcell['Lastname',1]
- 
+
 'Firstname' column (ie second column) and first row:
 
  \type{csvcell['Firstname',1] -->} \csvcell['Firstname',1]
- 
-'Email' column (ie nineth column) and fifth row: 
+
+'Email' column (ie nineth column) and fifth row:
 
 \type{\csvcell['Email',5] -->} \csvcell['Email',5]
 
@@ -321,7 +321,7 @@ Excel notation of column names:
 List of ten rows of 'Firstname' column (\type{\dorecurse} loop using):
 
 \startbuffer[recurseexample]
-\dorecurse{10}{\type{\Firstname[}\recurselevel\type{]}: 
+\dorecurse{10}{\type{\Firstname[}\recurselevel\type{]}:
 	\csvcell['Firstname',\recurselevel] \crlf
 }
 \stopbuffer
@@ -332,19 +332,19 @@ List of ten rows of 'Firstname' column (\type{\dorecurse} loop using):
 
 
 \blank[3*big]
- 
+
 \hairline
 
 Undefined and defined cells:
 
 \blank[big]
- 
+
 
 \type{\csvcell['Is',5] -->} \csvcell['Is',5]
 
 \type{\csvcell['I',51] -->} \csvcell['I',51]
 
-\type{\csvcell['I',0]  -->} \csvcell['I',0] 
+\type{\csvcell['I',0]  -->} \csvcell['I',0]
 
 \type{\csvcell['I',50] -->} \csvcell['I',50]
 
@@ -384,7 +384,7 @@ List of all CSV table by use cycle:
 \eTABLE
 
 
-\page 
+\page
 
 
 List of all CSV table by use cycle (other version):
@@ -394,7 +394,7 @@ List of all CSV table by use cycle (other version):
         \dorecurse{\numcols}{\bTD \csvcell[\currentTABLEcolumn,\currentTABLErow] \eTD}
     \eTR}
 \eTABLE
-   
+
 
 
 
@@ -435,9 +435,9 @@ Write all header names:
 \stopbuffer
 \typeexample[example2]{DOLOOP FOR ALL cycles}{Do lineaction macro for all lines}
 
- 
- 
- 
+
+
+
 
 \startbuffer[example3]
 \doloopforall{\dumpcontents}
@@ -518,27 +518,27 @@ Write all header names:
 
 
 ]
- 
- 
- 
+
+
+
  OK: \doloopaction{\action}{2}{5} % use \action macro for lines from 2 to 5
- 
- 
+
+
  FILELINEACTION:
- 
+
  Do for all lines of opening table
- 
+
  OK: \filelineaction
- 
- 
- Do for all lines of specific table name 
- 
+
+
+ Do for all lines of specific table name
+
  OK: \filelineaction{lide.csv}
 
 
 DOLOOPIF CYCLES:
 
-%\doloopif{value1}{[compare_operator]}{value2}{macro_for_doing} % [compareoperators] <, >, ==(eq), ~=(neq), >=, <=, in, until, while 
+%\doloopif{value1}{[compare_operator]}{value2}{macro_for_doing} % [compareoperators] <, >, ==(eq), ~=(neq), >=, <=, in, until, while
 
 
 
@@ -598,57 +598,57 @@ SSSSSSSSSSS
 
 DOLOOP CYCLE:
  \resetlinepointer
- \doloop{ 
-  \linepointer: 
+ \doloop{
+  \linepointer:
   \readline
   \lineaction\nextline
   \ifnum\linepointer>20\exitloop\fi
  }
- 
+
 
 \resetlinepointer
-\doloop{ 
- \linepointer: 
+\doloop{
+ \linepointer:
  \readline
  \lineaction\nextline
  \ifEOF\exitloop\fi
 }
 
- 
- 
- 
+
+
+
  XXX
 \setlinepointer{7}
 \doloop{%
 \ifnum\linepointer<9
- \linepointer: 
+ \linepointer:
  \readline
  \lineaction
  \nextline
  \else
- \exitloop 
+ \exitloop
 \fi
-} 
+}
 
 
  XXX
 \resetlinepointer
 \doloop{%
 \ifnum\linepointer<9
- \linepointer: 
+ \linepointer:
  \readline
  \lineaction
  \nextline
  \else
- \exitloop 
+ \exitloop
 \fi
-} 
+}
 
 
 % \doloop
 %   {Some kind of typesetting punishment \par
 %    \ifnum\pageno>5 \exitloop \fi}
-   
+
 DOLOOP CYCLE:DOLOOP CYCLE:DOLOOP CYCLE:DOLOOP CYCLE:DOLOOP CYCLE:
 
 
@@ -680,9 +680,9 @@ a \readline{a}
 
 \startluacode
 function test(opt)
---  if (interfaces.tolist(opt) > 0) 
---%  	then context('kladne') 
---% 	else context('zaporne') 
+--  if (interfaces.tolist(opt) > 0)
+--%  	then context('kladne')
+--% 	else context('zaporne')
 --%  end
     context("%s",interfaces.tolist(opt))
 end
@@ -729,7 +729,7 @@ And now \type{\filelineaction}
 
 
 \startluacode
-for i=1,200 do 
+for i=1,200 do
  context(i..' - '..thirddata.handlecsv.ar2xls(i)..' - '..thirddata.handlecsv.xls2ar(thirddata.handlecsv.ar2xls(i))..'\\crlf')
 end
 \stopluacode

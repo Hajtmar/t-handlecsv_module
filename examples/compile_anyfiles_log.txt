@@ -1,0 +1,7 @@
+Log kompilace spuštěn: 2025-03-06 02:06:46.N
+
+-----------------------------------------------------
+Hledám soubor: countriesandcities02.tex
+Soubor nalezen: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/handlecsvcells_library_using/countriesandcities02.tex
+Aktuální adresář: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/handlecsvcells_library_using
+Kompiluji soubor: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/handlecsvcells_library_using/countriesandcities02.tex

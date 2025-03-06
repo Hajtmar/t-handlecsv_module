@@ -1,21 +1,22 @@
 % Při tisku daného A3 listu dát tisk od žáka s nejmenším číslem mat.prot na dané A3
 % do žáka s následujícím číslem, pak se vytiskne daná A3 se všemi A4 stránkami ...
 
-\usemodule[handlecsv]
+
+\input ../incl_handlecsv_file.tex
 
 \setheader
 
-\voffset=3mm
+%\voffset=3mm
 \definelayout[portrait][width=middle, topspace=0cm, header=0cm, footer=0cm, height=middle,leftmargin=0mm, rightmargin=0mm,backspace=0mm]
 
 
 %% Volba pro oboustranný tisk "bookletu" na A3 (A3 se přehnou a vloží do sebe)
 %\setuparranging[2UP,doublesided,rotated]
-%\setuppapersize[A4][A3]  
+%\setuppapersize[A4][A3]
 %\setuplayout[portrait]
 
 \setuparranging[A4,doublesided]
-\setuppapersize[A4][A4]  
+\setuppapersize[A4][A4]
 \setuplayout[portrait]
 
 \setuppagenumbering[alternative=doublesided]
@@ -109,12 +110,12 @@
 \putWithOffset(85mm,87.5mm){\tf\bf \ZnamkaZPisemky} \putWithOffset(135mm,86mm){\proskrtni}
 \putWithOffset(19mm,93mm){\proskrtni} \putWithOffset(74mm,93mm){\proskrtni} \putWithOffset(135mm,93mm){\proskrtni}
 \putWithOffset(19mm,99mm){\proskrtni} \putWithOffset(74mm,99mm){\proskrtni} \putWithOffset(135mm,99mm){\proskrtni}
-\putWithOffset(18mm,135mm){\tfxx\bf \MatPredmetii} 
+\putWithOffset(18mm,135mm){\tfxx\bf \MatPredmetii}
 \putWithOffset(18mm,148mm){\tfxx\bf \MatPredmetiii}
 \putWithOffset(18mm,163mm){\tfxx\bf \MatPredmetiv}
 \putWithOffset(18mm,178mm){\proskrtni} \putWithOffset(74mm,178mm){\proskrtni} \putWithOffset(135mm,178mm){\proskrtni}
 
-\putWithOffset(18mm,202mm){\tfxx\bf \MatPredmetii} 
+\putWithOffset(18mm,202mm){\tfxx\bf \MatPredmetii}
 \putWithOffset(18mm,209mm){\tfxx\bf \MatPredmetiii}
 \putWithOffset(18mm,216mm){\tfxx\bf \MatPredmetiv}
 \putWithOffset(18mm,222mm){\proskrtni} \putWithOffset(74mm,222mm){\proskrtni} \putWithOffset(135mm,222mm){\proskrtni}
@@ -131,8 +132,8 @@
 
 
 \vglue0pt\unskip\page
-} 
- 
+}
+
 
 \starttext
 	\filelineaction{matprotokol-4.a.csv}

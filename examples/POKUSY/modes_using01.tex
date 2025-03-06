@@ -1,7 +1,9 @@
-\usemodule[handlecsv]
+\input ../incl_handlecsv_file.tex
 
 
 \starttext
+
+\unsetheader
 
 \startbuffer[text-content]
 \cA\hfill\cB\crlf
@@ -22,16 +24,16 @@ D)
 
 \def\lineaction{\getbuffer[text-content]}
 \opencsvfile{mail-sample.csv}
-\filelineaction			
-			
+\filelineaction
 
-E) 
+
+E)
 
 \opencsvfile{mail-sample.csv}
 \dorecurse{\numrows}{
 \getbuffer[text-content]
 \nextrow
 }
-		
+
 \stoptext
 

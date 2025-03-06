@@ -1,4 +1,5 @@
-\usemodule[handlecsv]
+\input ../incl_handlecsv_file.tex
+
 
 \setuppagenumbering[state=stop]
 %\setupbodyfont[regular, 8pt]
@@ -16,19 +17,19 @@
 \startbuffer[rowoftable]
 \expanded{\bTR\bTD\SerNum\eTD\bTD\Name\eTD\bTD\Population\eTD\bTD\Altitude\eTD\eTR}%
 \stopbuffer
-	
-	
+
+
 \starttext
 \blank[big]
 
-\setheader 
+\setheader
 \opencsvfile{cities.csv}
 \opencsvfile{selectedcountries.csv}
 
 \dorecurse{\numrowsof[selectedcountries.csv]}{
 
 \readline{\recurselevel}
-\midaligned{\ssb List of biggest cities of \Country -- \Abbrev}
+\midaligned{\ssb List of biggest cities of \Country\ -- \Abbrev}
 
 \blank[big]
 
@@ -46,7 +47,7 @@
 \bTR\bTD-- \eTD\bTD\ssx -- \eTD\bTD -- \eTD\bTD -- \eTD\eTR
 \eTABLE
 \nextrow
-\page	
+\page
 }
 
 

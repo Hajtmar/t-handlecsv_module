@@ -1,6 +1,7 @@
+\input ../incl_handlecsv_file.tex
 
 \def\typeandgetbuffers#1#2{
-Prováděné makro: {\tt\backslash#2} 
+Prováděné makro: {\tt\backslash#2}
 \typebuffer[#2]
 \typebuffer[#1]
 \blank[big]
@@ -12,8 +13,8 @@ Prováděné makro: {\tt\backslash#2}
 }
 
 
-\usemodule[handlecsv]
-\usemodule[handlecsv-tools]
+
+%\usemodule[handlecsv-tools]
 
 
 \def\bch{\bgroup\red\bf }
@@ -23,60 +24,99 @@ Prováděné makro: {\tt\backslash#2}
 \startbuffer[tab]
 \unexpanded\def\tab{
 \expanded{\bTR
-\bTD{\it \colname[{\indexcolname['cA']}]}:  \hcA\ - \Jmeno\eTD\bTD\hJmeno\eTD
+\bTD{\it \colname[{\indexcolname['cA']}]}:  \cA\ - \Jmeno\eTD\bTD\hJmeno\eTD
 \bTD\hPrijmeni\eTD
 \eTR}
 }%
 \stopbuffer
 
+
 \startbuffer[lineaction]
 \unexpanded\def\lineaction{
-{\it\colname[{\indexcolname['cA']}]}:  \hcA\ - \hJmeno\ \hPrijmeni\par
+{\it\colname[{\indexcolname['cA']}]}:  \cA\ - \hJmeno\ \hPrijmeni\par
 }
 \stopbuffer
 
+
 \startbuffer[akce]
 \unexpanded\def\akce{
-{\it\colname[{\indexcolname['cA']}]}: \hcA\ - \hJmeno\ \hPrijmeni\ 
+{\it\colname[{\indexcolname['cA']}]}: \cA\ - \hJmeno\ \hPrijmeni\
 (NumHod: \NumHod)\par
 }
 \stopbuffer
 
-\getbuffer[tab]
-\getbuffer[lineaction]
-\getbuffer[akce]
 
+\unexpanded\def\akceI{{\it\colname[{\indexcolname['cA']}]}: \cA\ - \hJmeno\ \hPrijmeni\ (NumHod: \NumHod)\par }
+
+\unexpanded\def\tabI{\expanded{\bTR\bTD{\it \colname[{\indexcolname['cA']}]}:  \cA\ - \Jmeno\eTD\bTD\hJmeno\eTD\bTD\hPrijmeni\eTD\eTR}}%
+
+\unexpanded\def\lineactionI{{\it\colname[{\indexcolname['cA']}]}:  \cA\ - \hJmeno\ \hPrijmeni\par}
 
 \setupcolors[state=start]
 
 
 \starttext
 
-\title{Netabulkové použití} 
+\subject{Netabulkové použití}
 
 
 \setheader
 \setsep{,}
-\usehooks % it is necessary turn on using hooks while process CSV file 
+\usehooks % it is necessary turn on using hooks while process CSV file
 \opencsvfile{lisajdb1a.csv}
 
-%\printline
-%\printall
-% \csvreport 
+
+
+\subject{getbuffer[tab]}
+
+\getbuffer[tab]
+
+\subject{typebuffer[tab]}
+
+\typebuffer[tab]
 
 
 
+\subject{getbuffer[lineaction]}
+
+\getbuffer[lineaction]
+
+\subject{getbuffer[akce]}
+
+\getbuffer[akce]
+
+
+\subject{Printline}
+
+\printline
+
+\subject{PrintAll}
+\printall
+
+\subject{Print CSV Report}
+
+\csvreport
+
+
+
+\subject{Praktické použití:}
 
 %\enablemode[XXX]
 
 %\startmode[XXX]
 
 
+\doloopif{\Id}{<}{5}{\akceI}
+
 
 \startbuffer[A)]
-\doloopif{\cA}{<}{5}{\akce} %OK
+\doloopif{\Id}{<}{5}{\akce}
 \stopbuffer
+
 \typeandgetbuffers{A)}{akce}
+
+
+
 
 
 
@@ -105,27 +145,30 @@ Prováděné makro: {\tt\backslash#2}
 \typeandgetbuffers{C)}{akce}
 
 
-\sym{D)} 
+\sym{D)}
 \startbuffer[D)]
 \doloopifnum{\Id}{<=}{\NumHod}{\akce}
 \stopbuffer
 \typeandgetbuffers{D)}{akce}
 
-\sym{E)} 
+\sym{E)}
 \startbuffer[E)]
 \doloopifnum{\Id}{>=}{\NumHod}{\akce}
 \stopbuffer
 \typeandgetbuffers{E)}{akce}
 
 
-\sym{F)} 
+
+\sym{F)}
 \startbuffer[F)]
 \bTABLE
 \bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
-\doloopifnum{\Id}{>=}{5}{\tab}
+\doloopifnum{\Id}{>=}{5}{\tabI}
 \eTABLE
 \stopbuffer
 \typeandgetbuffers{F)}{tab}
+
+
 
 
 \sym{01)}
@@ -134,51 +177,57 @@ Prováděné makro: {\tt\backslash#2}
 \stopbuffer
 \typeandgetbuffers{01)}{lineaction}
 
-	
+
 \sym{02)}
 \startbuffer[02)]
 \doloopaction{\akce} %OK
 \stopbuffer
 \typeandgetbuffers{02)}{akce}
 
+
 \sym{03)}
 \startbuffer[03)]
 \doloopaction{\akce}{4} %OK
 \stopbuffer
 \typeandgetbuffers{03)}{akce}
-	
+
 \sym{04)}
 \startbuffer[04)]
 \doloopaction{\akce}{2}{5} %OK
 \stopbuffer
 \typeandgetbuffers{04)}{akce}
-	
+
 \sym{05)}
 \startbuffer[05)]
 \doloopforall %OK
 \stopbuffer
 \typeandgetbuffers{05)}{lineaction}
 
-	
+
+
+
+
 \sym{06)}
 \startbuffer[06)]
 \doloopforall{\akce} %OK
 \stopbuffer
 \typeandgetbuffers{06)}{akce}
 
-	
+
 \sym{07)}
 \startbuffer[07)]
 \doloopif{Jan}{==}{\Jmeno}{\akce} % OK
 \stopbuffer
 \typeandgetbuffers{07)}{akce}
-  
+
 \sym{08)}
 \startbuffer[08)]
 \doloopif{Jan}{~=}{\Jmeno}{\akce} % OK
 \stopbuffer
 \typeandgetbuffers{08)}{akce}
-	
+
+
+
 
 \sym{08a)}
 \startbuffer[08a)]
@@ -196,16 +245,19 @@ Prováděné makro: {\tt\backslash#2}
 
 \sym{09)}
 \startbuffer[09)]
+\resetlinepointer
 \doloopuntil{\Jmeno}{Jan}{\akce} %OK
 \stopbuffer
 \typeandgetbuffers{09)}{akce}
 
 
-% \sym{09a)}
-% \startbuffer[09a)]
-% \doloopwhile{\Jmeno}{Jan}{\akce} %OK
-% \stopbuffer
-% \typeandgetbuffers{09a)}{akce}
+
+\sym{09a)}
+\startbuffer[09a)]
+\resetlinepointer
+\doloopwhile{\Jmeno}{Jan}{\akce} %OK
+\stopbuffer
+\typeandgetbuffers{09a)}{akce}
 
 
 \sym{10)}
@@ -216,27 +268,69 @@ Prováděné makro: {\tt\backslash#2}
 \typeandgetbuffers{10)}{akce}
 
 
+
 \sym{10a)}
 \startbuffer[10a)]
 \resetlinepointer
 \dorecurse{5}{\readline
-{\it\colname[{\indexcolname['cA']}]}: \hcA\ - \hJmeno\ \hPrijmeni\  (NumHod: \NumHod)\par
+{\it\colname[{\indexcolname['cA']}]}: \cA\ - \hJmeno\ \hPrijmeni\  (NumHod: \NumHod)\par
 \nextrow} % OK
 \stopbuffer
 \typeandgetbuffers{10a)}{vlastni}
 
 
-	
-\sym{11)}
-\startbuffer[11)]
+
+
+
+
+
+\sym{10b)}
+\startbuffer[10b)]
 \resetlinepointer
 \resetnumline
-\doloop{
-\ifnum\numline>7\exitloop
-\else\readline\numline -- \lineaction\nextline
-\fi} %OK
+\doloop{%
+% \ifnum\numline>3 % nefunguje dobře
+  \ifnum\linepointer>3
+    \exitloop
+  \else
+    \readline (numline \numline) (linepointer \linepointer)-- \lineaction\nextline
+  \fi
+}
 \stopbuffer
-\typeandgetbuffers{11)}{lineaction}
+\typeandgetbuffers{10b)}{lineaction}
+
+
+\sym{10c)}
+\startbuffer[10c)]
+\resetlinepointer
+\resetnumline
+\setnumline{1}
+\doloop{%
+  \ifnum\numline>3
+    \exitloop
+  \else
+    \readline (numline \numline) (linepointer \linepointer)-- \lineaction\nextline
+  \fi
+}
+\stopbuffer
+\typeandgetbuffers{10c)}{lineaction}
+
+
+\sym{10d)}
+\startbuffer[10d)]
+\resetlinepointer
+\resetnumline
+\doloop{%
+\ifnum\numline>4\exitloop
+\else\readline\numline -- \lineaction\nextline
+\fi
+} %OK
+\stopbuffer
+\typeandgetbuffers{10d)}{lineaction}
+
+
+
+
 
 
 \sym{11a)}
@@ -290,14 +384,15 @@ Prováděné makro: {\tt\backslash#2}
 
 
 
-	
+
+
 \sym{12)}
 \startbuffer[12)]
 \resetlinepointer
 \doloop{\ifEOF\exitloop\else\readline\lineaction\nextline\fi} %OK
 \stopbuffer
 \typeandgetbuffers{12)}{lineaction}
-	
+
 \sym{13)}
 \startbuffer[13)]
 \resetlinepointer
@@ -305,7 +400,7 @@ Prováděné makro: {\tt\backslash#2}
 \if\Id3\exitloop
 \else
 \lineaction\nextline
-\fi 
+\fi
 } %OK
 \stopbuffer
 \typeandgetbuffers{13)}{lineaction}
@@ -316,20 +411,22 @@ Prováděné makro: {\tt\backslash#2}
 \stopbuffer
 \typeandgetbuffers{14)}{lineaction}
 
-	
+
 \sym{15)}
 \startbuffer[15)]
 \filelineaction{lisajdb2a.csv} %OK
 \stopbuffer
 \typeandgetbuffers{15)}{lineaction}
 
-	
+
+
+
 \sym{16)}
 \startbuffer[16)]
 \filelineaction{lisajdb1a.csv}{3} %OK
 \stopbuffer
 \typeandgetbuffers{16)}{lineaction}
-	
+
 
 \sym{17)}
 \startbuffer[17)]
@@ -337,11 +434,11 @@ Prováděné makro: {\tt\backslash#2}
 \stopbuffer
 \typeandgetbuffers{17)}{lineaction}
 
-	
+
 % 	A16\sym{17a}\par
 % \opencsvfile
 %  \for \px=1 \to 5 \step 1 \do {\akce\nextrow} % OK
-  
+
 
 \sym{18)}
 \startbuffer[18)]
@@ -350,8 +447,8 @@ Prováděné makro: {\tt\backslash#2}
 \dostepwiserecurse{1}{6}{1}{\readline\akce\nextrow}
 \stopbuffer
 \typeandgetbuffers{18)}{akce}
-  
-  
+
+
 \sym{19}
 \startbuffer[19)]
 \resetnumline
@@ -359,24 +456,24 @@ Prováděné makro: {\tt\backslash#2}
 \stopbuffer
 \typeandgetbuffers{19)}{akce}
 
- 
+
 \stopitemize
 
 \page
 
 
 
-\title{Tabulkové použití} 
+\subject{Tabulkové použití}
 
 % Nyní ukázky použití v tabulkovém režimu. Toto použití vyžaduje expanzi uvnitř prostředí \bTABLE ... \eTABLE
-% nebo použití jiných maker ... 
+% nebo použití jiných maker ...
 
 
 \startbuffer[lineaction]
 \unexpanded\def\lineaction{%
 	\expanded{%
 		\bTR%
-		\bTD\hcA\eTD%
+		\bTD\cA\eTD%
 		\bTD\hJmeno\eTD%
 		\bTD\hPrijmeni\eTD%
 		\eTR%
@@ -388,7 +485,7 @@ Prováděné makro: {\tt\backslash#2}
 \unexpanded\def\tab{%
 	\expanded{%
 	\bTR%
-	\bTD\hcA - \hJmeno\eTD%
+	\bTD\cA - \hJmeno\eTD%
 	\bTD\Jmeno\eTD%
 	\bTD\hPrijmeni\eTD%
 	\eTR%
@@ -397,11 +494,11 @@ Prováděné makro: {\tt\backslash#2}
 \stopbuffer
 
 \startbuffer[othertab]
-\unexpanded\def\othertab{\expanded{\bTR\bTD\hcA - \Jmeno\eTD\bTD\hJmeno\eTD\bTD\Prijmeni\eTD\eTR}}
+\unexpanded\def\othertab{\expanded{\bTR\bTD\cA - \Jmeno\eTD\bTD\hJmeno\eTD\bTD\Prijmeni\eTD\eTR}}
 \stopbuffer
 
 \startbuffer[tableaction]
-\unexpanded\def\tableaction{\expanded{\bTR\bTD\hcA\eTD\bTD\hJmeno\eTD\bTD\hPrijmeni\eTD\eTR}}
+\unexpanded\def\tableaction{\expanded{\bTR\bTD\cA\eTD\bTD\hJmeno\eTD\bTD\hPrijmeni\eTD\eTR}}
 \stopbuffer
 
 
@@ -423,10 +520,10 @@ Prováděné makro: {\tt\backslash#2}
 \startbuffer[T1)]
 \bTABLE[split=yes]
 	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
-	\doloopaction %implicit \lineaction using 
+	\doloopaction %implicit \lineaction using
 	\doloopaction{\tab}% use \tab macro in cycle
 	\doloopaction{\tab}{4}%
-	\doloopaction{\tab}{2}{5}%  
+	\doloopaction{\tab}{2}{5}%
 	\doloopaction{\othertab}%
 	\doloopforall{\tab}%
 \eTABLE
@@ -484,7 +581,7 @@ Prováděné makro: {\tt\backslash#2}
 \startbuffer[T6)]
 \bTABLE%
 	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR%
-	\doloopif{Jan}{~=}{\Jmeno}{\tab}%OK	
+	\doloopif{Jan}{~=}{\Jmeno}{\tab}%OK
 	\doloopif{Markéta}{==}{\Jmeno}{\tab}%
 \eTABLE
 \stopbuffer
@@ -501,19 +598,19 @@ Prováděné makro: {\tt\backslash#2}
 \eTABLE
 \stopbuffer
 \typeandgetbuffers{T7)}{tab}
-	
-	
-	
-	
+
+
+
+
 \sym{T8)}
 \startbuffer[T8)]
 \bTABLE
 	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
-	\dorecurse{5}{\readline{\recurselevel}\othertab} %OK	
+	\dorecurse{5}{\readline{\recurselevel}\othertab} %OK
 \eTABLE
 \stopbuffer
 \typeandgetbuffers{T8)}{othertab}
- 
+
 
 
 \sym{T9)}
@@ -539,13 +636,13 @@ Prováděné makro: {\tt\backslash#2}
 	\resetnumline
 	\doloop{\readline\ifnum\numline>7\exitloop\else\othertab\nextline\fi}%
 	\resetlinepointer
-	\resetnumline	
+	\resetnumline
 	\doloop{\readline\ifnum\numline<8\tab\nextline\else\exitloop\fi}%
 \eTABLE
 \stopbuffer
 \typeandgetbuffers{T10)}{lineaction}
 
- 
+
 
 
 \sym{T11)}
@@ -555,7 +652,7 @@ Prováděné makro: {\tt\backslash#2}
 	\dorecurse{\numrows}{%
 		\readline{\recurselevel}%
 		\ifnum\Id>7\othertab\fi
-	}%	
+	}%
 \eTABLE%
 \stopbuffer
 \typeandgetbuffers{T11)}{lineaction}
@@ -570,35 +667,35 @@ Prováděné makro: {\tt\backslash#2}
 \eTABLE
 \stopbuffer
 \typeandgetbuffers{T12)}{lineaction}
- 
+
 \sym{T13)}
 \startbuffer[T13)]
 \bTABLE
  	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
 	\doloop{\lineaction\nextrow\if\Id3\exitloop\fi} %OK
-\eTABLE	
+\eTABLE
 \stopbuffer
 \typeandgetbuffers{T13)}{lineaction}
 
 
 
-\unexpanded\def\lineaction{\expanded{\bTR\bTD\cA\eTD\bTD\Jmeno\eTD\bTD\Prijmeni\eTD\eTR}}	
+\unexpanded\def\lineaction{\expanded{\bTR\bTD\cA\eTD\bTD\Jmeno\eTD\bTD\Prijmeni\eTD\eTR}}
 
 
 \sym{T14)}
 \startbuffer[T14)]
 \bTABLE
 	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
-	\doloopaction %OK provádí implicitně makro \lineaction pro všechny záznamy otevřeného CSV souboru uvnitř tabulky (netřeba \expanded) 
+	\doloopaction %OK provádí implicitně makro \lineaction pro všechny záznamy otevřeného CSV souboru uvnitř tabulky (netřeba \expanded)
 \eTABLE
 \stopbuffer
 \typeandgetbuffers{T14)}{lineaction}
 
-	
+
 \sym{T15)}
 \startbuffer[T15)]
 \bTABLE
-	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR	
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
 	\doloopaction{\lineaction} %OK stejné jako předchozí ... makro \lineaction zadáno explicitně (netřeba \expanded)
 \eTABLE
 \stopbuffer
@@ -621,7 +718,7 @@ Prováděné makro: {\tt\backslash#2}
 \sym{T17)}
 \startbuffer[T17)]
 \bTABLE
-	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR	
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
 	\doloopaction{\tab}{3} %OK provede makro \tab pro záznamy 1-3 otevřeného CSV souboru uvnitř tabulky (netřeba \expanded)
 \eTABLE
 \stopbuffer
@@ -631,23 +728,23 @@ Prováděné makro: {\tt\backslash#2}
 \sym{T18)}
 \startbuffer[T18)]
 \bTABLE
-	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR	
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
 	\doloopaction{\tab}{3}{6}  %OK provede makro \tab pro záznamy 3-6 otevřeného CSV souboru uvnitř tabulky (netřeba \expanded)
  \eTABLE
 \stopbuffer
 \typeandgetbuffers{T18)}{tab}
 
-	
+
 \sym{T19)}
 \startbuffer[T19)]
 \bTABLE
-	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR 
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
   \doloopforall %OK ... ekvivalentní \tdoloopaction - udělá \lineaction pro všechny záznamy (netřeba \expanded)
 \eTABLE
 \stopbuffer
 \typeandgetbuffers{T19)}{lineaction}
 
-	
+
 \sym{T20)}
 \startbuffer[T20)]
 \bTABLE
@@ -656,12 +753,12 @@ Prováděné makro: {\tt\backslash#2}
 \eTABLE
 \stopbuffer
 \typeandgetbuffers{T20)}{tab}
-	
+
 
 \sym{T21)}
 \startbuffer[T21)]
 \bTABLE
-	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR  
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
 	\doloopif{\Jmeno}{==}{Jan}{\tab} %OK provede makro \tab pro všechny záznamy CSV souboru, které vyhovují podmínce tj. rovnost prvních dvou parametrů (netřeba \expanded)
 \eTABLE
 \stopbuffer
@@ -671,33 +768,33 @@ Prováděné makro: {\tt\backslash#2}
 \sym{T22)}
 \startbuffer[T22)]
 \bTABLE
-	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR  
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
 	\doloopif{\Jmeno}{~=}{Jan}{\tab} %OK provede makro \tab pro všechny záznamy CSV souboru, které vyhovují podmínce tj. rovnost prvních dvou parametrů (netřeba \expanded)
 \eTABLE
 \stopbuffer
 \typeandgetbuffers{T22)}{tab}
 
-	
+
 \sym{T23)}
 \startbuffer[T23)]
 \bTABLE
-	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR	
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
   \doloopuntil{\Jmeno}{Slávek}{\tab} %OK provede makro \tab pro všechny záznamy CSV souboru, které vyhovují podmínce tj. rovnost prvních dvou parametrů (netřeba \expanded)
 \eTABLE
 \stopbuffer
 \typeandgetbuffers{T23)}{tab}
 
-	
+
 \sym{T24)}
 \startbuffer[T24)]
 \bTABLE
-	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR  
+	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
 	\filelineaction %OK provede makro \lineaction pro všechny záznamy otevřeného CSV souboru (netřeba \expanded)
 \eTABLE
 \stopbuffer
 \typeandgetbuffers{T24)}{lineaction}
-	
-	
+
+
 \sym{T25)}
 \startbuffer[T25)]
 \bTABLE
@@ -709,7 +806,7 @@ Prováděné makro: {\tt\backslash#2}
 
 
 
-	
+
 \sym{T26)}
 \startbuffer[T26)]
 \bTABLE
@@ -719,7 +816,7 @@ Prováděné makro: {\tt\backslash#2}
 \stopbuffer
 \typeandgetbuffers{T26)}{lineaction}
 
-	
+
 \sym{T27)}
 \startbuffer[T27)]
 \bTABLE
@@ -729,18 +826,18 @@ Prováděné makro: {\tt\backslash#2}
 \stopbuffer
 \typeandgetbuffers{T27)}{lineaction}
 
-	
+
 \sym{T28)}
 \startbuffer[T28)]
 \bTABLE
 	\bTR\bTD ID\eTD\bTD Jméno\eTD\bTD Příjmení\eTD\eTR
-	\filelineaction %OK ... ekvivalentní \tdolooplineaction - provádí \lineaction pro všechny záznamy otevřeného CSV souboru 
+	\filelineaction %OK ... ekvivalentní \tdolooplineaction - provádí \lineaction pro všechny záznamy otevřeného CSV souboru
 \eTABLE
 \stopbuffer
 \typeandgetbuffers{T28)}{lineaction}
 
 
-	
+
 \sym{T29)}
 \startbuffer[T29)]
 \bTABLE
@@ -750,7 +847,7 @@ Prováděné makro: {\tt\backslash#2}
 \stopbuffer
 \typeandgetbuffers{T29)}{lineaction}
 
-	
+
 \sym{T30)}
 \startbuffer[T30)]
 \bTABLE
@@ -760,7 +857,7 @@ Prováděné makro: {\tt\backslash#2}
 \stopbuffer
 \typeandgetbuffers{T30)}{lineaction}
 
-	
+
 \sym{T31)}
 \startbuffer[T31)]
 \bTABLE
@@ -769,11 +866,11 @@ Prováděné makro: {\tt\backslash#2}
 \eTABLE
 \stopbuffer
 \typeandgetbuffers{T31)}{lineaction}
- 
+
 
 \stopitemize
 
-\stoptext 
+\stoptext
 
 
 
@@ -829,18 +926,18 @@ JMENO: \TESTJMENO\ TEST: \ifx\TESTJMENO\mari TRUE\else FALSE \fi
 \csvcell['Jmeno',7]
 
 
- 
+
 
 sssssssssssssssssss
 
 
 % \ifx\podm\mari aaa\else bbb \fi
-% 
+%
 % \edef\podm{\colId}
 
 
 % \podm
-% 
+%
 % \ifnum\podm>2 aaa\else bbb\fi
 
 

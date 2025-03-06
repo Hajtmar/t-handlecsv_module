@@ -1,4 +1,5 @@
-\usemodule[handlecsv]
+\input ../incl_handlecsv_file.tex
+
 \usemodule[handlecsv-tools]
 
 
@@ -6,12 +7,12 @@
 
 \setheader
 \setsep{,}
-\usehooks % it is necessary turn on using hooks while process CSV file 
+\usehooks % it is necessary turn on using hooks while process CSV file
 \opencsvfile{lisajdb1a.csv}
 
 %\printline
 %\printall
-% \csvreport 
+% \csvreport
 
 
 
@@ -63,18 +64,18 @@ JMENO: \TESTJMENO\ TEST: \ifx\TESTJMENO\mari TRUE\else FALSE \fi
 \csvcell['Jmeno',7]
 
 
- 
+
 
 sssssssssssssssssss
 
 
 % \ifx\podm\mari aaa\else bbb \fi
-% 
+%
 % \edef\podm{\colId}
 
 
 % \podm
-% 
+%
 % \ifnum\podm>2 aaa\else bbb\fi
 
 
