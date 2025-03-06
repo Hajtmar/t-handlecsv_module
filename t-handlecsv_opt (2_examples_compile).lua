@@ -574,8 +574,10 @@ function H.assigncontentsof(inpcsvfile, line)
     context.setgvalue(puremacroname, content)
     context.setgvalue('col' .. puremacroname, '\\col' .. purexlsname)
     if H.gUseHooks then
-      context.setgvalue(hookxlsname,'\\bch\\bch' .. xlsname .. '\\' .. xlsname .. '\\ech' .. xlsname .. '\\ech')
-      context.setgvalue(hookmacroname,'\\bch\\bch' .. puremacroname .. '\\' .. xlsname .. '\\ech' .. puremacroname .. '\\ech ')
+            -- context.setgvalue(hookxlsname,'\\bch\\bch' .. xlsname .. '\\' .. xlsname .. '\\ech' .. xlsname .. '\\ech')
+       context.setgvalue(hookxlsname,'\\bch\\' .. xlsname .. '\\ech')
+            -- context.setgvalue(hookmacroname,'\\bch\\bch' .. puremacroname .. '\\' .. xlsname .. '\\ech' .. puremacroname .. '\\ech ')
+       context.setgvalue(hookmacroname,'\\bch\\' .. puremacroname .. '\\ech ')
     end
   end
 end
@@ -1028,21 +1030,34 @@ local string2print = [[%
 \def\readlineof[#1]#2{\ctxlua{thirddata.handlecsv.readlineof('#1',#2)}}
 
 % MAKRA PRO ZPRACOVÁNÍ PARAMETRŮ V CYKLECH:
+
 \def\readandprocessparameters#1#2#3#4{
   \edef\firstparam{#1}
   \edef\secondparam{#2}
   \edef\thirdparam{#3}
-  \def\fourthparam{#4}
+  \def\fourthparam{\removeunwantedspaces#4}%\def\fourthparam{#4}
   \edef\paroperator{#2}
-  \ctxlua{if '#2'=="==" and not(type(tonumber('#1'))=='number' and type(tonumber('#3'))=='number')
-    then tex.sprint('\\def\\paroperator{eq}')end}
-  \ctxlua{if '#2'=="~=" and not(type(tonumber('#1'))=='number' and type(tonumber('#3'))=='number')
-    then tex.sprint('\\def\\paroperator{neq}')end}
+  \ctxlua{%
+    local op='#2'
+    local expressionisnotnumeric=not(type(tonumber('#1'))=='number' and type(tonumber('#3'))=='number')
+    if (op == "==") and expressionisnotnumeric then op = "eq"
+    elseif (op == "~=") and expressionisnotnumeric then op = "neq"
+    elseif (op == "=<") then op = "<="
+    elseif (op == "=>") then op = ">="
+    elseif (op == "<>") then op = "~="
+    end
+    tex.sprint('\\def\\paroperator{'..op..'}')
+  }
 }
+
+
+
 
 % MAKRA CYKLŮ:
 \def\doloopfromto#1#2#3{\ctxlua{thirddata.handlecsv.doloopfromto([==[\thenumexpr{#1}]==],[==[\thenumexpr{#2}]==],[==[\detokenize{#3}]==])}}
-\def\Doloopfromto#1#2#3{%
+\letvalue{Doloopfromto}=\doloopfromto
+
+\def\xxxxxDoloopfromto#1#2#3{%
    \opencsvfile
    \resetnumline
    \bfilehook
@@ -1055,7 +1070,9 @@ local string2print = [[%
    \removeunwantedspaces
    \efilehook%
 }
+
 \def\doloopforall{\dosinglegroupempty\doloopforAll}
+
 \def\doloopforAll#1{
   \doifsomethingelse{#1}{
     \doloopfromto{1}{\numrows}{#1}
@@ -1063,7 +1080,9 @@ local string2print = [[%
     \doloopfromto{1}{\numrows}{\lineaction}
   }
 }
+
 \def\doloopaction{\dotriplegroupempty\doloopAction}
+
 \def\doloopAction#1#2#3{
   \opencsvfile
   \doifsomethingelse{#3}{
@@ -1080,6 +1099,7 @@ local string2print = [[%
     }
   }
 }
+
 \def\doloopif#1#2#3#4{%
   \edef\tempnumline{\numline}
   \readandprocessparameters{#1}{#2}{#3}{#4}
@@ -1165,27 +1185,47 @@ local string2print = [[%
       }
     },
     eq=>{
-      \doloopfromto{1}{\numrows}{
+      \doloopfromto{1}{\numrows}{%
         \ctxlua{
-          local a = tonumber("\luaescapestring{#1}") or 0;
-          local b = tonumber("\luaescapestring{#3}") or 0;
-          if a == b then
-            tex.sprint('\\blinehook\\fourthparam\\elinehook')
+          local a_num = tonumber("\luaescapestring{#1}")
+          local b_num = tonumber("\luaescapestring{#3}")
+          if a_num and b_num then
+            if a_num == b_num then
+              tex.sprint('\\blinehook\\fourthparam\\elinehook')
+            else
+              thirddata.handlecsv.addtonumline(-1)
+            end
           else
-            thirddata.handlecsv.addtonumline(-1)
+            local a_str = "\luaescapestring{#1}"
+            local b_str = "\luaescapestring{#3}"
+            if a_str == b_str then
+              tex.sprint('\\blinehook\\fourthparam\\elinehook')
+            else
+              thirddata.handlecsv.addtonumline(-1)
+            end
           end
         }
       }
     },
     neq=>{
-      \doloopfromto{1}{\numrows}{
+      \doloopfromto{1}{\numrows}{%
         \ctxlua{
-          local a = tonumber("\luaescapestring{#1}") or 0;
-          local b = tonumber("\luaescapestring{#3}") or 0;
-          if a ~= b then
-            tex.sprint('\\blinehook\\fourthparam\\elinehook')
+          local a_num = tonumber("\luaescapestring{#1}")
+          local b_num = tonumber("\luaescapestring{#3}")
+          if a_num and b_num then
+            if a_num ~= b_num then
+              tex.sprint('\\blinehook\\fourthparam\\elinehook')
+            else
+              thirddata.handlecsv.addtonumline(-1)
+            end
           else
-            thirddata.handlecsv.addtonumline(-1)
+            local a_str = "\luaescapestring{#1}"
+            local b_str = "\luaescapestring{#3}"
+            if a_str ~= b_str then
+              tex.sprint('\\blinehook\\fourthparam\\elinehook')
+            else
+              thirddata.handlecsv.addtonumline(-1)
+            end
           end
         }
       }
@@ -1225,8 +1265,11 @@ local string2print = [[%
   ]
   \efilehook
   \setnumline{\tempnumline}%
-  \removeunwantedspaces
+ \removeunwantedspaces
 }
+
+
+
 \letvalue{doloopifnum}=\doloopif
 \def\doloopuntil#1#2#3{\doloopif{#1}{repeatuntil}{#2}{#3}}
 \letvalue{repeatuntil}=\doloopuntil
