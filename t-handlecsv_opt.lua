@@ -971,41 +971,6 @@ end
 -- Looping functions (cycles):
 --------------------------------------------------------------------------------
 
-function H.xdoloopfromto(from, to, action)
-  tex.sprint([[\opencsvfile]])
-  tex.sprint([[\edef\tempnumline{\numline}]])
-  tex.sprint([[\resetnumline]])
-  if H.gUseHooks then tex.sprint([[\bfilehook]]) end
-
-  local csvfile = H.getcurrentcsvfilename()
-  local maxr = H.gNumRows[csvfile] or 0
-  local f = from + 0
-  local t = to + 0
-  local step = 1
-  local docycle = true
-  if (f > maxr and t > maxr) then
-    docycle = false
-  end
-  if docycle then
-    if f > t then
-      step = -1
-      if f > maxr then f = maxr end
-      if t < 1 then t = 1 end
-    else
-      if t > maxr then t = maxr end
-      if f < 1 then f = 1 end
-    end
-    for i = f, t, step do
-      if H.gUseHooks then tex.sprint([[\blinehook]]) end
-      tex.sprint("\\readline{" .. i .. "}")
-      tex.sprint(action)
-      if H.gUseHooks then tex.sprint([[\elinehook]]) end
-    end
-  end
-  if H.gUseHooks then tex.sprint([[\efilehook]]) end
-  tex.sprint([[\setnumline{\tempnumline}]])
-end
-
 function H.doloopfromto(from, to, action)
     H.opencsvfile()
     local tempnumline = H.numline()
@@ -1032,9 +997,8 @@ function H.doloopfromto(from, to, action)
     end
     for i = f, t, step do
       if H.gUseHooks then tex.sprint([[\blinehook]]) end
-        --      tex.sprint("\\readline{" .. i .. "}")
-      H.readline(i)
-      tex.sprint(action)
+        H.readline(i)
+        tex.sprint(action)
       if H.gUseHooks then tex.sprint([[\elinehook]]) end
     end
   end
@@ -1061,9 +1025,8 @@ function H.doloopfornext(numberofrows, action)
   end
   for i = from, (to - step), step do
     if H.gUseHooks then tex.sprint([[\blinehook]]) end
-        --    tex.sprint("\\readline{" .. i .. "}")
-    H.readline(i)
-    tex.sprint(action)
+        H.readline(i)
+        tex.sprint(action)
     if H.gUseHooks then tex.sprint([[\elinehook]]) end
   end
   H.addtonumline(-1)

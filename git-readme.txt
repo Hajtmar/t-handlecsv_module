@@ -1,4 +1,4 @@
 # Synchronizace s GitHubem
 git add .
-git commit -m "Vložení anglických popisů a seznamu maker, poslední verze před promazáním nepoužívaných částí kódu"
+git commit -m "Anglické popisy a seznam maker. Zásadní úpravy částí kódu - promazání záloh maker + poznámek"
 git push
