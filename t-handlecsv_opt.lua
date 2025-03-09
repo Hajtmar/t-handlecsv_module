@@ -175,7 +175,7 @@ thirddata.handlecsv = thirddata.handlecsv or {}
 local H = thirddata.handlecsv
 
 --------------------------------------------------------------------------------
--- Lokální zkratky – funkce ze string a math:
+-- Local shortcuts – functions from string and math:
 --------------------------------------------------------------------------------
 
 local gsub, sub, byte, char, upper, floor = string.gsub, string.sub, string.byte, string.char, string.upper, math.floor
@@ -183,7 +183,7 @@ local match = string.match
 local setmacro = interfaces.setmacro or ""
 
 --------------------------------------------------------------------------------
--- Globální proměnné a stavové tabulky:
+-- Global variables and state tables:
 --------------------------------------------------------------------------------
 
 H.gUserCSVSeparator      = H.gUserCSVSeparator      or ';'
@@ -217,8 +217,17 @@ H.gTableNotEmptyRows= H.gTableNotEmptyRows or {}
 H.gSavedLinePointerNo = H.gSavedLinePointerNo or 1
 
 --------------------------------------------------------------------------------
--- Pomocné Lua funkce:
+-- Helper Lua functions:
 --------------------------------------------------------------------------------
+
+
+function H.isEOF()
+  local csvfile = H.getcurrentcsvfilename()
+  local ptr = H.gCurrentLinePointer[csvfile] or 1
+  local maxr = H.gNumRows[csvfile] or 0
+  return ptr >= maxr
+end
+
 
 function H.trim(s)
   return s:match("^%s*(.-)%s*$")
@@ -327,7 +336,7 @@ function H.processinputvalue(inputparam, replacingnumber)
 end
 
 --------------------------------------------------------------------------------
--- Funkce pro nastavení hooků, hlavičky a oddělovače:
+-- Functions for setting hooks, headers, and delimiters:
 --------------------------------------------------------------------------------
 
 function H.hookson()  H.gUseHooks = true  end
@@ -359,7 +368,7 @@ function H.unsetsep()
 end
 
 --------------------------------------------------------------------------------
--- Funkce pro zpracování prázdných řádků:
+-- Functions for processing empty lines:
 --------------------------------------------------------------------------------
 
 function H.indexofnotemptyline(sernumline)
@@ -465,8 +474,9 @@ function H.removeemptylines()
 end
 
 --------------------------------------------------------------------------------
--- Funkce pro vyhodnocení hooků:
+-- Functions for evaluating hooks:
 --------------------------------------------------------------------------------
+
 
 function H.hooksevaluation()
   local csvf = H.getcurrentcsvfilename()
@@ -483,7 +493,7 @@ function H.hooksevaluation()
 end
 
 --------------------------------------------------------------------------------
--- Funkce pro práci se souborem a ukazateli:
+-- Functions for working with files and pointers:
 --------------------------------------------------------------------------------
 
 local function file_noext(filename)
@@ -605,7 +615,7 @@ function H.opencsvfile(filetoscan)
 end
 
 --------------------------------------------------------------------------------
--- Funkce pro čtení řádků a aktualizaci maker:
+-- Functions for reading lines and updating macros:
 --------------------------------------------------------------------------------
 
 function H.readlineof(inpcsvfile, numberofline)
@@ -648,7 +658,7 @@ function H.readline(numberofline)
 end
 
 --------------------------------------------------------------------------------
--- Definice maker pro sloupce – se definují jen jednou při otevření CSV
+-- Definitions of column macros – defined only once upon opening the CSV file
 --------------------------------------------------------------------------------
 
 function H.createxlscommandof(xlsname, csvfile)
@@ -685,7 +695,7 @@ function H.createxlscommand(xlsname)
 end
 
 --------------------------------------------------------------------------------
--- Přiřazení obsahu řádku do maker – pouze aktualizace hodnot (definice maker zde NEprobíhá)
+-- Assignment of row content into macros – only updating values (macro definitions are NOT performed here)
 --------------------------------------------------------------------------------
 
 function H.assigncontentsof(inpcsvfile, line)
@@ -720,7 +730,7 @@ function H.assigncontents(line)
 end
 
 --------------------------------------------------------------------------------
--- Čtení obsahu buňky:
+-- Reading cell content:
 --------------------------------------------------------------------------------
 
 function H.getcellcontentof(csvfile, column, row)
@@ -760,7 +770,7 @@ function H.getcellcontent(column, row)
 end
 
 --------------------------------------------------------------------------------
--- Posuny ukazatelů řádků – oprava pro správné nastavení EOF:
+-- Row Pointer Adjustments – Fix for Proper EOF Setting:
 --------------------------------------------------------------------------------
 
 function H.nextlineof(csvfile)
@@ -798,7 +808,7 @@ function H.previousline()
 end
 
 --------------------------------------------------------------------------------
--- Nastavení ukazatelů řádků:
+-- Row Pointer Setup:
 --------------------------------------------------------------------------------
 
 function H.setlinepointerof(csvfile, numberofline)
@@ -851,7 +861,7 @@ function H.getlinepointer()
 end
 
 --------------------------------------------------------------------------------
--- Nastavení čítače řádků:
+-- Row Counter Setup:
 --------------------------------------------------------------------------------
 
 function H.setnumlineof(csvfile, numline)
@@ -902,7 +912,7 @@ function H.nextnumline()
 end
 
 --------------------------------------------------------------------------------
--- Počet řádků, sloupců apod.:
+-- Number of rows, columns, etc.:
 --------------------------------------------------------------------------------
 
 function H.numrowsof(csvfile)
@@ -937,7 +947,7 @@ function H.numcols()
 end
 
 --------------------------------------------------------------------------------
--- Reset hooků a převod řetězce do TeX kontextu:
+-- Reset hooks and conversion of string to TeX context:
 --------------------------------------------------------------------------------
 
 function H.resethooks()
@@ -958,10 +968,10 @@ function H.string2context(str2ctx)
 end
 
 --------------------------------------------------------------------------------
--- Smyčkové funkce (cykly):
+-- Looping functions (cycles):
 --------------------------------------------------------------------------------
 
-function H.doloopfromto(from, to, action)
+function H.xdoloopfromto(from, to, action)
   tex.sprint([[\opencsvfile]])
   tex.sprint([[\edef\tempnumline{\numline}]])
   tex.sprint([[\resetnumline]])
@@ -996,6 +1006,43 @@ function H.doloopfromto(from, to, action)
   tex.sprint([[\setnumline{\tempnumline}]])
 end
 
+function H.doloopfromto(from, to, action)
+    H.opencsvfile()
+    local tempnumline = H.numline()
+    H.resetnumline()
+  if H.gUseHooks then tex.sprint([[\bfilehook]]) end
+
+  local csvfile = H.getcurrentcsvfilename()
+  local maxr = H.gNumRows[csvfile] or 0
+  local f = from + 0
+  local t = to + 0
+  local step = 1
+  local docycle = true
+  if (f > maxr and t > maxr) then
+    docycle = false
+  end
+  if docycle then
+    if f > t then
+      step = -1
+      if f > maxr then f = maxr end
+      if t < 1 then t = 1 end
+    else
+      if t > maxr then t = maxr end
+      if f < 1 then f = 1 end
+    end
+    for i = f, t, step do
+      if H.gUseHooks then tex.sprint([[\blinehook]]) end
+        --      tex.sprint("\\readline{" .. i .. "}")
+      H.readline(i)
+      tex.sprint(action)
+      if H.gUseHooks then tex.sprint([[\elinehook]]) end
+    end
+  end
+  if H.gUseHooks then tex.sprint([[\efilehook]]) end
+  H.setnumline(tempnumline)
+end
+
+
 function H.doloopfornext(numberofrows, action)
   if H.gUseHooks then tex.sprint([[\bfilehook]]) end
   tex.sprint([[\removeunwantedspaces]])
@@ -1014,7 +1061,8 @@ function H.doloopfornext(numberofrows, action)
   end
   for i = from, (to - step), step do
     if H.gUseHooks then tex.sprint([[\blinehook]]) end
-    tex.sprint("\\readline{" .. i .. "}")
+        --    tex.sprint("\\readline{" .. i .. "}")
+    H.readline(i)
     tex.sprint(action)
     if H.gUseHooks then tex.sprint([[\elinehook]]) end
   end
@@ -1024,8 +1072,98 @@ function H.doloopfornext(numberofrows, action)
   tex.sprint([[\nextrow]])
 end
 
+
+
+function H.xdoloopif(first, op, third, action)
+    H.opencsvfile()
+    local tempnumline = H.numline()
+    H.resetnumline()
+    if H.gUseHooks then tex.sprint([[\bfilehook]]) end
+
+    local csvfile = H.getcurrentcsvfilename()
+    local maxr = H.gNumRows[csvfile] or 0
+
+    -- Normalizace operátorů
+    if op == "=<" then op = "<=" end
+    if op == "=>" then op = ">=" end
+    if op == "<>" then op = "~=" end
+
+
+       -- Určení, zda se jedná o číselné porovnání
+--        local firstnum = tonumber(first)
+--        local thirdnum = tonumber(third)
+--        local isNumeric = (numeric1 and numeric3) and true or false
+
+        -- Pro operátory "==" a "~=" pokud nelze provést číselné porovnání, přepíšeme je na stringové varianty
+--        if (op == "==" or op == "~=") and not isNumeric then
+--            if op == "==" then op = "eq" else op = "neq" end
+--        end
+
+        local paroperator = op  -- normalizovaný operátor
+
+
+    local function processRow(condition)
+
+--    tex.sprint("\\removeunwantedspaces",first, paroperator, third, action)
+        if condition then
+            tex.sprint("\\removeunwantedspaces",first, paroperator, third,action)
+        else
+            H.addtonumline(-1)
+        end
+    end
+
+    for i = 1, maxr do
+--      if H.gUseHooks then tex.sprint([[\blinehook]]) end
+      tex.sprint("\\readline{" .. i .. "}")
+          tex.sprint(i)
+
+
+          tex.sprint(first,"ccc",third)
+          local firstnum=tostring(first)
+          local thirdnum=tostring(third)
+
+
+        if paroperator == "==" then
+
+        if(firstnum==thirdnum) then tex.sprint("xxx") end
+
+        end
+--
+--        elseif paroperator == "<" then
+--            processRow(firstnum and thirdnum and (firstnum < thirdnum))
+--        elseif paroperator == ">" then
+--            processRow(firstnum and thirdnum and (firstnum > thirdnum))
+--        elseif paroperator == "<=" then
+--            processRow(firstnum and thirdnum and (firstnum <= thirdnum))
+--        elseif paroperator == ">=" then
+--            processRow(firstnum and thirdnum and (firstnum >= thirdnum))
+--        elseif paroperator == "eq" then
+--            processRow(first == third)
+--        elseif paroperator == "neq" then
+--            processRow(first ~= third)
+--        elseif paroperator == "in" then
+--            processRow(string.find(third, first) ~= nil)
+--        elseif paroperator == "~in" then
+--            processRow(string.find(third, first) == nil)
+--
+--        end
+--
+
+
+--      if H.gUseHooks then tex.sprint([[\elinehook]]) end
+    end
+
+--    if H.gUseHooks then tex.sprint([[\efilehook]]) end
+
+    H.setnumline(tempnumline)
+
+end
+
+
+
+
 --------------------------------------------------------------------------------
--- Blok ConTeXt maker – kompletní definice maker (112 maker):
+-- ConTeXt Maker Block – Complete Definition of Makers (112 makers):
 --------------------------------------------------------------------------------
 
 local string2print = [[%
@@ -1094,7 +1232,7 @@ local string2print = [[%
 \def\columncontentof[#1][#2]{\ctxlua{tex.sprint(thirddata.handlecsv.getcellcontentof('#1',thirddata.handlecsv.gColNames['#1'][#2],thirddata.handlecsv.linepointerof('#1')))}}
 \def\columncontent[#1]{\ctxlua{tex.sprint(thirddata.handlecsv.getcellcontent(thirddata.handlecsv.gColNames[thirddata.handlecsv.getcurrentcsvfilename()][#1],thirddata.handlecsv.linepointerof(thirddata.handlecsv.getcurrentcsvfilename())))}}
 
-% MAKRA PRO NASTAVENÍ UKAZATELŮ ŘÁDKŮ:
+% MACROS FOR SETTING LINE POINTERS:
 \def\setlinepointer#1{\ctxlua{thirddata.handlecsv.setlinepointer(#1)}}
 \def\setlinepointerof[#1]#2{\ctxlua{thirddata.handlecsv.setlinepointerof('#1',#2)}}
 \def\resetlinepointer{\ctxlua{tex.sprint(thirddata.handlecsv.resetlinepointer())}}
@@ -1102,7 +1240,7 @@ local string2print = [[%
 \let\resetlineno\resetlinepointer
 \let\resetsernumline\resetlinepointer
 
-% MAKRA PRO NASTAVENÍ ČÍTAČE ŘÁDKŮ:
+% MACROS FOR SETTING LINE COUNTERS:
 \def\setnumline#1{\ctxlua{thirddata.handlecsv.setnumline(#1)}}
 \def\resetnumline{\ctxlua{tex.sprint(thirddata.handlecsv.resetnumline())}}
 \resetnumline
@@ -1125,7 +1263,7 @@ local string2print = [[%
 \def\resetmarkemptylines{\ctxlua{thirddata.handlecsv.resetmarkemptylines()}}
 \def\removeemptylines{\ctxlua{thirddata.handlecsv.removeemptylines()}}
 
-% MAKRA PRO POSUN ŘÁDKŮ A CYKLY:
+% MACROS FOR SHIFTING ROW POINTERS AND LOOPS:
 \def\nextlineof[#1]{\ctxlua{thirddata.handlecsv.nextlineof('#1')}}
 \def\nextline{\ctxlua{thirddata.handlecsv.nextline()}}
 \def\prevlineof[#1]{\ctxlua{thirddata.handlecsv.previouslineof('#1')}}
@@ -1137,7 +1275,7 @@ local string2print = [[%
 \def\prevrowof[#1]{\prevlineof[#1]\readlineof[#1]{\ctxlua{tex.sprint(thirddata.handlecsv.linepointerof('#1'))}}}
 \def\exitlooptest{\ifEOF\exitloop\else\nextrow\fi}
 
-% MAKRA PRO OTEVÍRÁNÍ/UZAVÍRÁNÍ CSV SOUBORŮ:
+% MACROS FOR OPENING/CLOSING CSV FILES:
 \def\opencsvfile{\dosingleempty\doopencsvfile}
 \def\doopencsvfile[#1]{\dosinglegroupempty\dodoopencsvfile}
 \def\dodoopencsvfile#1{%
@@ -1150,7 +1288,7 @@ local string2print = [[%
 }
 \def\closecsvfile#1{\ctxlua{thirddata.handlecsv.closecsvfile("#1")}}
 
-% MAKRA PRO ČTENÍ ŘÁDKŮ:
+% MACROS FOR READING LINES:
 \def\readline{\dosingleempty\doreadline}
 \def\doreadline[#1]{\dosinglegroupempty\dodoreadline}
 \def\dodoreadline#1{%
@@ -1162,7 +1300,7 @@ local string2print = [[%
 }
 \def\readlineof[#1]#2{\ctxlua{thirddata.handlecsv.readlineof('#1',#2)}}
 
-% MAKRA PRO ZPRACOVÁNÍ PARAMETRŮ V CYKLECH:
+% MACROS FOR PROCESSING PARAMETERS IN LOOPS:
 
 \def\readandprocessparameters#1#2#3#4{
   \edef\firstparam{#1}
@@ -1186,23 +1324,8 @@ local string2print = [[%
 
 
 
-% MAKRA CYKLŮ:
+% LOOP MACROS:
 \def\doloopfromto#1#2#3{\ctxlua{thirddata.handlecsv.doloopfromto([==[\thenumexpr{#1}]==],[==[\thenumexpr{#2}]==],[==[\detokenize{#3}]==])}}
-\letvalue{Doloopfromto}=\doloopfromto
-
-\def\xxxxxDoloopfromto#1#2#3{%
-   \opencsvfile
-   \resetnumline
-   \bfilehook
-   \removeunwantedspaces
-   \ifnum#1<#2
-     \dostepwiserecurse{#1}{#2}{1}{\blinehook{\readline{\recurselevel}}#3\elinehook}
-   \else
-     \dostepwiserecurse{#1}{#2}{-1}{\blinehook{\readline{\recurselevel}}#3\elinehook}
-   \fi
-   \removeunwantedspaces
-   \efilehook%
-}
 
 \def\doloopforall{\dosinglegroupempty\doloopforAll}
 
@@ -1232,6 +1355,10 @@ local string2print = [[%
     }
   }
 }
+
+
+\def\xdoloopif#1#2#3#4{\ctxlua{thirddata.handlecsv.xdoloopif([==[\detokenize{#1}]==],[==[#2]==],[==[\detokenize{#3}]==],[==[\detokenize{#4}]==])}}
+
 
 \def\doloopif#1#2#3#4{%
   \edef\tempnumline{\numline}
@@ -1423,4 +1550,4 @@ local string2print = [[%
 ]]
 
 H.string2context(string2print)
--- Konec modulu
+-- End of module
