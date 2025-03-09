@@ -37,6 +37,139 @@
   ==============================================================================
 --]]
 
+
+--[[
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% t‑handlecsv module – Complete Listing of Defined Macros and Commands
+%
+% This section provides an overview of all the macros defined in the module,
+% along with a brief description of their functionality.
+%
+% Status Condition Macros:
+%   \ifissetheader           - Tests if the CSV header flag is set.
+%   \ifnotsetheader          - Tests if the CSV header flag is not set.
+%   \ifEOF                   - True if end-of-file for the CSV is reached.
+%   \ifnotEOF                - True if not at the end-of-file.
+%   \ifemptyline             - Tests if the current CSV row is empty.
+%   \ifnotemptyline          - Tests if the current CSV row is not empty.
+%   \ifemptylinesmarking     - True if empty lines marking is active.
+%   \ifemptylinesnotmarking  - True if empty lines are not marked.
+%
+% Hook Macros:
+%   \hookson                - Enable hooks (custom processing for rows/columns).
+%   \hooksoff               - Disable hooks.
+%   \resethooks             - Resets hook macros (\bfilehook, \efilehook,
+%                             \blinehook, \elinehook, \bch, \ech) to empty.
+%
+% CSV Setup Macros:
+%   \setheader              - Set the CSV header flag (first row contains names).
+%   \unsetheader            - Unset the CSV header flag.
+%   \setsep{<separator>}    - Set the CSV field separator.
+%   \unsetsep               - Restore the default separator.
+%   \setfiletoscan{<file>}   - Define the CSV file to be processed.
+%
+% Global Information Macros:
+%   \numrows                - Returns the total number of rows in the CSV table.
+%   \numemptyrows           - Returns the number of empty rows.
+%   \numnotemptyrows        - Returns the number of non-empty rows.
+%   \numcols                - Returns the total number of columns in the CSV table.
+%   \csvfilename            - Contains the name of the current CSV file.
+%
+% Expression Tools:
+%   \thenumexpr{<expression>} - Evaluates a TeX numeric expression.
+%   \addto\macro{<text>}     - Appends non-expanded text to the macro.
+%   \eaddto\macro{<text>}    - Appends fully expanded text to the macro.
+%
+% Cell Access Macros:
+%   \getcsvcell[<col>,<row>] - Returns the content of the cell at the specified
+%                             column (number or name) and row.
+%   \csvcell[<col>,<row>]    - Alias for \getcsvcell.
+%   \currentcell{<col>}      - Returns content of column <col> in the current row.
+%   \nextcell{<col>}         - Returns content of column <col> in the next row.
+%   \previouscell{<col>}     - Returns content of column <col> in the previous row.
+%                             (Aliases: \currcell, \nextcell, \prevcell)
+%
+% Column Name Macros:
+%   \colname[<n>]           - Returns the name of the nth column.
+%   \xlscolname[<n>]        - Returns the Excel-style column name (A, B, …).
+%   \cxlscolname[<n>]       - Returns the Excel-style column name prefixed with "c".
+%   \texcolname[<n>]        - Returns a TeX-friendly version of the column name.
+%   \indexcolname[<name>]    - Returns the column index for a given column name.
+%
+% Content Macros:
+%   \columncontent[<col>]   - Returns the content of the specified column in the
+%                             current row.
+%   \numberxlscolname[<name>] - Converts an Excel column name to its numeric index.
+%
+% Line Pointer and Counter Macros:
+%   \linepointer             - Returns the current CSV row pointer.
+%   \lineno, \sernumline     - Synonyms for \linepointer.
+%   \resetlinepointer        - Resets the row pointer to the first row.
+%   \setlinepointer{<n>}     - Sets the row pointer to a specified row.
+%   \savelinepointer         - Saves the current row pointer.
+%   \setsavedlinepointer     - Restores the saved row pointer.
+%
+%   \numline                - Returns the current row counter (processed rows).
+%   \setnumline{<n>}        - Sets the row counter to <n>.
+%   \resetnumline           - Resets the row counter.
+%   \addtonumline{<n>}      - Adds a number to the row counter.
+%
+% Row Indexing Macros:
+%   \indexofnotemptyline{}  - Returns the index of the nth non-empty row.
+%   \indexofemptyline{}     - Returns the index of the nth empty row.
+%
+% Empty Line Handling:
+%   \markemptylines         - Marks empty rows in the CSV.
+%   \notmarkemptylines      - Disables empty rows marking.
+%   \resetmarkemptylines    - Resets the empty row marking.
+%   \removeemptylines       - Removes empty rows from the CSV table.
+%
+% Navigation Macros:
+%   \nextlineof[<file>]     - Advances the row pointer of the specified file.
+%   \nextline                - Advances the row pointer of the current CSV.
+%   \prevlineof[<file>]     - Moves the row pointer back in the specified file.
+%   \prevline                - Moves the row pointer back in the current CSV.
+%   \nextnumline            - Increments the row counter.
+%   \nextrowof[<file>], \nextrow  - Reads the next row.
+%   \prevrowof[<file>], \prevrow  - Reads the previous row.
+%   \exitlooptest           - Macro to test and exit loops based on EOF.
+%
+% File Handling Macros:
+%   \opencsvfile           - Opens a CSV file (optionally with a filename argument).
+%   \closecsvfile{<file>}   - Closes the specified CSV file.
+%
+% Reading Macros:
+%   \readline              - Reads a CSV row (optionally from a specified line).
+%   \readline{<n>}         - Reads the nth row.
+%
+% Internal Parameter Processing:
+%   \readandprocessparameters#1#2#3#4
+%      - Processes parameters for cycle macros, normalizes comparison operators.
+%
+% Cycle (Loop) Macros:
+%   \doloopfromto{<start>}{<end>}{<action>}
+%      - Executes <action> for each row from <start> to <end>.
+%   \doloopforall, \doloopforall{<action>}
+%      - Executes <action> for all rows (defaults to \lineaction if omitted).
+%   \doloopaction, \doloopaction{<action>}, \doloopaction{<action>}{<end>},
+%      \doloopaction{<action>}{<start>}{<end>}
+%      - Executes <action> for a specified range of rows.
+%   \doloopif{<val1>}{<operator>}{<val2>}{<action>}
+%      - Executes <action> on rows satisfying the comparison condition.
+%      (Synonym: \doloopifnum for numeric comparisons.)
+%   \doloopuntil{<val1>}{<val2>}{<action>}
+%      - Repeats <action> until <val1> equals <val2> (alias: \repeatuntil).
+%   \doloopwhile{<val1>}{<val2>}{<action>}
+%      - Repeats <action> while <val1> equals <val2> (alias: \whiledo).
+%   \filelineaction, \filelineaction{<file>}
+%      - Executes \lineaction for all rows of the specified CSV file.
+%   \doloopfornext{<n>}{<action>}
+%      - Executes <action> for the next <n> rows starting from the current row.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+--]]
+
 thirddata           = thirddata           or {}
 thirddata.handlecsv = thirddata.handlecsv or {}
 local H = thirddata.handlecsv
