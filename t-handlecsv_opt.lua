@@ -25,20 +25,6 @@
 -- %C along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 --[[
-  ==============================================================================
-   Tato verze modulu t‑handlecsv.lua byla optimalizována a rozšířena o ochranu proti
-   chybě při indexaci nil hodnoty, která vzniká, pokud CSV soubor neobsahuje hlavičku.
-   V případě, že hlavička chybí, se automaticky vytvoří výchozí názvy sloupců ("col1",
-   "col2", …). Oprava tak zamezí pokusu o indexaci nil v poli H.gColumnNames.
-
-   API modulu zůstává beze změny:
-     • 76 Lua funkcí
-     • 112 TeX maker (včetně aliasů)
-  ==============================================================================
---]]
-
-
---[[
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % t‑handlecsv module – Complete Listing of Defined Macros and Commands
 %
@@ -167,7 +153,6 @@
 %      - Executes <action> for the next <n> rows starting from the current row.
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 --]]
 
 thirddata           = thirddata           or {}
@@ -228,10 +213,6 @@ function H.isEOF()
   return ptr >= maxr
 end
 
-
-function H.trim(s)
-  return s:match("^%s*(.-)%s*$")
-end
 
 
 function H.texmacroisdefined(macroname)
@@ -952,12 +933,12 @@ end
 
 function H.resethooks()
  tex.sprint([[
-\def\blinehook{\relax}
-\def\elinehook{\relax}
-\def\bfilehook{\relax}
-\def\efilehook{\relax}
-\def\bch{\relax}
-\def\ech{\relax}
+\def\blinehook{}%
+\def\elinehook{}%
+\def\bfilehook{}%
+\def\efilehook{}%
+\def\bch{}%
+\def\ech{}%
 ]])
 end
 
