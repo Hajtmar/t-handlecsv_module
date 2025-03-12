@@ -129,6 +129,8 @@
 %   \readline{<n>}         - Reads the nth row.
 %
 % Internal Parameter Processing:
+%   \readandprocessparameters#1#2#3#4
+%      - Processes parameters for cycle macros, normalizes comparison operators.
 %
 % Cycle (Loop) Macros:
 %   \doloopfromto{<start>}{<end>}{<action>}
@@ -941,7 +943,9 @@ function H.doloopfromto(from, to, action)
   append([[\resetnumline]])
 
   local hooks = H.gUseHooks
-  if hooks then append([[\bfilehook]]) end
+  if hooks then
+    append([[\bfilehook]])
+  end
 
   local csvfile = H.getcurrentcsvfilename()
   local maxr = H.gNumRows[csvfile] or 0
@@ -970,7 +974,9 @@ function H.doloopfromto(from, to, action)
     end
     if hooks then append([[\elinehook]]) end
   end
-  if hooks then append([[\efilehook]]) end
+  if hooks then
+    append([[\efilehook]])
+  end
   append([[\setnumline{\tempnumline}]])
 
   tex.sprint(table.concat(output))
@@ -1055,7 +1061,9 @@ end
 function H.xdoloopif(first, op, third, action)
     H.opencsvfile()
     local tempnumline = H.numline()
-    H.setnumline(1)
+    H.resetnumline()
+    if H.gUseHooks then tex.sprint([[\bfilehook]]) end
+
     local csvfile = H.getcurrentcsvfilename()
     local maxr = H.gNumRows[csvfile] or 0
 
@@ -1064,65 +1072,72 @@ function H.xdoloopif(first, op, third, action)
     if op == "=>" then op = ">=" end
     if op == "<>" then op = "~=" end
 
-       -- Určení, zda se jedná o číselné porovnání
-         firstnum = tonumber(first)
-         thirdnum = tonumber(third)
-         isNumeric = (firstnum and thirdnum) and true or false
 
-        if (isNumeric) then tex.sprint("numeric") else tex.sprint("nonumeric") end
+       -- Určení, zda se jedná o číselné porovnání
+--        local firstnum = tonumber(first)
+--        local thirdnum = tonumber(third)
+--        local isNumeric = (numeric1 and numeric3) and true or false
+
         -- Pro operátory "==" a "~=" pokud nelze provést číselné porovnání, přepíšeme je na stringové varianty
-        if (op == "==" or op == "~=") and not isNumeric then
-            if op == "==" then op = "eq" else op = "neq" end
-        end
+--        if (op == "==" or op == "~=") and not isNumeric then
+--            if op == "==" then op = "eq" else op = "neq" end
+--        end
 
         local paroperator = op  -- normalizovaný operátor
 
 
     local function processRow(condition)
+
+--    tex.sprint("\\removeunwantedspaces",first, paroperator, third, action)
         if condition then
-         --   tex.sprint(first, paroperator, third,action)
-            tex.sprint("horni")
+            tex.sprint("\\removeunwantedspaces",first, paroperator, third,action)
         else
-           tex.sprint("dolni")
             H.addtonumline(-1)
         end
     end
 
-
     for i = 1, maxr do
-          H.readline(i)
---      tex.sprint("\\readline{" .. i .. "}")
---          tex.sprint(i)
---          tex.sprint(first,op,third,action)
---          local firstnum=tostring(first)
---          local thirdnum=tostring(third)
+--      if H.gUseHooks then tex.sprint([[\blinehook]]) end
+      tex.sprint("\\readline{" .. i .. "}")
+          tex.sprint(i)
+
+
+          tex.sprint(first,"ccc",third)
+          local firstnum=tostring(first)
+          local thirdnum=tostring(third)
 
 
         if paroperator == "==" then
-             tex.sprint (", firstnum=",firstnum, ", operator=",paroperator,", thirdnum=", thirdnum, ", i=",i,", ")
 
-             processRow(isNumeric and (firstnum == thirdnum))
-            tex.sprint("i=",i," rovno")
-        elseif paroperator == "<" then
-            processRow(firstnum and thirdnum and (firstnum < thirdnum))
-        elseif paroperator == ">" then
-            processRow(firstnum and thirdnum and (firstnum > thirdnum))
-        elseif paroperator == "<=" then
-            processRow(firstnum and thirdnum and (firstnum <= thirdnum))
-        elseif paroperator == ">=" then
-            processRow(firstnum and thirdnum and (firstnum >= thirdnum))
-        elseif paroperator == "eq" then
-            processRow(first == third)
-        elseif paroperator == "neq" then
-            processRow(first ~= third)
-        elseif paroperator == "in" then
-            processRow(string.find(third, first) ~= nil)
-        elseif paroperator == "~in" then
-            processRow(string.find(third, first) == nil)
+        if(firstnum==thirdnum) then tex.sprint("xxx") end
+
         end
-      tex.sprint("\\nextline")
+--
+--        elseif paroperator == "<" then
+--            processRow(firstnum and thirdnum and (firstnum < thirdnum))
+--        elseif paroperator == ">" then
+--            processRow(firstnum and thirdnum and (firstnum > thirdnum))
+--        elseif paroperator == "<=" then
+--            processRow(firstnum and thirdnum and (firstnum <= thirdnum))
+--        elseif paroperator == ">=" then
+--            processRow(firstnum and thirdnum and (firstnum >= thirdnum))
+--        elseif paroperator == "eq" then
+--            processRow(first == third)
+--        elseif paroperator == "neq" then
+--            processRow(first ~= third)
+--        elseif paroperator == "in" then
+--            processRow(string.find(third, first) ~= nil)
+--        elseif paroperator == "~in" then
+--            processRow(string.find(third, first) == nil)
+--
+--        end
+--
+
+
+--      if H.gUseHooks then tex.sprint([[\elinehook]]) end
     end
 
+--    if H.gUseHooks then tex.sprint([[\efilehook]]) end
 
     H.setnumline(tempnumline)
 
@@ -1147,15 +1162,25 @@ function H.inserthook(hookname)
 end
 
 
+function H.setFourthParam(param)
+  local trimmed = param:match("^%s*(.-)%s*$") or ""
+  tex.sprint("\\def\\fourthparam{" .. trimmed .. "}")
+end
+
+function H.doFourthParamHook()
+--  thirddata.handlecsv.inserthook("bch")
+  tex.sprint("\\fourthparam")
+--  thirddata.handlecsv.inserthook("ech")
+end
 
 
 -- This corresponds to the definition of the resethooks macro in ConText ie. \def\resethooks{blabla...}
 token.set_macro("resethooks",[[\def\bfilehook{BX}\def\efilehook{EX}\def\blinehook{BY}\def\elinehook{EY}\def\bch{BZ}\def\ech{EZ}]],"global")
 
-token.set_macro("hookson", tex.sprint(thirddata.handlecsv.hookson()) ,"global")
-
 -- Corresponds callings of \resethooks macro in ConTeXt ie placing of \resetooks macro in string2print and its rewriting to ConTeXt
 tex.sprint(token.get_macro("resethooks"))
+
+
 
 
 
@@ -1183,7 +1208,7 @@ local string2print = [[%
 \newif\ifemptylinesnotmarking
 
 \let\lineaction\empty
-%\def\hookson{\ctxlua{tex.sprint(thirddata.handlecsv.hookson())}}
+\def\hookson{\ctxlua{tex.sprint(thirddata.handlecsv.hookson())}}
 \let\usehooks\hookson
 \def\hooksoff{\ctxlua{tex.sprint(thirddata.handlecsv.hooksoff())}}
 
@@ -1305,6 +1330,26 @@ local string2print = [[%
 
 % MACROS FOR PROCESSING PARAMETERS IN LOOPS:
 
+\def\readandprocessparameters#1#2#3#4{%
+  \edef\firstparam{#1}%
+  \edef\secondparam{#2}%
+  \edef\thirdparam{#3}%
+  \def\fourthparam{#4}%\def\fourthparam{\if!#4!\else\removeunwantedspaces#4\fi}%
+  \edef\paroperator{#2}%
+  \ctxlua{
+    local op='#2'
+    local expressionisnotnumeric=not(type(tonumber('#1'))=='number' and type(tonumber('#3'))=='number')
+        if (op == "==") and expressionisnotnumeric then op = "eq"
+            elseif (op == "~=") and expressionisnotnumeric then op = "neq"
+            elseif (op == "=<") then op = "<="
+            elseif (op == "=>") then op = ">="
+            elseif (op == "<>") then op = "~="
+        end
+    tex.sprint("\\def\\paroperator{"..op.."}")
+  }%
+}%
+%
+
 
 
 % LOOP MACROS:
@@ -1340,128 +1385,347 @@ local string2print = [[%
 }
 
 
-\def\xdoloopif#1#2#3#4{\ctxlua{thirddata.handlecsv.xdoloopif([==[#1]==],[==[#2]==],[==[#3]==],[==[\detokenize{#4}]==])}}
+\def\xdoloopif#1#2#3#4{\ctxlua{thirddata.handlecsv.xdoloopif([==[\detokenize{#1}]==],[==[#2]==],[==[\detokenize{#3}]==],[==[\detokenize{#4}]==])}}
 
 
-\def\doloopif#1#2#3#4{
-  \edef\tempnumline{\numline}%
-  \edef\firstparam{\luaescapestring{#1}}%
-  \edef\thirdparam{\luaescapestring{#3}}%
-  \def\fourthparam{\luaescapestring{#4}}%
-  \edef\paroperator{\luaescapestring{#2}}%
+\def\doloopif#1#2#3#4{%
+  \edef\tempnumline{\numline}
+  \readandprocessparameters{#1}{#2}{#3}{#4}
   \removeunwantedspaces
-  \ctxlua{
-    local op='#2'
-    local expressionisnotnumeric=not(type(tonumber('#1'))=='number' and type(tonumber('#3'))=='number')
-        if (op == "==") and expressionisnotnumeric then op = "eq"
-            elseif (op == "~=") and expressionisnotnumeric then op = "neq"
-            elseif (op == "=<") then op = "<="
-            elseif (op == "=>") then op = ">="
-            elseif (op == "<>") then op = "~="
-        end
-        token.set_macro("paroperator",op)}
   \processaction[\paroperator][
     <=>{
       \doloopfromto{1}{\numrows}{
         \ctxlua{
-          local a_num = tonumber('\luaescapestring{#1}') or 0
-          local b_num = tonumber('\luaescapestring{#3}') or 0
-          if a_num < b_num then   tex.sprint("\\fourthparam") else thirddata.handlecsv.addtonumline(-1) end
+          local a = tonumber("\luaescapestring{#1}") or 0;
+          local b = tonumber("\luaescapestring{#3}") or 0;
+          if a < b then
+             thirddata.handlecsv.doFourthParamHook()
+          else
+            thirddata.handlecsv.addtonumline(-1)
+          end
         }
       }
     },
     >=>{
       \doloopfromto{1}{\numrows}{
         \ctxlua{
-          local a_num = tonumber('\luaescapestring{#1}') or 0
-          local b_num = tonumber('\luaescapestring{#3}') or 0
-          if a_num > b_num then tex.sprint("\\fourthparam") else thirddata.handlecsv.addtonumline(-1) end
+          local a = tonumber("\luaescapestring{#1}") or 0;
+          local b = tonumber("\luaescapestring{#3}") or 0;
+          if a > b then
+             thirddata.handlecsv.doFourthParamHook()
+          else
+            thirddata.handlecsv.addtonumline(-1)
+          end
         }
       }
     },
     ===>{
       \doloopfromto{1}{\numrows}{
         \ctxlua{
-          local a_num = tonumber('\luaescapestring{#1}') or 0
-          local b_num = tonumber('\luaescapestring{#3}') or 0
-          if a_num == b_num then tex.sprint("\\fourthparam") else thirddata.handlecsv.addtonumline(-1) end
+          local a = tonumber("\luaescapestring{#1}") or 0;
+          local b = tonumber("\luaescapestring{#3}") or 0;
+          if a == b then
+             thirddata.handlecsv.doFourthParamHook()
+          else
+            thirddata.handlecsv.addtonumline(-1)
+          end
         }
       }
     },
     ~==>{
       \doloopfromto{1}{\numrows}{
         \ctxlua{
-          local a_num = tonumber('\luaescapestring{#1}') or 0
-          local b_num = tonumber('\luaescapestring{#3}') or 0
-          if a_num ~= b_num then  tex.sprint("\\fourthparam") else thirddata.handlecsv.addtonumline(-1) end
+          local a = tonumber("\luaescapestring{#1}") or 0;
+          local b = tonumber("\luaescapestring{#3}") or 0;
+          if a ~= b then
+             thirddata.handlecsv.doFourthParamHook()
+          else
+            thirddata.handlecsv.addtonumline(-1)
+          end
         }
       }
     },
     >==>{
       \doloopfromto{1}{\numrows}{
         \ctxlua{
-          local a_num = tonumber('\luaescapestring{#1}') or 0
-          local b_num = tonumber('\luaescapestring{#3}') or 0
-          if a_num >= b_num then tex.sprint("\\fourthparam") else thirddata.handlecsv.addtonumline(-1) end
+          local a = tonumber("\luaescapestring{#1}") or 0;
+          local b = tonumber("\luaescapestring{#3}") or 0;
+          if a >= b then
+             thirddata.handlecsv.doFourthParamHook()
+          else
+            thirddata.handlecsv.addtonumline(-1)
+          end
         }
       }
     },
     <==>{
       \doloopfromto{1}{\numrows}{
         \ctxlua{
-          local a_num = tonumber('\luaescapestring{#1}') or 0
-          local b_num = tonumber('\luaescapestring{#3}') or 0
-          if a_num <= b_num then  tex.sprint("\\fourthparam") else thirddata.handlecsv.addtonumline(-1) end
+          local a = tonumber("\luaescapestring{#1}") or 0;
+          local b = tonumber("\luaescapestring{#3}") or 0;
+          if a <= b then
+             thirddata.handlecsv.doFourthParamHook()
+          else
+            thirddata.handlecsv.addtonumline(-1)
+          end
         }
       }
     },
     eq=>{
       \doloopfromto{1}{\numrows}{
         \ctxlua{
-            local a_str = '\luaescapestring{#1}'
-            local b_str = '\luaescapestring{#3}'
-            if a_str == b_str then  tex.sprint("\\fourthparam") else thirddata.handlecsv.addtonumline(-1) end
+          local a_num = tonumber("\luaescapestring{#1}")
+          local b_num = tonumber("\luaescapestring{#3}")
+          if a_num and b_num then
+            if a_num == b_num then
+             thirddata.handlecsv.doFourthParamHook()
+            else
+              thirddata.handlecsv.addtonumline(-1)
+            end
+          else
+            local a_str = "\luaescapestring{#1}"
+            local b_str = "\luaescapestring{#3}"
+            if a_str == b_str then
+             thirddata.handlecsv.doFourthParamHook()
+            else
+              thirddata.handlecsv.addtonumline(-1)
+            end
+          end
         }
       }
     },
-    neq=>{%
+    neq=>{
       \doloopfromto{1}{\numrows}{
         \ctxlua{
-            local a_str = '\luaescapestring{#1}'
-            local b_str = '\luaescapestring{#3}'
-            if a_str ~= b_str then tex.sprint("\\fourthparam") else thirddata.handlecsv.addtonumline(-1) end
+          local a_num = tonumber("\luaescapestring{#1}")
+          local b_num = tonumber("\luaescapestring{#3}")
+          if a_num and b_num then
+            if a_num ~= b_num then
+             thirddata.handlecsv.doFourthParamHook()
+            else
+              thirddata.handlecsv.addtonumline(-1)
+            end
+          else
+            local a_str = "\luaescapestring{#1}"
+            local b_str = "\luaescapestring{#3}"
+            if a_str ~= b_str then
+             thirddata.handlecsv.doFourthParamHook()
+            else
+              thirddata.handlecsv.addtonumline(-1)
+            end
+          end
         }
       }
     },
     in=>{
       \doloopfromto{1}{\numrows}{
         \ctxlua{
-          if string.find('\luaescapestring{#3}', '\luaescapestring{#1}') then tex.sprint("\\fourthparam") else thirddata.handlecsv.addtonumline(-1) end
+          if string.find("\luaescapestring{#3}", "\luaescapestring{#1}") then
+             thirddata.handlecsv.doFourthParamHook()
+          else
+            thirddata.handlecsv.addtonumline(-1)
+          end
         }
       }
     },
     ~in=>{
       \doloopfromto{1}{\numrows}{
         \ctxlua{
-          if not string.find('\luaescapestring{#3}', '\luaescapestring{#1}') then tex.sprint("\\fourthparam") else thirddata.handlecsv.addtonumline(-1) end
+          if not string.find("\luaescapestring{#3}", "\luaescapestring{#1}") then
+             thirddata.handlecsv.doFourthParamHook()
+          else
+            thirddata.handlecsv.addtonumline(-1)
+          end
         }
       }
     },
     repeatuntil=>{
       \doloop{
-        \ctxlua{if '\luaescapestring{#1}'=='\luaescapestring{#3}' then tex.sprint('\\exitloop') else tex.sprint('\\ifEOF\\exitloop\\else\\fourthparam\\nextrow\\fi') end}%
+        \ctxlua{if "\luaescapestring{#1}"=="\luaescapestring{#3}" then tex.sprint('\\exitloop') else tex.sprint('\\ifEOF\\exitloop\\else\\blinehook\\fourthparam\\elinehook\\nextrow\\fi')end}
       }
     },
     whiledo=>{
       \doloop{
-        \ctxlua{if '\luaescapestring{#1}'~='\luaescapestring{#3}' then tex.sprint('\\exitloop') else tex.sprint('\\fourthparam\\ifEOF\\exitloop\\else\\nextrow\\fi') end}
+        \ctxlua{if "\luaescapestring{#1}"~="\luaescapestring{#3}" then tex.sprint('\\exitloop') else tex.sprint('\\blinehook\\fourthparam\\elinehook\\ifEOF\\exitloop\\else\\nextrow\\fi')end}
       }
     }
   ]
-\setnumline{\tempnumline}%
-\removeunwantedspaces%
-}%
-%
+  \setnumline{\tempnumline}
+ \removeunwantedspaces
+}
+
+
+
+
+\def\yalohadoloopif#1#2#3#4{%
+  \edef\tempnumline{\numline}
+  \readandprocessparameters{#1}{#2}{#3}{#4}
+  \removeunwantedspaces
+  \bfilehook
+  \processaction[\paroperator][
+    <=>{
+      \doloopfromto{1}{\numrows}{
+        \ctxlua{
+          local a = tonumber("\luaescapestring{#1}") or 0;
+          local b = tonumber("\luaescapestring{#3}") or 0;
+          if a < b then
+            tex.sprint('\\blinehook\\fourthparam\\elinehook')
+          else
+            thirddata.handlecsv.addtonumline(-1)
+          end
+        }
+      }
+    },
+    >=>{
+      \doloopfromto{1}{\numrows}{
+        \ctxlua{
+          local a = tonumber("\luaescapestring{#1}") or 0;
+          local b = tonumber("\luaescapestring{#3}") or 0;
+          if a > b then
+            tex.sprint('\\blinehook\\fourthparam\\elinehook')
+          else
+            thirddata.handlecsv.addtonumline(-1)
+          end
+        }
+      }
+    },
+    ===>{
+      \doloopfromto{1}{\numrows}{
+        \ctxlua{
+          local a = tonumber("\luaescapestring{#1}") or 0;
+          local b = tonumber("\luaescapestring{#3}") or 0;
+          if a == b then
+            tex.sprint('\\blinehook\\fourthparam\\elinehook')
+          else
+            thirddata.handlecsv.addtonumline(-1)
+          end
+        }
+      }
+    },
+    ~==>{
+      \doloopfromto{1}{\numrows}{
+        \ctxlua{
+          local a = tonumber("\luaescapestring{#1}") or 0;
+          local b = tonumber("\luaescapestring{#3}") or 0;
+          if a ~= b then
+            tex.sprint('\\blinehook\\fourthparam\\elinehook')
+          else
+            thirddata.handlecsv.addtonumline(-1)
+          end
+        }
+      }
+    },
+    >==>{
+      \doloopfromto{1}{\numrows}{
+        \ctxlua{
+          local a = tonumber("\luaescapestring{#1}") or 0;
+          local b = tonumber("\luaescapestring{#3}") or 0;
+          if a >= b then
+            tex.sprint('\\blinehook\\fourthparam\\elinehook')
+          else
+            thirddata.handlecsv.addtonumline(-1)
+          end
+        }
+      }
+    },
+    <==>{
+      \doloopfromto{1}{\numrows}{
+        \ctxlua{
+          local a = tonumber("\luaescapestring{#1}") or 0;
+          local b = tonumber("\luaescapestring{#3}") or 0;
+          if a <= b then
+            tex.sprint('\\blinehook\\fourthparam\\elinehook')
+          else
+            thirddata.handlecsv.addtonumline(-1)
+          end
+        }
+      }
+    },
+    eq=>{
+      \doloopfromto{1}{\numrows}{%
+        \ctxlua{
+          local a_num = tonumber("\luaescapestring{#1}")
+          local b_num = tonumber("\luaescapestring{#3}")
+          if a_num and b_num then
+            if a_num == b_num then
+              tex.sprint('\\blinehook\\fourthparam\\elinehook')
+            else
+              thirddata.handlecsv.addtonumline(-1)
+            end
+          else
+            local a_str = "\luaescapestring{#1}"
+            local b_str = "\luaescapestring{#3}"
+            if a_str == b_str then
+              tex.sprint('\\blinehook\\fourthparam\\elinehook')
+            else
+              thirddata.handlecsv.addtonumline(-1)
+            end
+          end
+        }
+      }
+    },
+    neq=>{
+      \doloopfromto{1}{\numrows}{%
+        \ctxlua{
+          local a_num = tonumber("\luaescapestring{#1}")
+          local b_num = tonumber("\luaescapestring{#3}")
+          if a_num and b_num then
+            if a_num ~= b_num then
+              tex.sprint('\\blinehook\\fourthparam\\elinehook')
+            else
+              thirddata.handlecsv.addtonumline(-1)
+            end
+          else
+            local a_str = "\luaescapestring{#1}"
+            local b_str = "\luaescapestring{#3}"
+            if a_str ~= b_str then
+              tex.sprint('\\blinehook\\fourthparam\\elinehook')
+            else
+              thirddata.handlecsv.addtonumline(-1)
+            end
+          end
+        }
+      }
+    },
+    in=>{
+      \doloopfromto{1}{\numrows}{
+        \ctxlua{
+          if string.find("\luaescapestring{#3}", "\luaescapestring{#1}") then
+            tex.sprint('\\blinehook\\fourthparam\\elinehook')
+          else
+            thirddata.handlecsv.addtonumline(-1)
+          end
+        }
+      }
+    },
+    ~in=>{
+      \doloopfromto{1}{\numrows}{
+        \ctxlua{
+          if not string.find("\luaescapestring{#3}", "\luaescapestring{#1}") then
+            tex.sprint('\\blinehook\\fourthparam\\elinehook')
+          else
+            thirddata.handlecsv.addtonumline(-1)
+          end
+        }
+      }
+    },
+    repeatuntil=>{
+      \doloop{
+        \ctxlua{if "\luaescapestring{#1}"=="\luaescapestring{#3}" then tex.sprint('\\exitloop') else tex.sprint('\\ifEOF\\exitloop\\else\\blinehook\\fourthparam\\elinehook\\nextrow\\fi')end}
+      }
+    },
+    whiledo=>{
+      \doloop{
+        \ctxlua{if "\luaescapestring{#1}"~="\luaescapestring{#3}" then tex.sprint('\\exitloop') else tex.sprint('\\blinehook\\fourthparam\\elinehook\\ifEOF\\exitloop\\else\\nextrow\\fi')end}
+      }
+    }
+  ]
+  \efilehook
+  \setnumline{\tempnumline}%
+ \removeunwantedspaces
+}
+
+
 
 
 \letvalue{doloopifnum}=\doloopif
