@@ -16,7 +16,7 @@ echo "" >> "$LOGFILE"
 
 # Pole se seznamem adresářů
 directories=(
-  "Non-binding-tests"
+  "2PR-Batch"
 )
 
 # Seznam souborů, které se nesmí kompilovat

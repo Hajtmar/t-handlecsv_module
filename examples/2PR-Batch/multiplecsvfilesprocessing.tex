@@ -1,0 +1,24 @@
+
+\input ../incl_handlecsv_file.tex
+
+\unexpanded\def\lineaction{
+\cA -- \cB\crlf
+\page
+}
+
+\setsep{;}
+\setheader
+
+\starttext
+% more CSV files processing
+\filelineaction{mail1.csv}
+\filelineaction{mail2.csv}
+\filelineaction{mail3.csv}
+
+% OR:
+\dorecurse{3}{
+	\filelineaction{mail\recurselevel.csv}
+}
+
+
+\stoptext

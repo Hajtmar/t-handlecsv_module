@@ -1,0 +1,193 @@
+\input ../incl_handlecsv_file.tex % my option to switch versions
+
+\setuppapersize[A3,landscape]
+
+\setheader
+
+\opencsvfile{ctx-doc.csv}
+
+\def\typeandgetbuffers#1{
+{\bf Running  macro:}\hbox{\typebuffer[#1]}
+%\typebuffer[#1]
+\blank[big]
+{\bf Result:}\getbuffer[#1]\crlf%
+\hairline
+\blank[big]
+}
+
+\def\typeandgetanotherbuffers#1{
+\getbuffer[#1]\crlf%
+\hairline
+\blank[big]
+}
+
+\def\processbuff#1#2{\hbox{\typebuffer[#1]}
+\noindent Code:\type{#2}\par
+\noindent Result:#2\par
+\bigskip\hrule\bigskip
+}
+
+% operators: <, >, ==, ~=, >=, <=, eq, neq, in, ~in, repeatuntil, whiledo
+
+\starttext
+
+%\setupalign[flushleft,stretch=never]
+
+
+
+
+\startbuffer[A)]
+\doloopif{1}{==}{1}{\cB\cA, }
+\stopbuffer
+\typeandgetbuffers{A)}
+
+
+
+
+\startbuffer[A)]
+\doloopif{\cA}{==}{5}{\cB\cA, }
+\stopbuffer
+\typeandgetbuffers{A)}
+
+
+\startbuffer[A)]
+\doloopif{\cA}{==}{}{\cB\cA, }
+\stopbuffer
+\typeandgetbuffers{A)}
+
+
+\startbuffer[A)]
+\doloopif{\cA}{~=}{}{\cB\cA,\nobreakspace}
+\stopbuffer
+\typeandgetbuffers{A)}
+
+\startbuffer[A)]
+\dorecurse{5}{not a break before:\doloopif{\cA}{~=}{}{\recurselevel - \cB\cA,~}\blank}
+\stopbuffer
+\typeandgetbuffers{A)}
+
+\startbuffer[A)]
+\dorecurse{1}{not a break before:\doloopif{\cA}{~=}{}{\cB \cA, }\blank}
+\stopbuffer
+\typeandgetbuffers{A)}
+
+\startbuffer[A)]
+\dorecurse{1}{not a break before:\doloopif{\cB}{==}{colors-mkiv.pdf}{\cB\cA, }\blank}
+\stopbuffer
+\typeandgetbuffers{A)}
+
+
+\startbuffer[A)]
+\dorecurse{1}{not a break before:\doloopif{\cB}{~=}{colors-mkiv.pdf}{\cB\cA, }\blank}
+\stopbuffer
+\typeandgetbuffers{A)}
+
+\stoptext
+
+Compare numbers:
+
+\startbuffer[A)]
+\dorecurse{1}{not a break before:\doloopif{\cA}{==}{3}{\cB\cA, }}
+\stopbuffer
+\typeandgetbuffers{A)}
+
+
+\startbuffer[A)]
+\dorecurse{1}{not a break before:\doloopif{\cA}{~=}{3}{\cB\cA, }}
+\stopbuffer
+\typeandgetbuffers{A)}
+
+
+\startbuffer[A)]
+\dorecurse{1}{not a break before:\doloopif{\cA}{>=}{3}{\cB\cA, }}
+\stopbuffer
+\typeandgetbuffers{A)}
+
+
+\startbuffer[A)]
+\dorecurse{1}{not a break before:\doloopif{\cA}{<=}{3}{\cB\cA, }}
+\stopbuffer
+\typeandgetbuffers{A)}
+
+
+\startbuffer[A)]
+\dorecurse{1}{not a break before:\doloopif{\cA}{>}{3}{\cB\cA, }}
+\stopbuffer
+\typeandgetbuffers{A)}
+
+\startbuffer[A)]
+\dorecurse{1}{not a break before:\doloopif{\cA}{<}{3}{\cB\cA, }}
+\stopbuffer
+\typeandgetbuffers{A)}
+
+\startbuffer[A)]
+\dorecurse{1}{not a break before:\doloopif{\cA}{<>}{3}{\cB\cA, }}
+\stopbuffer
+\typeandgetbuffers{A)}
+
+
+\startbuffer[A)]
+\dorecurse{1}{not a break before:\doloopif{\cA}{=<}{3}{\cB\cA, }}
+\stopbuffer
+\typeandgetbuffers{A)}
+
+\startbuffer[A)]
+\dorecurse{1}{not a break before:\doloopif{\cA}{=>}{3}{\cB\cA, }}
+\stopbuffer
+\typeandgetbuffers{A)}
+
+
+
+
+
+\startbuffer[B)]
+{\ssa Operators testing:}\crlf
+
+\processbuff{Testing operátor '<':}{\dorecurse{1}{\doloopif{\cA}{<}{3}{\cB\cA, }}}
+
+\processbuff{Testing operátor '>':}{\dorecurse{1}{\doloopif{\cA}{>}{3}{\cB\cA, }}}
+
+\processbuff{Testing operátor '==':}{\dorecurse{1}{\doloopif{\cA}{==}{3}{\cB\cA, }}}
+
+\processbuff{Testing operátor '~=':}{\dorecurse{1}{\doloopif{\cA}{~=}{3}{\cB\cA, }}}
+
+\processbuff{Testing operátor '>=':}{\dorecurse{1}{\doloopif{\cA}{>=}{3}{\cB\cA, }}}
+
+\processbuff{Testing operátor '<=':}{\dorecurse{1}{\doloopif{\cA}{<=}{3}{\cB\cA, }}}
+
+\processbuff{Testing operátor '=<':}{\dorecurse{1}{\doloopif{\cA}{=<}{3}{\cB\cA, }}}
+
+\processbuff{Testing operátor '=>':}{\dorecurse{1}{\doloopif{\cA}{=>}{3}{\cB\cA, }}}
+
+\processbuff{Testing operátor '<>':}{\dorecurse{1}{\doloopif{\cA}{<>}{3}{\cB\cA, }}}
+
+\processbuff{Testing operátor 'eq':}{\dorecurse{1}{\doloopif{\cA}{eq}{3}{\cB\cA, }}}
+
+\processbuff{Testing operátor 'neq':}{\dorecurse{1}{\doloopif{\cA}{neq}{3}{\cB\cA, }}}
+
+\processbuff{Testing operátor 'in':}{\dorecurse{1}{\doloopif{mkiv}{in}{\cB}{\cB\cA, }}}
+
+\processbuff{Testing operátor '\type{~}in':}{\dorecurse{1}{\doloopif{i}{~in}{\cB}{\cB\cA, }}}
+
+\processbuff{Testing operátor 'repeatuntil':}{\setlinepointer{0}\dorecurse{1}{\doloopif{\cA}{repeatuntil}{3}{\cB\cA, }}}
+
+\processbuff{Testing operátor 'whiledo':}{\setlinepointer{0}\dorecurse{1}{\doloopif{\cA}{whiledo}{1}{\cB\cA, }}}
+
+\processbuff{Testing 'doloopuntil':}{\setlinepointer{0}\doloopuntil{2}{\cA}{\cB\cA, }}
+
+\processbuff{Testing 'repeatuntil':}{\setlinepointer{0}\dorecurse{1}{\repeatuntil{\cA}{3}{\cB\cA, }}}
+
+\processbuff{Testing 'doloopwhile':}{\setlinepointer{0}\dorecurse{1}{\doloopwhile{\cA}{1}{\cB\cA, }}}
+
+\processbuff{Testing 'whiledo':}{\setlinepointer{0}\dorecurse{1}{\whiledo{\cA}{1}{\cB\cA, }}}
+
+\stopbuffer
+
+\typeandgetanotherbuffers{B)}
+
+
+
+
+\stoptext
+
+

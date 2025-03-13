@@ -1,85 +1,20 @@
-Log kompilace spuštěn: 2025-03-06 02:16:42.N
+Log kompilace spuštěn: 2025-03-08 02:11:54.N
 
 -----------------------------------------------------
-Zpracovávám adresář: Non-binding-tests
-Adresář: Non-binding-tests
-Začátek zpracování adresáře: 2025-03-06 02:16:42.N
- - 2conf-correction.tex
- - 2conf.tex
- - 2maillist-ans.tex
- - 2maillist-ans2.tex
- - 2maillist.tex
- - 2maillist2.tex
- - countriesandcities.tex
- - countriesandcities02.tex
- - first_tests01.tex
- - first_tests02.tex
- - optdeftest.tex
- - test_command.tex
- - testing01.tex
- - testy_maker01.tex
- - testy_maker02.tex
+Zpracovávám adresář: 2PR-Batch
+Adresář: 2PR-Batch
+Začátek zpracování adresáře: 2025-03-08 02:11:54.N
+ - multiplecsvfilesprocessing.tex
+ - source_generator.tex
 -----------------------------------------------------
-Kompiluji soubor: 2conf-correction.tex
-Kompilace souboru 2conf-correction.tex trvala: 0 sekund
-Přesouvám 2conf-correction.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results/
+Kompiluji soubor: multiplecsvfilesprocessing.tex
+Kompilace souboru multiplecsvfilesprocessing.tex trvala: 1.0 sekund
+Přesouvám multiplecsvfilesprocessing.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results/
 -----------------------------------------------------
-Kompiluji soubor: 2conf.tex
-Kompilace souboru 2conf.tex trvala: 1.0 sekund
-Přesouvám 2conf.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results/
------------------------------------------------------
-Kompiluji soubor: 2maillist-ans.tex
-Kompilace souboru 2maillist-ans.tex trvala: 1.0 sekund
-Přesouvám 2maillist-ans.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results/
------------------------------------------------------
-Kompiluji soubor: 2maillist-ans2.tex
-Kompilace souboru 2maillist-ans2.tex trvala: 0 sekund
-Přesouvám 2maillist-ans2.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results/
------------------------------------------------------
-Kompiluji soubor: 2maillist.tex
-Kompilace souboru 2maillist.tex trvala: 1.0 sekund
-Přesouvám 2maillist.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results/
------------------------------------------------------
-Kompiluji soubor: 2maillist2.tex
-Kompilace souboru 2maillist2.tex trvala: 0 sekund
-Přesouvám 2maillist2.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results/
------------------------------------------------------
-Kompiluji soubor: countriesandcities.tex
-Kompilace souboru countriesandcities.tex trvala: 1.0 sekund
-Přesouvám countriesandcities.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results/
------------------------------------------------------
-Kompiluji soubor: countriesandcities02.tex
-Kompilace souboru countriesandcities02.tex trvala: 1.0 sekund
-Přesouvám countriesandcities02.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results/
------------------------------------------------------
-Kompiluji soubor: first_tests01.tex
-Kompilace souboru first_tests01.tex trvala: 1.0 sekund
-Přesouvám first_tests01.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results/
------------------------------------------------------
-Kompiluji soubor: first_tests02.tex
-Kompilace souboru first_tests02.tex trvala: 1.0 sekund
-Přesouvám first_tests02.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results/
------------------------------------------------------
-Kompiluji soubor: optdeftest.tex
-Kompilace souboru optdeftest.tex trvala: 0 sekund
-Přesouvám optdeftest.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results/
------------------------------------------------------
-Kompiluji soubor: test_command.tex
-Kompilace souboru test_command.tex trvala: 1.0 sekund
-Přesouvám test_command.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results/
------------------------------------------------------
-Kompiluji soubor: testing01.tex
-Kompilace souboru testing01.tex trvala: 0 sekund
-Přesouvám testing01.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results/
------------------------------------------------------
-Kompiluji soubor: testy_maker01.tex
-Kompilace souboru testy_maker01.tex trvala: 1.0 sekund
-Přesouvám testy_maker01.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results/
------------------------------------------------------
-Kompiluji soubor: testy_maker02.tex
-Kompilace souboru testy_maker02.tex trvala: 1.0 sekund
-Přesouvám testy_maker02.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results/
+Kompiluji soubor: source_generator.tex
+Kompilace souboru source_generator.tex trvala: 1.0 sekund
+Přesouvám source_generator.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results/
 
 -----------------------------------------------------
-Kompilace dokončena: 2025-03-06 02:16:52.N
-Celkový čas zpracování všech souborů: 10.0 sekund
+Kompilace dokončena: 2025-03-08 02:11:56.N
+Celkový čas zpracování všech souborů: 2.0 sekund

@@ -1,0 +1,14 @@
+\usemodule[database]
+
+\starttext
+
+\defineseparatedlist
+ [test]
+ [separator=;, % tab
+  before=\bTABLE,after=\eTABLE,
+  first=\bTR,last=\eTR,
+  left=\bTD,right=\eTD]
+
+\processdatabasefile[test][ctx-doc.csv]
+
+\stoptext

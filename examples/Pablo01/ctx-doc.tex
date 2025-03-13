@@ -21,10 +21,10 @@
 \blank[big]
 }
 
-\def\processbuff#1#2{\hbox{\typebuffer[#1]}
-\noindent Code:\type{#2}\par
-\noindent Result:#2\par
-\bigskip\hrule\bigskip
+\def\processbuff#1#2{\hbox{\typebuffer[#1]}%
+\noindent {{\bf\type{Code}}}:\type{#2}\crlf%
+\noindent {\em Result}:#2\crlf%
+\bigskip\hrule\bigskip%
 }
 
 % operators: <, >, ==, ~=, >=, <=, eq, neq, in, ~in, repeatuntil, whiledo
@@ -34,46 +34,195 @@
 %\setupalign[flushleft,stretch=never]
 
 
+\hooksoff
+
+AAA
+
+1.
+
+\bfilehook
+\efilehook
+
+2.
+
+\resethooks
+
+3.
+
+\bfilehook
+\efilehook
+
+4.
+
+\def\bfilehook{{\bf AAAAA}}
+\def\efilehook{{\bf BBBBB}}
+
+5.
+
+\bfilehook
+\efilehook
+
+6.
+
+\resethooks
+%\resetoriginalhooks
+
+7.
+
+\bfilehook
+\efilehook
 
 
+
+
+
+\def\mojemakro{AA}
+
+\startluacode
+  local mojemakrocontent = token.get_macro("mojemakro") or ""
+  if content == "" then
+    tex.sprint("Macro \\type{\\mojemakro} is empty.")
+  else
+    tex.sprint("Macro \\type{\\mojemakro} expands to: " .. mojemakrocontent)
+  end
+\stopluacode
+
+
+\doloopfromto{1}{6}{nic}
+\def\NIC{NIC}
+\doloopfromto{1}{6}{\NIC}
+
+
+
+\doloopif{1}{==}{1}{nic}%
+
+\doloopif{1}{==}{1}{\NIC}%
+
+
+POKUS
+
+\thinrule
+
+\hookson
+
+
+\opencsvfile{ctx-doc.csv}
+
+\def\bfilehook{bTABLE }
+\def\efilehook{eTABLE }
+\def\blinehook{bTR}
+\def\elinehook{eTR}
+\def\bch{bTD }
+\def\ech{eTD}
+
+\def\lineaction{\cA}
+\doloopforall
+
+
+\hooksoff
+
+
+\thinrule
+
+NEXT
+
+\doloopfornext{3}{\NIC}
+
+
+
+
+
+\thinrule
+
+% Cycle (Loop) Macros:
+%   \doloopfromto{<start>}{<end>}{<action>}
+%      - Executes <action> for each row from <start> to <end>.
+%   \doloopforall, \doloopforall{<action>}
+%      - Executes <action> for all rows (defaults to \lineaction if omitted).
+%   \doloopaction, \doloopaction{<action>}, \doloopaction{<action>}{<end>},
+%      \doloopaction{<action>}{<start>}{<end>}
+%      - Executes <action> for a specified range of rows.
+%   \doloopif{<val1>}{<operator>}{<val2>}{<action>}
+%      - Executes <action> on rows satisfying the comparison condition.
+%      (Synonym: \doloopifnum for numeric comparisons.)
+%   \doloopuntil{<val1>}{<val2>}{<action>}
+%      - Repeats <action> until <val1> equals <val2> (alias: \repeatuntil).
+%   \doloopwhile{<val1>}{<val2>}{<action>}
+%      - Repeats <action> while <val1> equals <val2> (alias: \whiledo).
+%   \filelineaction, \filelineaction{<file>}
+%      - Executes \lineaction for all rows of the specified CSV file.
+%   \doloopfornext{<n>}{<action>}
+%      - Executes <action> for the next <n> rows starting from the current row.
+
+
+doloopfromto{<start>}{<end>}{<action>}
+
+\doloopfromto{2}{4}{\cA xxx \cB zzz \crlf}
+
+
+doloopforall{<action>}
+
+\doloopforall{\cA xxx \cB zzz \crlf}
+
+
+\def\lineaction{mmmm \cB xxx \cA zzz \crlf}
+
+doloopaction
+
+\doloopaction
+
+
+doloopaction{<action>}
+
+\doloopaction{\cA xxx \cB zzz \crlf}
+
+doloopaction{<action>}{<end>}
+
+\doloopaction{\cA xxx \cB zzz \crlf}{4}
+
+doloopaction{<action>}{<start>}{<end>}
+
+\doloopaction{\cA xxx \cB zzz \crlf}{3}{6}
 
 
 
 \startbuffer[A)]
-\doloopif{\cA}{==}{5}{\cB\cA, }
+\doloopif{\cA}{==}{5}{\cB\cA}%
 \stopbuffer
 \typeandgetbuffers{A)}
 
 
 \startbuffer[A)]
-\doloopif{\cA}{==}{}{\cB\cA, }
+\setlinepointer{0}
+\doloopif{\cA}{==}{}{\cB\cA}%
 \stopbuffer
 \typeandgetbuffers{A)}
 
 
 \startbuffer[A)]
-\doloopif{\cA}{~=}{}{\cB\cA,\nobreakspace}
+\setlinepointer{0}
+\doloopif{\cA}{~=}{}{\cB\cA}%
 \stopbuffer
 \typeandgetbuffers{A)}
 
 \startbuffer[A)]
-\dorecurse{5}{not a break before:\doloopif{\cA}{~=}{}{\cB\cA,~}\blank}
+\dorecurse{5}{not a break before:\doloopif{\cA}{~=}{}{\cB\cA}\blank}%
 \stopbuffer
 \typeandgetbuffers{A)}
 
 \startbuffer[A)]
-\dorecurse{1}{not a break before:\doloopif{\cA}{~=}{}{\cB \cA, }\blank}
+\dorecurse{1}{not a break before:\doloopif{\cA}{~=}{}{\cB \cA}\blank}
 \stopbuffer
 \typeandgetbuffers{A)}
 
 \startbuffer[A)]
-\dorecurse{1}{not a break before:\doloopif{\cB}{==}{colors-mkiv.pdf}{\cB\cA, }\blank}
+\dorecurse{1}{not a break before:\doloopif{\cB}{==}{colors-mkiv.pdf}{\cB\cA}\blank}
 \stopbuffer
 \typeandgetbuffers{A)}
 
 
 \startbuffer[A)]
-\dorecurse{1}{not a break before:\doloopif{\cB}{~=}{colors-mkiv.pdf}{\cB\cA, }\blank}
+\dorecurse{1}{not a break before:\doloopif{\cB}{~=}{colors-mkiv.pdf}{\cB\cA}\blank}
 \stopbuffer
 \typeandgetbuffers{A)}
 
@@ -81,106 +230,234 @@
 Compare numbers:
 
 \startbuffer[A)]
-\dorecurse{1}{not a break before:\doloopif{\cA}{==}{3}{\cB\cA, }}
+\dorecurse{1}{not a break before:\doloopif{\cA}{==}{3}{\cB\cA}}
 \stopbuffer
 \typeandgetbuffers{A)}
 
 
 \startbuffer[A)]
-\dorecurse{1}{not a break before:\doloopif{\cA}{~=}{3}{\cB\cA, }}
+\dorecurse{1}{not a break before:\doloopif{\cA}{~=}{3}{\cB\cA}}
 \stopbuffer
 \typeandgetbuffers{A)}
 
 
 \startbuffer[A)]
-\dorecurse{1}{not a break before:\doloopif{\cA}{>=}{3}{\cB\cA, }}
+\dorecurse{1}{not a break before:\doloopif{\cA}{>=}{3}{\cB\cA}}
 \stopbuffer
 \typeandgetbuffers{A)}
 
 
 \startbuffer[A)]
-\dorecurse{1}{not a break before:\doloopif{\cA}{<=}{3}{\cB\cA, }}
+\dorecurse{1}{not a break before:\doloopif{\cA}{<=}{3}{\cB\cA}}
 \stopbuffer
 \typeandgetbuffers{A)}
 
 
 \startbuffer[A)]
-\dorecurse{1}{not a break before:\doloopif{\cA}{>}{3}{\cB\cA, }}
+\dorecurse{1}{not a break before:\doloopif{\cA}{>}{3}{\cB\cA}}
 \stopbuffer
 \typeandgetbuffers{A)}
 
 \startbuffer[A)]
-\dorecurse{1}{not a break before:\doloopif{\cA}{<}{3}{\cB\cA, }}
+\dorecurse{1}{not a break before:\doloopif{\cA}{<}{3}{\cB\cA}}
 \stopbuffer
 \typeandgetbuffers{A)}
 
 \startbuffer[A)]
-\dorecurse{1}{not a break before:\doloopif{\cA}{<>}{3}{\cB\cA, }}
+\dorecurse{1}{not a break before:\doloopif{\cA}{<>}{3}{\cB\cA}}
 \stopbuffer
 \typeandgetbuffers{A)}
 
 
 \startbuffer[A)]
-\dorecurse{1}{not a break before:\doloopif{\cA}{=<}{3}{\cB\cA, }}
+\dorecurse{1}{not a break before:\doloopif{\cA}{=<}{3}{\cB\cA}}
 \stopbuffer
 \typeandgetbuffers{A)}
 
 \startbuffer[A)]
-\dorecurse{1}{not a break before:\doloopif{\cA}{=>}{3}{\cB\cA, }}
+\dorecurse{1}{not a break before:\doloopif{\cA}{=>}{3}{\cB\cA}}
 \stopbuffer
 \typeandgetbuffers{A)}
 
 
+\type{\dorecurse{1}{\doloopif{\cA}{<}{3}{\cB\cA}}}
+
+\doloopif{\cA}{<}{3}{\cB\cA}
+
+
+
+
+
+\blank[2*big]
 
 
 
 \startbuffer[B)]
 {\ssa Operators testing:}\crlf
 
-\processbuff{Testing operátor '<':}{\dorecurse{1}{\doloopif{\cA}{<}{3}{\cB\cA, }}}
+\processbuff{Testing operátor '<':}{\dorecurse{1}{\doloopif{\cA}{<}{3}{\cB\cA}}}
 
-\processbuff{Testing operátor '>':}{\dorecurse{1}{\doloopif{\cA}{>}{3}{\cB\cA, }}}
+\processbuff{Testing operátor '>':}{\dorecurse{1}{\doloopif{\cA}{>}{3}{\cB\cA}}}%
 
-\processbuff{Testing operátor '==':}{\dorecurse{1}{\doloopif{\cA}{==}{3}{\cB\cA, }}}
+\processbuff{Testing operátor '==':}{\dorecurse{1}{\doloopif{\cA}{==}{3}{\cB\cA}}}%
 
-\processbuff{Testing operátor '~=':}{\dorecurse{1}{\doloopif{\cA}{~=}{3}{\cB\cA, }}}
+\processbuff{Testing operátor '~=':}{\dorecurse{1}{\doloopif{\cA}{~=}{3}{\cB\cA}}}
 
-\processbuff{Testing operátor '>=':}{\dorecurse{1}{\doloopif{\cA}{>=}{3}{\cB\cA, }}}
+\processbuff{Testing operátor '>=':}{\dorecurse{1}{\doloopif{\cA}{>=}{3}{\cB\cA}}}
 
-\processbuff{Testing operátor '<=':}{\dorecurse{1}{\doloopif{\cA}{<=}{3}{\cB\cA, }}}
+\processbuff{Testing operátor '<=':}{\dorecurse{1}{\doloopif{\cA}{<=}{3}{\cB\cA}}}
 
-\processbuff{Testing operátor '=<':}{\dorecurse{1}{\doloopif{\cA}{=<}{3}{\cB\cA, }}}
+\processbuff{Testing operátor '=<':}{\dorecurse{1}{\doloopif{\cA}{=<}{3}{\cB\cA}}}
 
-\processbuff{Testing operátor '=>':}{\dorecurse{1}{\doloopif{\cA}{=>}{3}{\cB\cA, }}}
+\processbuff{Testing operátor '=>':}{\dorecurse{1}{\doloopif{\cA}{=>}{3}{\cB\cA}}}
 
-\processbuff{Testing operátor '<>':}{\dorecurse{1}{\doloopif{\cA}{<>}{3}{\cB\cA, }}}
+\processbuff{Testing operátor '<>':}{\dorecurse{1}{\doloopif{\cA}{<>}{3}{\cB\cA}}}
 
-\processbuff{Testing operátor 'eq':}{\dorecurse{1}{\doloopif{\cA}{eq}{3}{\cB\cA, }}}
+\processbuff{Testing operátor 'eq':}{\dorecurse{1}{\doloopif{\cA}{eq}{3}{\cB\cA}}}
 
-\processbuff{Testing operátor 'neq':}{\dorecurse{1}{\doloopif{\cA}{neq}{3}{\cB\cA, }}}
+\processbuff{Testing operátor 'neq':}{\dorecurse{1}{\doloopif{\cA}{neq}{3}{\cB\cA}}}
 
-\processbuff{Testing operátor 'in':}{\dorecurse{1}{\doloopif{mkiv}{in}{\cB}{\cB\cA, }}}
+\processbuff{Testing operátor 'in':}{\dorecurse{1}{\doloopif{mkiv}{in}{\cB}{\cB\cA}}}
 
-\processbuff{Testing operátor '\type{~}in':}{\dorecurse{1}{\doloopif{i}{~in}{\cB}{\cB\cA, }}}
+\processbuff{Testing operátor '\type{~}in':}{\dorecurse{1}{\doloopif{i}{~in}{\cB}{\cB\cA}}}
 
-\processbuff{Testing operátor 'repeatuntil':}{\setlinepointer{0}\dorecurse{1}{\doloopif{\cA}{repeatuntil}{3}{\cB\cA, }}}
+\processbuff{Testing operátor 'repeatuntil':}{\setlinepointer{0}\dorecurse{1}{\doloopif{\cA}{repeatuntil}{3}{\cB\cA}}}
 
-\processbuff{Testing operátor 'whiledo':}{\setlinepointer{0}\dorecurse{1}{\doloopif{\cA}{whiledo}{1}{\cB\cA, }}}
+\processbuff{Testing operátor 'whiledo':}{\setlinepointer{0}\dorecurse{1}{\doloopif{\cA}{whiledo}{1}{\cB\cA}}}
 
-\processbuff{Testing 'doloopuntil':}{\setlinepointer{0}\doloopuntil{2}{\cA}{\cB\cA, }}
+\processbuff{Testing 'doloopuntil':}{\setlinepointer{0}\doloopuntil{2}{\cA}{\cB\cA}}
 
-\processbuff{Testing 'repeatuntil':}{\setlinepointer{0}\dorecurse{1}{\repeatuntil{\cA}{3}{\cB\cA, }}}
+\processbuff{Testing 'repeatuntil':}{\setlinepointer{0}\dorecurse{1}{\repeatuntil{\cA}{3}{\cB\cA}}}
 
-\processbuff{Testing 'doloopwhile':}{\setlinepointer{0}\dorecurse{1}{\doloopwhile{\cA}{1}{\cB\cA, }}}
+\processbuff{Testing 'doloopwhile':}{\setlinepointer{0}\dorecurse{1}{\doloopwhile{\cA}{1}{\cB\cA}}}
 
-\processbuff{Testing 'whiledo':}{\setlinepointer{0}\dorecurse{1}{\whiledo{\cA}{1}{\cB\cA, }}}
+\processbuff{Testing 'whiledo':}{\setlinepointer{0}\dorecurse{1}{\whiledo{\cA}{1}{\cB\cA}}}
 
 \stopbuffer
 
 \typeandgetanotherbuffers{B)}
 
 
+\thinrule
 
+\resethooks
+\hooksoff
+
+\opencsvfile{ctx-doc.csv}
+
+
+
+\resetnumline
+\def\lineaction{\expanded{\bTR\bTD\cA\eTD\bTD\cB\eTD\eTR}}
+
+\def\emptyrow#1{\bTR\bTD[nc=2,width=.5\textwidth] \type{#1} \eTD\eTR}
+
+
+
+
+\bTABLE
+\bTR\bTD ID\eTD\bTD PDF\eTD\eTR
+
+%http://wiki.contextgarden.net/System_Macros/Loops_and_Recursion
+
+\emptyrow{\doloopfromto{3}{5}{\expanded{\bTR\bTD\cA\eTD\bTD\cB\eTD\eTR}}}
+\doloopfromto{3}{5}{\expanded{\bTR\bTD\cA\eTD\bTD\cB\eTD\eTR}}
+
+
+\emptyrow{\doloopif{\cA}{<}{4}{\expanded{\bTR\bTD\cA\eTD\bTD\cB\eTD\eTR}}}
+\doloopif{\cA}{<}{4}{\expanded{\bTR\bTD\cA\eTD\bTD\cB\eTD\eTR}}
+
+
+\emptyrow{\doloopif{\cA}{<}{4}{\lineaction}}
+\doloopif{\cA}{<}{4}{\lineaction}
+
+
+\emptyrow{\doloopaction}
+\doloopaction
+
+
+
+\emptyrow{\doloopaction{\expanded{\bTR\bTD\cA\eTD\bTD\cB\eTD\eTR}}}
+\doloopaction{\expanded{\bTR\bTD\cA\eTD\bTD\cB\eTD\eTR}}
+
+
+\emptyrow{\doloopaction{\expanded{\bTR\bTD\cA\eTD\bTD\cB\eTD\eTR}}{3}}
+\doloopaction{\expanded{\bTR\bTD\cA\eTD\bTD\cB\eTD\eTR}}{3}
+
+
+\emptyrow{\doloopaction{\expanded{\bTR\bTD\cA\eTD\bTD\cB\eTD\eTR}}{2}{4}}
+\doloopaction{\expanded{\bTR\bTD\cA\eTD\bTD\cB\eTD\eTR}}{2}{4} % OK
+
+\eTABLE
+
+\page
+
+\bTABLE
+\bTR\bTD ID\eTD\bTD PDF\eTD\eTR
+
+\emptyrow{\setnumline{4}\doloop{\lineaction\nextrow\ifnum\recurselevel>2 \exitloop \fi}}
+\setnumline{4}
+\doloop{\lineaction\nextrow\ifnum\recurselevel>2 \exitloop \fi}
+
+
+\emptyrow{\doloopforall}
+\doloopforall
+
+
+
+\emptyrow{\setnumline{2}\doloop{\ifEOF\exitloop\else\lineaction\nextrow\fi}}
+\setnumline{2}
+\doloop{\ifEOF\exitloop\else\lineaction\nextrow\fi}
+
+
+\emptyrow{\setnumline{2}\doloop{\ifnotEOF\lineaction\readrow\else\exitloop\fi}}
+\setnumline{2}
+\doloop{\ifnotEOF\lineaction\readrow\else\exitloop\fi}
+
+
+\eTABLE
+
+\thinrule
+
+\closecsvfile{ctx-doc.csv}
+\unsetheader
+\opencsvfile{ctx-doc.csv}
+\filelineaction
+
+
+\closecsvfile{ctx-doc.csv}
+\setheader
+\opencsvfile{ctx-doc.csv}
+\filelineaction
+
+\thinrule
+
+
+\closecsvfile{ctx-doc.csv}
+\hookson
+\unsetheader
+\opencsvfile{ctx-doc.csv}
+
+
+% Vše zařizuje zapnuté hookování...
+\def\bfilehook{\bTABLE}
+\def\efilehook{\eTABLE}
+\def\blinehook{\bTR}
+\def\elinehook{\eTR}
+
+\doloopfromto{1}{5}{\expanded{\bTD \cA\eTD \bTD \cB\eTD}}
+
+\thinrule
+
+\closecsvfile{ctx-doc.csv}
+\setheader
+\hooksoff
+\opencsvfile{ctx-doc.csv}
+
+\doloopfornext{3}{\expanded{ \cA \cB}}
+
+
+\thinrule
 
 \stoptext
 

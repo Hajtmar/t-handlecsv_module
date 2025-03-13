@@ -931,19 +931,16 @@ end
 -- Looping functions (cycles):
 --------------------------------------------------------------------------------
 
+-- New fast version of basic function
 function H.doloopfromto(from, to, action)
   local output = {}
   local function append(s) table.insert(output, s) end
-
-  -- Zahájení: otevření CSV, uložení čítače a reset čítače
-  append([[ \opencsvfile ]])
-  append([[ \edef\tempnumline{\numline} ]])
-  append([[ \resetnumline ]])
+  append([[\opencsvfile ]])
+  append([[\edef\tempnumline{\numline}]])
+  append([[\resetnumline ]])
 
   local hooks = H.gUseHooks
-  if hooks then
-    append([[ \bfilehook ]])
-  end
+  if hooks then append([[\bfilehook ]]) end
 
   local csvfile = H.getcurrentcsvfilename()
   local maxr = H.gNumRows[csvfile] or 0
@@ -964,23 +961,19 @@ function H.doloopfromto(from, to, action)
       if f < 1 then f = 1 end
     end
     for i = f, t, step do
-      if hooks then append([[ \blinehook ]]) end
+      if hooks then append([[\blinehook ]]) end
       append("\\readline{" .. i .. "}")
-      append("\\removeunwantedspaces "..action)
---      append(action)
+      append("\\removeunwantedspaces "..action) -- it was append(action)
       if hooks then append([[ \elinehook ]]) end
     end
   end
-  if hooks then
-    append([[ \efilehook ]])
-  end
-  append([[ \setnumline{\tempnumline} ]])
-
+  if hooks then append([[\efilehook ]]) end
+  append([[\setnumline{\tempnumline}]])
   tex.sprint(table.concat(output))
 end
 
 
-
+-- Old version of basic function
 function H.doloopfromtooriginal(from, to, action)
   H.opencsvfile()
   local tempnumline = H.numline()
@@ -1007,7 +1000,8 @@ function H.doloopfromtooriginal(from, to, action)
     for i = f, t, step do
       H.inserthook("blinehook")
       H.readline(i)
-      tex.sprint(action)
+      tex.sprint("\\removeunwantedspaces "..action)
+--      tex.sprint(action)
       H.inserthook("elinehook")
     end
   end
@@ -1017,6 +1011,7 @@ function H.doloopfromtooriginal(from, to, action)
 end
 
 
+-- Old version of basic function
 function H.doloopfornextoriginal(numberofrows, action)
   H.inserthook("bfilehook")
   tex.sprint([[\removeunwantedspaces]])
@@ -1044,6 +1039,9 @@ function H.doloopfornextoriginal(numberofrows, action)
   tex.sprint([[\nextrow]])
 end
 
+
+
+-- New fast version of basic function
 function H.doloopfornext(numberofrows, action)
   local csvfile = H.getcurrentcsvfilename()
   local from = H.gCurrentLinePointer[csvfile] or 1
@@ -1055,6 +1053,8 @@ end
 
 
 
+
+-- Actually in testing
 function H.xdoloopif(first, op, third, action)
     H.opencsvfile()
     local tempnumline = H.numline()
@@ -1186,6 +1186,9 @@ local string2print = [[%
 \newif\ifemptylinesnotmarking
 
 \let\lineaction\empty
+%\def\resethooks{\ctxlua{context(thirddata.handlecsv.resethooks())}}
+%\resethooks % -- DO IT NOW !!!
+
 \def\hookson{\ctxlua{tex.sprint(thirddata.handlecsv.hookson())}}
 \let\usehooks\hookson
 \def\hooksoff{\ctxlua{tex.sprint(thirddata.handlecsv.hooksoff())}}
