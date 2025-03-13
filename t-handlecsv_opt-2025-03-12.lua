@@ -936,14 +936,12 @@ function H.doloopfromto(from, to, action)
   local function append(s) table.insert(output, s) end
 
   -- Zahájení: otevření CSV, uložení čítače a reset čítače
-  append([[ \opencsvfile ]])
-  append([[ \edef\tempnumline{\numline} ]])
-  append([[ \resetnumline ]])
+  append([[\opencsvfile]])
+  append([[\edef\tempnumline{\numline}]])
+  append([[\resetnumline]])
 
   local hooks = H.gUseHooks
-  if hooks then
-    append([[ \bfilehook ]])
-  end
+  if hooks then append([[\bfilehook]]) end
 
   local csvfile = H.getcurrentcsvfilename()
   local maxr = H.gNumRows[csvfile] or 0
@@ -963,18 +961,17 @@ function H.doloopfromto(from, to, action)
       if t > maxr then t = maxr end
       if f < 1 then f = 1 end
     end
+    if hooks then append([[\blinehook]]) end
     for i = f, t, step do
-      if hooks then append([[ \blinehook ]]) end
+      if hooks then append([[\bch]]) end
       append("\\readline{" .. i .. "}")
       append("\\removeunwantedspaces "..action)
---      append(action)
-      if hooks then append([[ \elinehook ]]) end
+      if hooks then append([[\ech]]) end
     end
+    if hooks then append([[\elinehook]]) end
   end
-  if hooks then
-    append([[ \efilehook ]])
-  end
-  append([[ \setnumline{\tempnumline} ]])
+  if hooks then append([[\efilehook]]) end
+  append([[\setnumline{\tempnumline}]])
 
   tex.sprint(table.concat(output))
 end

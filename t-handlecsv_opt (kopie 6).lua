@@ -966,8 +966,7 @@ function H.doloopfromto(from, to, action)
     for i = f, t, step do
       if hooks then append([[ \blinehook ]]) end
       append("\\readline{" .. i .. "}")
-      append("\\removeunwantedspaces "..action)
---      append(action)
+      append(action)
       if hooks then append([[ \elinehook ]]) end
     end
   end
@@ -975,6 +974,53 @@ function H.doloopfromto(from, to, action)
     append([[ \efilehook ]])
   end
   append([[ \setnumline{\tempnumline} ]])
+
+  tex.sprint(table.concat(output))
+end
+
+
+
+function H.doloopfromtoappend1(from, to, action)
+  local output = {}
+  local function append(s) table.insert(output, s) end
+
+  -- Zahájení: otevření CSV, uložení čítače a reset čítače
+  append([[\opencsvfile]])
+  append([[\edef\tempnumline{\numline}]])
+  append([[\resetnumline]])
+
+  local hooks = H.gUseHooks
+  if hooks then append([[\bfilehook]]) end
+
+  local csvfile = H.getcurrentcsvfilename()
+  local maxr = H.gNumRows[csvfile] or 0
+  local f = from + 0
+  local t = to + 0
+  local step = 1
+  local docycle = true
+  if (f > maxr and t > maxr) then
+    docycle = false
+  end
+  if docycle then
+    if f > t then
+      step = -1
+      if f > maxr then f = maxr end
+      if t < 1 then t = 1 end
+    else
+      if t > maxr then t = maxr end
+      if f < 1 then f = 1 end
+    end
+    if hooks then append([[\blinehook]]) end
+    for i = f, t, step do
+--      if hooks then append([[\bch]]) end
+      append("\\readline{" .. i .. "}")
+      append("\\removeunwantedspaces "..action)
+--      if hooks then append([[\ech]]) end
+    end
+    if hooks then append([[\elinehook]]) end
+  end
+  if hooks then append([[\efilehook]]) end
+  append([[\setnumline{\tempnumline}]])
 
   tex.sprint(table.concat(output))
 end
