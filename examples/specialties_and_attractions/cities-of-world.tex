@@ -1,7 +1,7 @@
 
 \input ../incl_handlecsv_file.tex
 
-\def\numcountries{\numrowsof[countries.csv]}
+\def\numcountries{\numrowsof[selectedcountries.csv]}
 \def\numcities{\numrowsof[cities.csv]}
 
 
@@ -25,21 +25,21 @@
 
 \title{Example of together using of two opened CSV files at the same time}
 
-CSV file \type{countries.csv} consist of information about countries, file \type{cities.csv} consist of information about cities.
-Relation is mediated through the country abbreviation field \type{Abbrev}  (in \type{countries.csv}) and field \type{CountryAbbrev} (in \type{cities.csv} file).
+CSV file \type{selectedcountries.csv} consist of information about countries, file \type{cities.csv} consist of information about cities.
+Relation is mediated through the country abbreviation field \type{Abbrev}  (in \type{selectedcountries.csv}) and field \type{CountryAbbrev} (in \type{cities.csv} file).
 
 \blank[big]
 
 % Open two CSV files at one time together
 \setheader
 \opencsvfile{cities.csv}
-\opencsvfile{countries.csv}
+\opencsvfile{selectedcountries.csv}
 
 
-\dorecurse{\numcountries}{ % For all countries from countries.csv file DO:
-    \edef\abbrevcountry{\getcsvcellof[countries.csv]['Abbrev',\recurselevel]}
+\dorecurse{\numcountries}{ % For all countries from selectedcountries.csv file DO:
+    \edef\abbrevcountry{\getcsvcellof[selectedcountries.csv]['Abbrev',\recurselevel]}
 
-	{\bf \recursedepth.\recurselevel\  Cities of \getcsvcellof[countries.csv]['Country',\recurselevel] -- \abbrevcountry:}
+	{\bf \recursedepth.\recurselevel\  Cities of \getcsvcellof[selectedcountries.csv]['Country',\recurselevel] -- \abbrevcountry:}
 
 	\blank[big]
 
