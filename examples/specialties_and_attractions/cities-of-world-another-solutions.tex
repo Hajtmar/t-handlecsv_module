@@ -24,9 +24,9 @@
 
 \setheader
 \opencsvfile{cities.csv}
-\opencsvfile{countries.csv}
+\opencsvfile{selectedcountries.csv}
 
-\dorecurse{\numrowsof[countries.csv]}{
+\dorecurse{\numrowsof[selectedcountries.csv]}{
 
 \readline{\recurselevel}
 \midaligned{\ssb List of biggest cities of \Country\ -- \Abbrev}

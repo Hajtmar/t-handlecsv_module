@@ -19,18 +19,20 @@ echo "" >> "$LOGFILE"
 
 # Seznam konkrétních souborů ke kompilaci (včetně přípony .tex)
 files=(
-     calculations_in_table01.tex ## kompilovat jako test funkčnosti.
-     2m4CM_programme.tex
-     m3TE_programme.tex
-     listofparticipants-ctm_and_te.tex
-     test01-general.tex
-     cykly-test-008.tex
-     cykly-test-007.tex
-     test02-hooks.tex
-     countriesandcities03.tex
-    countriesandcities02.tex # je zajímavé, že tento soubor nejde zkompilovat tímto skriptem, nicméně přímo ve složce ano...
-    letter01.tex
-    testy_maker01.tex
+     calculations_in_the_table.tex # specialities - kompilovat jako test funkčnosti.
+     cities-of-world.tex # specialities - kompilovat jako test funkčnosti.
+     cities-of-world-another-solutions.tex  # specialities - kompilovat jako test funkčnosti.
+     2m4CM_programme.tex # kompilovat jako test funkčnosti.
+     big_test_of_library_macros.tex # kompilovat jako test funkčnosti.
+#     m3TE_programme.tex
+#     listofparticipants-ctm_and_te.tex
+#     test01-general.tex
+#     cykly-test-008.tex
+#     cykly-test-007.tex
+#     test02-hooks.tex
+
+#    letter01.tex
+#    testy_maker01.tex
     #countriesandcities.tex
     #loopstests01.tex
     #test-nolibrary01.tex

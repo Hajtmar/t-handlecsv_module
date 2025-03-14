@@ -1,0 +1,15 @@
+Row ID;Order ID;Order Date;Order Priority;Order Quantity;Sales;Discount;Ship Mode;Profit;Unit Price;Shipping Cost;Customer Name;Province;Region;Customer Segment;Product Category;Product Sub-Category;Product Name;Product Container;Product Base Margin;Ship Date
+80;483;10.07.11;High;30;4965,7595;0,08;Regular Air;1198,97;195,99;3,99;Clay Rozendal;Nunavut;Nunavut;Corporate;Technology;Telephones and Communication;R380;Small Box;0,58;12.07.11
+85;515;28.08.10;Not Specified;19;394,27;0,08;Regular Air;30,94;21,78;5,94;Carlos Soltero;Nunavut;Nunavut;Consumer;Office Supplies;Appliances;Holmes HEPA Air Purifier;Medium Box;0,5;30.08.10
+98;613;17.06.11;High;22;905,08;0,09;Regular Air;127,7;42,76;6,22;Carl Jackson;Nunavut;Nunavut;Corporate;Office Supplies;Storage & Organization;SAFCO Mobile Desk Side File, Wire Frame;Small Box;;18.06.11
+103;643;24.03.11;High;21;2781,82;0,07;Express Air;-695,26;138,14;35;Monica Federle;Nunavut;Nunavut;Corporate;Office Supplies;Storage & Organization;SAFCO Commercial Wire Shelving, Black;Large Box;;25.03.11
+107;678;26.02.10;Low;44;228,41;0,07;Regular Air;-226,36;4,98;8,33;Dorothy Badders;Nunavut;Nunavut;Home Office;Office Supplies;Paper;Xerox 198;Small Box;0,38;26.02.10
+127;807;23.11.10;Medium;45;196,85;0,01;Regular Air;-166,85;4,28;6,18;Neola Schneider;Nunavut;Nunavut;Home Office;Office Supplies;Paper;Xerox 1980;Small Box;0,4;24.11.10
+134;868;08.06.12;Not Specified;32;716,84;0;Regular Air;134,72;21,78;5,94;Carlos Daly;Nunavut;Nunavut;Home Office;Office Supplies;Appliances;Holmes HEPA Air Purifier;Medium Box;0,5;09.06.12
+149;933;04.08.12;Not Specified;15;80,61;0,02;Regular Air;-4,72;5,28;2,99;Claudia Miner;Nunavut;Nunavut;Small Business;Office Supplies;Binders and Binder Accessories;"Wilson Jones 1"" Hanging Ring Binders";Small Box;0,37;04.08.12
+160;995;30.05.11;Medium;46;1815,49;0,03;Regular Air;782,91;39,89;3,04;Neola Schneider;Nunavut;Nunavut;Home Office;Furniture;Office Furnishings;Ultra Commercial Grade Dual Valve Door Closer;Wrap Bag;0,53;31.05.11
+161;998;25.11.09;Not Specified;16;248,26;0,07;Regular Air;93,8;15,74;1,39;Allen Rosenblatt;Nunavut;Nunavut;Small Business;Office Supplies;Envelopes;"#10-4 1/8"" x 9 1/2"" Premium Seam Envelopes";Small Box;0,4;26.11.09
+175;1154;14.02.12;Critical;44;4462,23;0,04;Delivery Truck;440,72;100,98;26,22;Sylvia Foulston;Nunavut;Nunavut;Home Office;Furniture;Bookcases;Hon 4-Shelf Metal Bookcases;Jumbo Box;0,6;16.02.12
+203;1344;15.04.12;Low;15;834,904;0,06;Regular Air;-11,68;65,99;5,26;Jim Radford;Nunavut;Nunavut;Corporate;Technology;Telephones and Communication;g520;Small Box;0,59;22.04.12
+204;1344;15.04.12;Low;18;2480,9205;0,01;Regular Air;313,58;155,99;8,99;Jim Radford;Nunavut;Nunavut;Corporate;Technology;Telephones and Communication;LX 788;Small Box;0,58;19.04.12
+213;1412;12.03.10;Not Specified;13;59,03;0,1;Express Air;26,92;3,69;0,5;Carlos Soltero;Nunavut;Nunavut;Consumer;Office Supplies;Labels;Avery 52;Small Box;0,38;14.03.10

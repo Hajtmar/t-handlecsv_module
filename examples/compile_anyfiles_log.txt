@@ -1,149 +1,149 @@
-Log kompilace spuštěn: 2025-03-14 00:47:51.N
+Log kompilace spuštěn: 2025-03-14 11:26:29.N
 
 -----------------------------------------------------
 Hledám soubor: calculations_in_table01.tex
-Soubor nalezen: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Calculations_in_tables/calculations_in_table01.tex
-Aktuální adresář: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Calculations_in_tables
-Kompiluji soubor: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Calculations_in_tables/calculations_in_table01.tex
+Soubor nalezen: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Calculations_in_tables/calculations_in_table01.tex
+Aktuální adresář: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Calculations_in_tables
+Kompiluji soubor: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Calculations_in_tables/calculations_in_table01.tex
 PDF soubory v aktuálním adresáři po kompilaci:
--rw-r--r--  1 hajtmar  staff  31357 14 bře 00:47 calculations_in_table01.pdf
-/Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Calculations_in_tables/calculations_in_table01.tex (OK)
-Kompilace souboru /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Calculations_in_tables/calculations_in_table01.tex trvala: 1.0 sekund
-Přesouvám calculations_in_table01.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results_anyfiles/
+-rw-r--r--  1 hajtmar  staff  31358 14 bře 11:26 calculations_in_table01.pdf
+/Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Calculations_in_tables/calculations_in_table01.tex (OK)
+Kompilace souboru /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Calculations_in_tables/calculations_in_table01.tex trvala: 1.0 sekund
+Přesouvám calculations_in_table01.pdf do /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/pdf_results_anyfiles/
 Přesun PDF souboru byl úspěšný.
 
 -----------------------------------------------------
 Hledám soubor: 2m4CM_programme.tex
-Soubor nalezen: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/CTM_2010_agenda/2m4CM_programme.tex
-Aktuální adresář: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/CTM_2010_agenda
-Kompiluji soubor: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/CTM_2010_agenda/2m4CM_programme.tex
+Soubor nalezen: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/CTM_2010_agenda/2m4CM_programme.tex
+Aktuální adresář: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/CTM_2010_agenda
+Kompiluji soubor: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/CTM_2010_agenda/2m4CM_programme.tex
 PDF soubory v aktuálním adresáři po kompilaci:
--rw-r--r--  1 hajtmar  staff  45459 14 bře 00:47 2m4CM_programme.pdf
-/Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/CTM_2010_agenda/2m4CM_programme.tex (OK)
-Kompilace souboru /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/CTM_2010_agenda/2m4CM_programme.tex trvala: 1.0 sekund
-Přesouvám 2m4CM_programme.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results_anyfiles/
+-rw-r--r--  1 hajtmar  staff  45465 14 bře 11:26 2m4CM_programme.pdf
+/Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/CTM_2010_agenda/2m4CM_programme.tex (OK)
+Kompilace souboru /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/CTM_2010_agenda/2m4CM_programme.tex trvala: 2.0 sekund
+Přesouvám 2m4CM_programme.pdf do /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/pdf_results_anyfiles/
 Přesun PDF souboru byl úspěšný.
 
 -----------------------------------------------------
 Hledám soubor: m3TE_programme.tex
-Soubor nalezen: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/CTM_2010_agenda/m3TE_programme.tex
-Aktuální adresář: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/CTM_2010_agenda
-Kompiluji soubor: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/CTM_2010_agenda/m3TE_programme.tex
+Soubor nalezen: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/CTM_2010_agenda/m3TE_programme.tex
+Aktuální adresář: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/CTM_2010_agenda
+Kompiluji soubor: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/CTM_2010_agenda/m3TE_programme.tex
 PDF soubory v aktuálním adresáři po kompilaci:
--rw-r--r--  1 hajtmar  staff  31122 14 bře 00:47 m3TE_programme.pdf
-/Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/CTM_2010_agenda/m3TE_programme.tex (OK)
-Kompilace souboru /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/CTM_2010_agenda/m3TE_programme.tex trvala: 1.0 sekund
-Přesouvám m3TE_programme.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results_anyfiles/
+-rw-r--r--  1 hajtmar  staff  31122 14 bře 11:26 m3TE_programme.pdf
+/Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/CTM_2010_agenda/m3TE_programme.tex (OK)
+Kompilace souboru /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/CTM_2010_agenda/m3TE_programme.tex trvala: 1.0 sekund
+Přesouvám m3TE_programme.pdf do /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/pdf_results_anyfiles/
 Přesun PDF souboru byl úspěšný.
 
 -----------------------------------------------------
 Hledám soubor: listofparticipants-ctm_and_te.tex
-Soubor nalezen: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/CTMagenda/listofparticipants-ctm_and_te.tex
-Aktuální adresář: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/CTMagenda
-Kompiluji soubor: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/CTMagenda/listofparticipants-ctm_and_te.tex
+Soubor nalezen: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/CTMagenda/listofparticipants-ctm_and_te.tex
+Aktuální adresář: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/CTMagenda
+Kompiluji soubor: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/CTMagenda/listofparticipants-ctm_and_te.tex
 PDF soubory v aktuálním adresáři po kompilaci:
--rw-r--r--  1 hajtmar  staff  204079 14 bře 00:47 listofparticipants-ctm_and_te.pdf
-/Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/CTMagenda/listofparticipants-ctm_and_te.tex (OK)
-Kompilace souboru /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/CTMagenda/listofparticipants-ctm_and_te.tex trvala: 2.0 sekund
-Přesouvám listofparticipants-ctm_and_te.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results_anyfiles/
+-rw-r--r--  1 hajtmar  staff  204078 14 bře 11:26 listofparticipants-ctm_and_te.pdf
+/Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/CTMagenda/listofparticipants-ctm_and_te.tex (OK)
+Kompilace souboru /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/CTMagenda/listofparticipants-ctm_and_te.tex trvala: 1.0 sekund
+Přesouvám listofparticipants-ctm_and_te.pdf do /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/pdf_results_anyfiles/
 Přesun PDF souboru byl úspěšný.
 
 -----------------------------------------------------
 Hledám soubor: test01-general.tex
-Soubor nalezen: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Cycles_testing/test01-general.tex
-Aktuální adresář: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Cycles_testing
-Kompiluji soubor: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Cycles_testing/test01-general.tex
+Soubor nalezen: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Cycles_testing/test01-general.tex
+Aktuální adresář: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Cycles_testing
+Kompiluji soubor: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Cycles_testing/test01-general.tex
 PDF soubory v aktuálním adresáři po kompilaci:
--rw-r--r--  1 hajtmar  staff  69914 14 bře 00:47 test01-general.pdf
-/Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Cycles_testing/test01-general.tex (OK)
-Kompilace souboru /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Cycles_testing/test01-general.tex trvala: 1.0 sekund
-Přesouvám test01-general.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results_anyfiles/
+-rw-r--r--  1 hajtmar  staff  69909 14 bře 11:26 test01-general.pdf
+/Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Cycles_testing/test01-general.tex (OK)
+Kompilace souboru /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Cycles_testing/test01-general.tex trvala: 2.0 sekund
+Přesouvám test01-general.pdf do /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/pdf_results_anyfiles/
 Přesun PDF souboru byl úspěšný.
 
 -----------------------------------------------------
 Hledám soubor: cykly-test-008.tex
-Soubor nalezen: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Cycles_testing/cykly-test-008.tex
-Aktuální adresář: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Cycles_testing
-Kompiluji soubor: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Cycles_testing/cykly-test-008.tex
+Soubor nalezen: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Cycles_testing/cykly-test-008.tex
+Aktuální adresář: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Cycles_testing
+Kompiluji soubor: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Cycles_testing/cykly-test-008.tex
 PDF soubory v aktuálním adresáři po kompilaci:
--rw-r--r--  1 hajtmar  staff  126088 14 bře 00:48 cykly-test-008.pdf
-/Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Cycles_testing/cykly-test-008.tex (OK)
-Kompilace souboru /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Cycles_testing/cykly-test-008.tex trvala: 3.0 sekund
-Přesouvám cykly-test-008.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results_anyfiles/
+-rw-r--r--  1 hajtmar  staff  126079 14 bře 11:26 cykly-test-008.pdf
+/Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Cycles_testing/cykly-test-008.tex (OK)
+Kompilace souboru /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Cycles_testing/cykly-test-008.tex trvala: 2.0 sekund
+Přesouvám cykly-test-008.pdf do /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/pdf_results_anyfiles/
 Přesun PDF souboru byl úspěšný.
 
 -----------------------------------------------------
 Hledám soubor: cykly-test-007.tex
-Soubor nalezen: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Cycles_testing/cykly-test-007.tex
-Aktuální adresář: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Cycles_testing
-Kompiluji soubor: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Cycles_testing/cykly-test-007.tex
+Soubor nalezen: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Cycles_testing/cykly-test-007.tex
+Aktuální adresář: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Cycles_testing
+Kompiluji soubor: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Cycles_testing/cykly-test-007.tex
 PDF soubory v aktuálním adresáři po kompilaci:
--rw-r--r--  1 hajtmar  staff  48864 14 bře 00:48 cykly-test-007.pdf
-/Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Cycles_testing/cykly-test-007.tex (OK)
-Kompilace souboru /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Cycles_testing/cykly-test-007.tex trvala: 1.0 sekund
-Přesouvám cykly-test-007.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results_anyfiles/
+-rw-r--r--  1 hajtmar  staff  48868 14 bře 11:26 cykly-test-007.pdf
+/Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Cycles_testing/cykly-test-007.tex (OK)
+Kompilace souboru /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Cycles_testing/cykly-test-007.tex trvala: 1.0 sekund
+Přesouvám cykly-test-007.pdf do /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/pdf_results_anyfiles/
 Přesun PDF souboru byl úspěšný.
 
 -----------------------------------------------------
 Hledám soubor: test02-hooks.tex
-Soubor nalezen: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Cycles_testing/test02-hooks.tex
-Aktuální adresář: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Cycles_testing
-Kompiluji soubor: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Cycles_testing/test02-hooks.tex
+Soubor nalezen: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Cycles_testing/test02-hooks.tex
+Aktuální adresář: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Cycles_testing
+Kompiluji soubor: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Cycles_testing/test02-hooks.tex
 PDF soubory v aktuálním adresáři po kompilaci:
--rw-r--r--  1 hajtmar  staff  34095 14 bře 00:48 test02-hooks.pdf
-/Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Cycles_testing/test02-hooks.tex (OK)
-Kompilace souboru /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Cycles_testing/test02-hooks.tex trvala: 1.0 sekund
-Přesouvám test02-hooks.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results_anyfiles/
+-rw-r--r--  1 hajtmar  staff  34090 14 bře 11:26 test02-hooks.pdf
+/Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Cycles_testing/test02-hooks.tex (OK)
+Kompilace souboru /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Cycles_testing/test02-hooks.tex trvala: 1.0 sekund
+Přesouvám test02-hooks.pdf do /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/pdf_results_anyfiles/
 Přesun PDF souboru byl úspěšný.
 
 -----------------------------------------------------
 Hledám soubor: countriesandcities03.tex
-Soubor nalezen: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/handlecsvcells_library_using/countriesandcities03.tex
-Aktuální adresář: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/handlecsvcells_library_using
-Kompiluji soubor: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/handlecsvcells_library_using/countriesandcities03.tex
+Soubor nalezen: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/handlecsvcells_library_using/countriesandcities03.tex
+Aktuální adresář: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/handlecsvcells_library_using
+Kompiluji soubor: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/handlecsvcells_library_using/countriesandcities03.tex
 PDF soubory v aktuálním adresáři po kompilaci:
--rw-r--r--@ 1 hajtmar  staff  34772 14 bře 00:48 countriesandcities03.pdf
-/Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/handlecsvcells_library_using/countriesandcities03.tex (OK)
-Kompilace souboru /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/handlecsvcells_library_using/countriesandcities03.tex trvala: 1.0 sekund
-Přesouvám countriesandcities03.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results_anyfiles/
+-rw-r--r--  1 hajtmar  staff  34773 14 bře 11:26 countriesandcities03.pdf
+/Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/handlecsvcells_library_using/countriesandcities03.tex (OK)
+Kompilace souboru /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/handlecsvcells_library_using/countriesandcities03.tex trvala: 1.0 sekund
+Přesouvám countriesandcities03.pdf do /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/pdf_results_anyfiles/
 Přesun PDF souboru byl úspěšný.
 
 -----------------------------------------------------
 Hledám soubor: countriesandcities02.tex
-Soubor nalezen: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Non-binding-tests/countriesandcities02.tex
-Aktuální adresář: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Non-binding-tests
-Kompiluji soubor: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Non-binding-tests/countriesandcities02.tex
+Soubor nalezen: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Non-binding-tests/countriesandcities02.tex
+Aktuální adresář: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Non-binding-tests
+Kompiluji soubor: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Non-binding-tests/countriesandcities02.tex
 PDF soubory v aktuálním adresáři po kompilaci:
--rw-r--r--  1 hajtmar  staff  36986 14 bře 00:48 countriesandcities02.pdf
-/Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Non-binding-tests/countriesandcities02.tex (OK)
-Kompilace souboru /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Non-binding-tests/countriesandcities02.tex trvala: 1.0 sekund
-Přesouvám countriesandcities02.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results_anyfiles/
+-rw-r--r--  1 hajtmar  staff  36992 14 bře 11:26 countriesandcities02.pdf
+/Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Non-binding-tests/countriesandcities02.tex (OK)
+Kompilace souboru /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Non-binding-tests/countriesandcities02.tex trvala: 1.0 sekund
+Přesouvám countriesandcities02.pdf do /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/pdf_results_anyfiles/
 Přesun PDF souboru byl úspěšný.
 
 -----------------------------------------------------
 Hledám soubor: letter01.tex
-Soubor nalezen: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Letter-module/letter01.tex
-Aktuální adresář: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Letter-module
-Kompiluji soubor: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Letter-module/letter01.tex
+Soubor nalezen: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Letter-module/letter01.tex
+Aktuální adresář: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Letter-module
+Kompiluji soubor: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Letter-module/letter01.tex
 PDF soubory v aktuálním adresáři po kompilaci:
--rw-r--r--  1 hajtmar  staff  203278 14 bře 00:48 letter01.pdf
-/Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Letter-module/letter01.tex (OK)
-Kompilace souboru /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Letter-module/letter01.tex trvala: 1.0 sekund
-Přesouvám letter01.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results_anyfiles/
+-rw-r--r--  1 hajtmar  staff  203274 14 bře 11:26 letter01.pdf
+/Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Letter-module/letter01.tex (OK)
+Kompilace souboru /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Letter-module/letter01.tex trvala: 2.0 sekund
+Přesouvám letter01.pdf do /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/pdf_results_anyfiles/
 Přesun PDF souboru byl úspěšný.
 
 -----------------------------------------------------
 Hledám soubor: testy_maker01.tex
-Soubor nalezen: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Non-binding-tests/testy_maker01.tex
-Aktuální adresář: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Non-binding-tests
-Kompiluji soubor: /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Non-binding-tests/testy_maker01.tex
+Soubor nalezen: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Non-binding-tests/testy_maker01.tex
+Aktuální adresář: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Non-binding-tests
+Kompiluji soubor: /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Non-binding-tests/testy_maker01.tex
 PDF soubory v aktuálním adresáři po kompilaci:
--rw-r--r--  1 hajtmar  staff  26946 14 bře 00:48 testy_maker01.pdf
-/Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Non-binding-tests/testy_maker01.tex (OK)
-Kompilace souboru /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/Non-binding-tests/testy_maker01.tex trvala: 1.0 sekund
-Přesouvám testy_maker01.pdf do /Users/hajtmar/Downloads/handlecsv-optbyi-testing/examples/pdf_results_anyfiles/
+-rw-r--r--  1 hajtmar  staff  26940 14 bře 11:26 testy_maker01.pdf
+/Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Non-binding-tests/testy_maker01.tex (OK)
+Kompilace souboru /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/Non-binding-tests/testy_maker01.tex trvala: 0 sekund
+Přesouvám testy_maker01.pdf do /Users/hajtmar/Documents/1da/GitHub-projekty/t-handlecsv_module/examples/pdf_results_anyfiles/
 Přesun PDF souboru byl úspěšný.
 
 -----------------------------------------------------
-Kompilace dokončena: 2025-03-14 00:48:06.N
-Celkový čas zpracování všech souborů: 15.0 sekund
+Kompilace dokončena: 2025-03-14 11:26:45.N
+Celkový čas zpracování všech souborů: 16.0 sekund
