@@ -24,6 +24,7 @@ files=(
      cities-of-world-another-solutions.tex  # specialities - kompilovat jako test funkčnosti.
      2m4CM_programme.tex # kompilovat jako test funkčnosti.
      big_test_of_library_macros.tex # kompilovat jako test funkčnosti.
+     mpreliminarylist.tex  # specialities - kompilovat jako test funkčnosti.
 #     m3TE_programme.tex
 #     listofparticipants-ctm_and_te.tex
 #     test01-general.tex

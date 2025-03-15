@@ -19,3 +19,4 @@ Např. tyto:
     countriesandcities02.tex # je zajímavé, že tento soubor nejde zkompilovat tímto skriptem, nicméně přímo ve složce ano...
     letter01.tex
     testy_maker01.tex
+    mpreliminarylist.tex

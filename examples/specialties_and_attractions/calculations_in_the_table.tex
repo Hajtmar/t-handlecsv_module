@@ -4,7 +4,31 @@
 
 \def\eval#1{\directlua{context(tonumber(#1))}}
 \def\commatodecimal#1{\directlua{context(string.gsub('#1', "," , "."))}}
-\def\priceforallitems{\ctxlua{context(tostring(tonumber([==[\commatodecimal{\columncontent['Unit Price']}]==]*[==[\commatodecimal{\columncontent['Order Quantity']}]==])))}}
+
+% Původní makro nezaokrouhlovalo_
+%\def\priceforallitems{\ctxlua{context(tostring(tonumber([==[\commatodecimal{\columncontent['Unit Price']}]==]*[==[\commatodecimal{\columncontent['Order Quantity']}]==])))}}
+
+\begingroup
+  \catcode`\%=12\relax
+  \gdef\luatemplate{[==[%%.%df]==]}
+\endgroup
+
+\def\roundto#1#2{%
+  \ctxlua{%
+    local number = tonumber("\luaescapestring{#1}")
+    local places = tonumber("\luaescapestring{#2}")
+    local fmt = string.format(\luatemplate, places)
+    context(string.format(fmt, number))
+  }%
+}
+
+\def\priceforallitems{%
+  \ctxlua{%
+    local product = tonumber([==[\commatodecimal{\columncontent['Unit Price']}]==]) *
+                    tonumber([==[\commatodecimal{\columncontent['Order Quantity']}]==])
+    tex.sprint("\\roundto{" .. product .. "}{2}")
+  }%
+}
 
 \setupTABLE[background=color,backgroundcolor=white, offset=3pt]
 \setupTABLE[row][first][background=color,backgroundcolor=lightgray, style=bold]
@@ -26,7 +50,7 @@
 \def\lasttableline{
 \bTR
 \bTD[nc=3]TOTAL PRICE\eTD
-\bTD\eval{\totalprice}\eTD
+\bTD\roundto{\eval{\totalprice}}{2}\eTD
 \eTR
 }
 
@@ -42,6 +66,7 @@
 }
 \eaddto\totalprice{+\priceforallitems}% ADD into
 }
+
 
 \startbuffer[tablerows]
 \setlinepointer{\recurselevel}
@@ -65,7 +90,7 @@
 \catcode`\#=12 %CSV file contains # characters (i.e. TeX problematic character)
 
 
-\opencsvfile{superstore_sales_smalltable.csv}
+\opencsvfile{superstore_sales_table.csv}
 
 
 \title{Using \type{\dorecurse} cycle}
