@@ -24,7 +24,7 @@
 %\usedirectory[c:/1da/ConTeXt/ConTeXt-Tests/my_way/ScanCSV/t-handlecsv_module/]
 %\usemodule[handlecsv]
 
-\input ../incl_handlecsv_file.tex
+\input ../incl_handlecsv_file.tex % \usemodule[t-handlecsv_opt.lua]
 
 \def\predmetzhlavicky#1:#2:#3:#4!{#2}
 \def\vyhodnocenypredmet{\edef\predmet{\csvcell[\recurselevel,0]}\words{\expandafter\predmetzhlavicky\predmet!}}

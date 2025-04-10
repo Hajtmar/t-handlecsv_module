@@ -16,6 +16,7 @@ mkdir -p "$PDF_OUTPUT_DIR" "$TEMP_DIR"
 # Jediný řetězec, uvnitř je obyčejná mezera:
 pairingfiles=(
   "calculations_in_the_table.tex superstore_sales_table.csv"
+  "cities-of-world.tex countries.csv cities.csv"
 )
 
 # ============================
@@ -116,8 +117,9 @@ for record in "${pairingfiles[@]}"; do
     echo "\\setupinteraction[state=start,color=blue,contrastcolor=blue, style=normal]"
     echo "\\setuppagenumbering[state=stop]"
     echo "% \\setuplayout[backspace=1cm, width=middle,height=29cm, topspace=5mm, header=0cm, footer=5mm]"
-    echo "\setupbodyfont[regular, 9pt]"
-    echo ""
+    echo "\\setupbodyfont[regular, 9pt]"
+    echo '\\setuphead[section, subject][style={\\bf}]'
+    echo "% \\setuppapersize[A4,landscape]"
     echo ""
     echo "\\starttext"
     # Sekce 1

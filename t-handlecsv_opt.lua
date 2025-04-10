@@ -1175,7 +1175,7 @@ end
 --------------------------------------------------------------------------------
 
 local string2print = [[%
-% --- Stavové makra:
+% --- State macros:
 \newif\ifissetheader
 \newif\ifnotsetheader
 \newif\ifEOF

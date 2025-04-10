@@ -1,21 +1,24 @@
 
-\input ../incl_handlecsv_file.tex
+\input ../incl_handlecsv_file.tex % \usemodule[t-handlecsv_opt.lua]
 
 \unexpanded\def\lineaction{
 \cA -- \cB\crlf
-\page
 }
 
 \setsep{;}
 \setheader
 
 \starttext
+
+\title{Variant 1}
 % more CSV files processing
 \filelineaction{mail1.csv}
 \filelineaction{mail2.csv}
 \filelineaction{mail3.csv}
 
 % OR:
+
+\title{Variant 2}
 \dorecurse{3}{
 	\filelineaction{mail\recurselevel.csv}
 }

@@ -1,5 +1,0 @@
-CSV:
-http://creativyst.com/Doc/Articles/CSV/CSV01.htm#ExampleData
-https://support.spatialkey.com/spatialkey-sample-csv-data/
-http://wiki.contextgarden.net/System_Macros/Branches_and_Decisions#.5Cdoifinstringelse.2C.5Cdoifincsnameelse
-

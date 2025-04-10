@@ -1,6 +1,6 @@
 % https://mailman.ntg.nl/pipermail/ntg-context/2003/001390.html
 
-\input ../incl_handlecsv_file.tex
+\input ../incl_handlecsv_file.tex % \usemodule[t-handlecsv_opt.lua]
 
 \def\eval#1{\directlua{context(tonumber(#1))}}
 \def\commatodecimal#1{\directlua{context(string.gsub('#1', "," , "."))}}

@@ -1,0 +1,145 @@
+
+
+\input ../incl_handlecsv_file.tex % \usemodule[t-handlecsv_opt.lua]
+
+\def\eval#1{\directlua{context(tonumber(#1))}}
+\def\commatodecimal#1{\directlua{context(string.gsub('#1', "," , "."))}}
+
+% Original macro did not round
+%\def\priceforallitems{
+%    \ctxlua{%
+%        context(tostring(tonumber(
+%        [==[\commatodecimal{\columncontent['Unit Price']}]==]*
+%        [==[\commatodecimal{\columncontent['Order Quantity']}]==]))
+%        )
+%    }
+%}
+
+\begingroup
+  \catcode`\%=12\relax
+  \gdef\luatemplate{[==[%%.%df]==]}
+\endgroup
+
+\def\roundto#1#2{%
+  \ctxlua{%
+    local number = tonumber("\luaescapestring{#1}")
+    local places = tonumber("\luaescapestring{#2}")
+    local fmt = string.format(\luatemplate, places)
+    context(string.format(fmt, number))
+  }%
+}
+
+\def\priceforallitems{%
+  \ctxlua{%
+    local product =
+        tonumber([==[\commatodecimal{\columncontent['Unit Price']}]==])
+        *
+        tonumber([==[\commatodecimal{\columncontent['Order Quantity']}]==])
+    tex.sprint("\\roundto{" .. product .. "}{2}")
+  }%
+}
+
+\setupTABLE[background=color,backgroundcolor=white, offset=3pt]
+\setupTABLE[row][first][background=color,backgroundcolor=lightgray, style=bold]
+\setupTABLE[row][last][background=color,backgroundcolor=lightgray, style=bold]
+\setupTABLE[c][1][style=\tfx, width=8cm]
+\setupTABLE[c][2][align=middle]
+\setupTABLE[c][3][alignmentcharacter={.}, aligncharacter=yes, align=middle]
+\setupTABLE[c][4][alignmentcharacter={.}, aligncharacter=yes, align=middle, style=\ss]
+
+\def\firsttableline{
+    \bTR
+        \bTD Product name\eTD
+        \bTD Quantity\eTD
+        \bTD Unit Price\eTD
+        \bTD Items price\eTD
+    \eTR
+}
+
+\def\lasttableline{
+    \bTR
+        \bTD[nc=3]TOTAL PRICE\eTD
+        \bTD\roundto{\eval{\totalprice}}{2}\eTD
+    \eTR
+}
+
+
+\def\lineaction{%
+    \expanded{
+        \bTR
+            \bTD\columncontent['Product Name']\eTD
+            \bTD\columncontent['Order Quantity'] \eTD
+            \bTD\commatodecimal{\columncontent['Unit Price']}\eTD
+            \bTD\priceforallitems\eTD
+        \eTR
+    }
+    \eaddto\totalprice{+\priceforallitems}% ADD into
+}
+
+
+\startbuffer[tablerows]
+    \setlinepointer{\recurselevel}
+    \expanded{
+    \bTR
+        \bTD\columncontent['Product Name']\eTD
+        \bTD\columncontent['Order Quantity'] \eTD
+        \bTD\commatodecimal{\columncontent['Unit Price']}\eTD
+        \bTD\priceforallitems\eTD
+    \eTR
+    }
+    \eaddto\totalprice{+\priceforallitems}% ADD into
+\stopbuffer
+
+
+
+\starttext
+
+\setheader
+\setsep{;}
+\catcode`\#=12 %CSV file contains # characters (i.e. TeX problematic character)
+
+
+\opencsvfile{superstore_sales_table.csv}
+
+\title{Using \type{\dorecurse} cycle}
+
+\def\totalprice{0}
+
+\bTABLE[split=yes]
+\firsttableline
+\dorecurse{\numrows}{
+	\setlinepointer{\recurselevel}
+	\lineaction
+	\nextrow
+    }
+    \lasttableline
+\eTABLE
+
+\hairline
+
+\subject{Buffers using}
+
+\bTABLE[split=yes]
+\firsttableline
+\dorecurse{\numrows}{%
+	\getbuffer[tablerows]
+    }
+    \lasttableline
+\eTABLE
+
+
+
+
+\title{Using \type{\filelineaction} cycle}
+
+\def\totalprice{0}
+
+\bTABLE[split=yes]
+    \firsttableline
+    \filelineaction
+    \lasttableline
+\eTABLE
+
+
+\stoptext
+
