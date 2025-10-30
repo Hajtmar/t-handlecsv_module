@@ -1,15 +1,15 @@
 -- %D \module
 -- %D   [     file=t-handlecsv.lua,
 -- %D      version=2025.02.25,
--- %D        title=HandleCSV module,
--- %D     subtitle=CSV file handling,
--- %D       author=Jaroslav Hajtmar (orig.), modifications by using ChatGPT,
+-- %D        title=HandleCSV Module,
+-- %D     subtitle=CSV File Handling,
+-- %D       author=Jaroslav Hajtmar (original), with later modifications using ChatGPT,
 -- %D         date=2025-02-25,
--- %D    copyright=Jaroslav Hajtmar,
+-- %D    copyright=© 2019–2025 Jaroslav Hajtmar,
 -- %D        email=hajtmar@gyza.cz,
--- %D      license=GNU General Public License]
+-- %D      license=GNU General Public License v3+]
 --
--- %C Copyright (C) 2019-2025 Jaroslav Hajtmar
+-- %C Copyright (C) 2019–2025 Jaroslav Hajtmar
 -- %C
 -- %C This program is free software: you can redistribute it and/or modify
 -- %C it under the terms of the GNU General Public License as published by
