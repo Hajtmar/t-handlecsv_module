@@ -1479,4 +1479,3 @@ local string2print=[[%
 
 -- write definitions into ConTeXt:
 thirddata.handlecsv.string2context(string2print)
-
