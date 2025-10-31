@@ -1,13 +1,19 @@
 -- %D \module
--- %D   [     file=t-handlecsv.lua,
+-- %D   [     file=t-handlecsv_old.lua,
 -- %D      version=2019.03.30,
--- %D        title=HandleCSV module,
+-- %D        title=HandleCSV module (legacy version),
 -- %D     subtitle=CSV file handling,
 -- %D       author=Jaroslav Hajtmar,
--- %D         date=\currentdate,
+-- %D         date=2019-03-30,
 -- %D    copyright=Jaroslav Hajtmar,
 -- %D        email=hajtmar@gyza.cz,
 -- %D      license=GNU General Public License]
+--
+-- %C This is the original file formerly known as `t-handlecsv.lua`.
+-- %C As of 2025-10-29, it has been replaced by a new version (2025.10.29)
+-- %C and renamed to `t-handlecsv_old.lua` for backward compatibility.
+-- %C The optimized version `t-handlecsv_opt.lua` is now the main module
+-- %C distributed as `t-handlecsv.lua`.
 --
 -- %C Copyright (C) 2019 Jaroslav Hajtmar
 -- %C
@@ -23,6 +29,7 @@
 -- %C
 -- %C You should have received a copy of the GNU General Public License
 -- %C along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-- This is the original t-handlecsv.lua file from March 2019, kept for backward compatibility.
 
 
 -- use a feature that is part of the /texmf-dist/tex/context/base/util-prs.lua

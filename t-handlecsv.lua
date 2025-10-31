@@ -1,10 +1,10 @@
 -- %D \module
 -- %D   [     file=t-handlecsv.lua,
--- %D      version=2025.02.25,
+-- %D      version=2025.10.29,
 -- %D        title=HandleCSV Module,
 -- %D     subtitle=CSV File Handling,
 -- %D       author=Jaroslav Hajtmar (original), with later modifications using ChatGPT,
--- %D         date=2025-02-25,
+-- %D         date=2025-10-29,
 -- %D    copyright=© 2019–2025 Jaroslav Hajtmar,
 -- %D        email=hajtmar@gyza.cz,
 -- %D      license=GNU General Public License v3+]

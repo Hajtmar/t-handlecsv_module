@@ -1,4 +1,4 @@
-# Complete Listing of Macros in the Latest Optimized Version (t‑handlecsv.lua v2025.02.25)
+# Complete Listing of Macros in the Latest Optimized Version (t‑handlecsv.lua 2025.10.29)
 
 Tato verze knihovny implementuje přibližně 112 maker (včetně aliasů) a zachovává kompatibilitu s původní verzí. Níže je uveden kategorizovaný seznam maker s anglickými popisy, který můžete použít jako základ pro dokumentaci.
 

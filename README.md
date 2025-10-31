@@ -1,4 +1,5 @@
 # HandleCSV Module for ConTeXt
+## version 2025.10.29
 
 HandleCSV is a ConTeXt module designed for flexible and efficient processing of CSV files directly within ConTeXt documents.
 
@@ -15,8 +16,8 @@ HandleCSV is a ConTeXt module designed for flexible and efficient processing of 
 
 ## Current Stable Version
 
-**2025.02.25**
-(Released after full testing in October 30, 2025)
+**2025.10.29**
+(Released after full testing in October 29, 2025)
 Compatible with ConTeXt LMTX and MkIV.
 
 ---
